@@ -6,3 +6,6 @@ passlib
 bcrypt
 python-jose
 python-multipart
+pyjwt
+pydentic
+mysqlclient
