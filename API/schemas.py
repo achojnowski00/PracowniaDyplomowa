@@ -1,5 +1,5 @@
 import datetime as _dt
-import pydentic as _pydentic
+import pydantic as _pydantic
 
 
 # ################# #
@@ -7,7 +7,7 @@ import pydentic as _pydentic
 #    USER SCHEMA
 #
 # ################# #
-class UserBase(_pydentic.BaseModel):
+class UserBase(_pydantic.BaseModel):
     login: str
 
 
@@ -31,7 +31,7 @@ class User(UserBase):
 #    TRANSACTION SCHEMA
 #
 # ####################### #
-class TransactionBase(_pydentic.BaseModel):
+class TransactionBase(_pydantic.BaseModel):
     isOutcome: bool
     title: str
     description: str
@@ -52,7 +52,7 @@ class Transaction(TransactionBase):
 #    CATEGORY SCHEMA
 #
 # ###################### #
-class CategoryBase(_pydentic.BaseModel):
+class CategoryBase(_pydantic.BaseModel):
     name: str
     isOutcome: bool
 
@@ -70,7 +70,7 @@ class Category(CategoryBase):
 #    BUDGET SCHEMA
 #
 # #################### #
-class BudgetBase(_pydentic.BaseModel):
+class BudgetBase(_pydantic.BaseModel):
     name: str
 
 
@@ -92,7 +92,7 @@ class Budget(BudgetBase):
 #    N0TE SCHEMA
 #
 # ################# #
-class NoteBase(_pydentic.BaseModel):
+class NoteBase(_pydantic.BaseModel):
     title: str
     description: str
     date: _dt.datetime

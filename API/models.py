@@ -20,7 +20,7 @@ class User(_db.Base):
     id = _sql.Column(_sql.Integer, primary_key=True, index=True)
     login = _sql.Column(_sql.String(64), unique=True, index=True)
     hashed_password = _sql.Column(_sql.String(256))
-    name = _sql.Column(_sql.String(64))
+    name = _sql.Column(_sql.String(64), default="Twoja nazwa użytkownika")
 
     budgets = _orm.relationship(
         "Budget", secondary=user_has_budget, back_populates="users")
