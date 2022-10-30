@@ -78,4 +78,6 @@ class Note(_db.Base):
 
 
 # Create database
+# If you have any table in database, you can't create it again
+# First delete all tables from database and then run this script
 _db.Base.metadata.create_all(bind=_db.engine)
