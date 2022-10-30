@@ -75,3 +75,43 @@ async def get_current_user(db: _orm.Session = _fastapi.Depends(get_db), token: s
             status_code=401, detail="Nieprawidłowe dane logowania")
 
     return _schemas.User.from_orm(user)
+
+
+# ####################### #
+#
+#    Budget functions
+#
+# ####################### #
+async def create_budget(
+        budget: _schemas.BudgetCreate,
+        db: _orm.Session = _fastapi.Depends(get_db),
+        user: _schemas.User = _fastapi.Depends(get_current_user)):
+    budget_obj = _models.Budget(name=budget.name)
+
+    db.add(budget_obj)
+    db.commit()
+    db.refresh(budget_obj)
+
+    user_obj = db.query(_models.User).get(user.id)
+    user_obj.budgets.append(budget_obj)
+
+    db.commit()
+    db.refresh(user_obj)
+
+    return budget_obj
+
+
+async def add_user_to_budget(
+        budget_id: int,
+        user_id: int,
+        db: _orm.Session = _fastapi.Depends(get_db),
+        user: _schemas.User = _fastapi.Depends(get_current_user)):
+    user_obj = db.query(_models.User).get(user_id)
+    budget_obj = db.query(_models.Budget).get(budget_id)
+
+    user_obj.budgets.append(budget_obj)
+
+    db.commit()
+    db.refresh(user_obj)
+
+    return user_obj

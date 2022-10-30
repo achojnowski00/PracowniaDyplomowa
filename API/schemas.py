@@ -81,10 +81,28 @@ class BudgetCreate(BudgetBase):
 
 class Budget(BudgetBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+
+class BudgetOutput(Budget):
+    transactions: list[Transaction] = []
     users: list[User] = []
 
     class Config:
         orm_mode = True
+
+
+class UsersOutput(User):
+    budgets: list[Budget] = []
+
+    class Config:
+        orm_mode = True
+
+
+class user_has_budget_create(_pydantic.BaseModel):
+    user_id: int
 
 
 # ################# #

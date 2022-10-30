@@ -9,6 +9,21 @@ import schemas as _schemas
 app = _fastapi.FastAPI()
 
 
+# ####################### #
+#
+#    Base route
+#
+# ####################### #
+@app.get("/")
+def hello():
+    return {"messages": "All endpoints you can find in /docs"}
+
+
+# ####################### #
+#
+#    User auth routes
+#
+# ####################### #
 @app.post("/api/users")
 async def create_user(user: _schemas.UserCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
     db_user = await _services.get_user_by_login(user.login, db)
@@ -36,6 +51,49 @@ async def get_user(user: _schemas.User = _fastapi.Depends(_services.get_current_
     return user
 
 
-@app.get("/")
-def hello():
-    return {"messages": "All endpoints you can find in /docs"}
+# ####################### #
+#
+#    Budget routes
+#
+# ####################### #
+@app.post("/api/budgets", response_model=_schemas.Budget)
+async def create_budget(
+        budget: _schemas.BudgetCreate,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.create_budget(budget, db, user)
+
+
+# TODO - dodać, żeby budzet id i user id były pobierane z linku (jeśli jest to potrzebne)
+@app.post("/api/budgets-add", response_model=_schemas.Budget)
+async def add_user_to_budget(
+        budget_id: int,
+        user_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.add_user_to_budget(budget_id, user_id, db, user)
+
+
+# TODO - edytowanie nazwy budżetu
+
+# TODO - opuszczanie budzetu / usuwanie użytkownika z budżetu
+
+# ####################### #
+#
+#    Transactions routes
+#
+# ####################### #
+
+
+# ####################### #
+#
+#    Cattegories routes
+#
+# ####################### #
+
+
+# ####################### #
+#
+#    Notes routes
+#
+# ####################### #
