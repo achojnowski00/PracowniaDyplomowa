@@ -1,3 +1,13 @@
+# Czym jest to repozytorium?
+
+To repozytorium zawiera dokumenty i materiały związane z realizacją zajęć Pracowni Dyplomowej na Wydziale Matematyki i Informatyki Uniwersytetu Warmińsko-Mazurskiego.
+
+Zaweirają się tu m.in.:
+
+- dokumentacja projektu
+- projekt aplikacji
+- materiały pomocnicze w pisaniu aplikacji
+
 # Uruchamianie projektu backendu w FastAPI
 
 tworzenie witrualnego środowiska:
