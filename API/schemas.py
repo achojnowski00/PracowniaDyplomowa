@@ -1,5 +1,6 @@
 import datetime as _dt
 import pydantic as _pydantic
+from typing import Optional
 
 
 # ################# #
@@ -21,6 +22,15 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     name: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserUpdate(_pydantic.BaseModel):
+    id: Optional[int] = None
+    login: Optional[str] = None
+    name: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -86,16 +96,16 @@ class Budget(BudgetBase):
         orm_mode = True
 
 
-class BudgetOutput(Budget):
-    transactions: list[Transaction] = []
-    users: list[User] = []
+class UsersOutput(User):
+    budgets: list[Budget] = []
 
     class Config:
         orm_mode = True
 
 
-class UsersOutput(User):
-    budgets: list[Budget] = []
+class BudgetOutput(Budget):
+    transactions: list[Transaction] = []
+    users: list[User] = []
 
     class Config:
         orm_mode = True
