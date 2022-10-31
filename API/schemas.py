@@ -67,6 +67,15 @@ class CategoryBase(_pydantic.BaseModel):
     isOutcome: bool
 
 
+class CategoryCreate(CategoryBase):
+    pass
+
+
+class CategoryEdit(_pydantic.BaseModel):
+    name: Optional[str] = None
+    isOutcome: Optional[bool] = None
+
+
 class Category(CategoryBase):
     id: int
     transactions: list[Transaction] = []

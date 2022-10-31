@@ -145,7 +145,51 @@ async def edit_budget(
 #    Cattegories routes
 #
 # ####################### #
+@app.post("/api/categories/create", response_model=_schemas.Category)
+async def create_category(
+        category: _schemas.CategoryCreate,
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.create_category(category, db)
 
+
+@app.get("/api/categories/get-all")
+async def get_categories(
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_categories("all", db)
+
+
+@app.get("/api/categories/get-outcomes")
+async def get_outcomes(
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_categories("outcomes", db)
+
+
+@app.get("/api/categories/get-incomes")
+async def get_incomes(
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_categories("incomes", db)
+
+
+@app.get("/api/categories/get-single/{category_id}", response_model=_schemas.Category)
+async def get_category(
+        category_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_category(category_id, db)
+
+
+@app.put("/api/categories/edit/{category_id}")
+async def edit_category(
+        category_id: int,
+        category: _schemas.CategoryEdit,
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.edit_category(category_id, category, db)
+
+
+@app.delete("/api/categories/delete/{category_id}")
+async def delete_category(
+        category_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.delete_category(category_id, db)
 
 # ####################### #
 #

@@ -220,3 +220,90 @@ async def edit_budget(
     db.refresh(budget_obj)
 
     return budget_obj
+
+
+# ####################### #
+#
+#    Cattegory functions
+#
+# ####################### #
+async def create_category(
+    category: _schemas.CategoryCreate,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    category_obj = _models.Category(
+        name=category.name,
+        isOutcome=category.isOutcome
+    )
+
+    db.add(category_obj)
+    db.commit()
+    db.refresh(category_obj)
+
+    return category_obj
+
+
+async def get_categories(
+    witch: str,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    if (witch == "all"):
+        return db.query(_models.Category).all()
+    if (witch == "incomes"):
+        return db.query(_models.Category).filter(
+            _models.Category.isOutcome == False).all()
+    if (witch == "outcomes"):
+        return db.query(_models.Category).filter(
+            _models.Category.isOutcome == True).all()
+
+
+async def get_category(
+    category_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    category = db.query(_models.Category).filter(
+        _models.Category.id == category_id).first()
+
+    if (category == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID kategorii, nieznaleziono kategorii")
+
+    return category
+
+
+async def edit_category(
+    category_id: int,
+    category: _schemas.CategoryEdit,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    category_obj = db.query(_models.Category).get(category_id)
+
+    if (category_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID kategorii, nieznaleziono kategorii")
+
+    if (category.name):
+        category_obj.name = category.name
+    if (category.isOutcome):
+        category_obj.isOutcome = category.isOutcome
+
+    db.commit()
+    db.refresh(category_obj)
+
+    return category_obj
+
+
+async def delete_category(
+    category_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    category_obj = db.query(_models.Category).get(category_id)
+
+    if (category_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID kategorii, nieznaleziono kategorii")
+
+    db.delete(category_obj)
+    db.commit()
+
+    return category_obj
