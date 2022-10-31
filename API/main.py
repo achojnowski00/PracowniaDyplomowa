@@ -191,8 +191,48 @@ async def delete_category(
         db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.delete_category(category_id, db)
 
+
 # ####################### #
 #
 #    Notes routes
 #
 # ####################### #
+@app.post("/api/notes/create", response_model=_schemas.Note)
+async def create_note(
+        note: _schemas.NoteCreate,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.create_note(note, db)
+
+
+@app.get("/api/notes/get-all")
+async def get_notes(
+        budget_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.get_notes(budget_id, db)
+
+
+@app.get("/api/notes/get-single/{note_id}", response_model=_schemas.Note)
+async def get_note(
+        note_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.get_note(note_id, db)
+
+
+@app.put("/api/notes/edit/{note_id}")
+async def edit_note(
+        note_id: int,
+        note: _schemas.NoteEdit,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.edit_note(note_id, note, db)
+
+
+@app.delete("/api/notes/delete/{note_id}")
+async def delete_note(
+        note_id: int,
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
+    return await _services.delete_note(note_id, db)

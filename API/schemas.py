@@ -112,14 +112,6 @@ class UsersOutput(User):
         orm_mode = True
 
 
-class BudgetOutput(Budget):
-    transactions: list[Transaction] = []
-    users: list[User] = []
-
-    class Config:
-        orm_mode = True
-
-
 class user_has_budget_create(_pydantic.BaseModel):
     user_id: int
 
@@ -132,10 +124,11 @@ class user_has_budget_create(_pydantic.BaseModel):
 class NoteBase(_pydantic.BaseModel):
     title: str
     description: str
-    date: _dt.datetime
 
 
 class NoteCreate(NoteBase):
+    budget_id: int
+
     class Config:
         orm_mode = True
 
@@ -143,6 +136,24 @@ class NoteCreate(NoteBase):
 class Note(NoteBase):
     id: int
     budget_id: int
+    date: _dt.datetime
+
+    class Config:
+        orm_mode = True
+
+
+class NoteEdit(_pydantic.BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class BudgetOutput(Budget):
+    transactions: list[Transaction] = []
+    users: list[User] = []
+    notes: list[Note] = []
 
     class Config:
         orm_mode = True

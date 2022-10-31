@@ -307,3 +307,85 @@ async def delete_category(
     db.commit()
 
     return category_obj
+
+
+# ####################### #
+#
+#    Notes functions
+#
+# ####################### #
+async def create_note(
+    note: _schemas.NoteCreate,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    note_obj = _models.Note(
+        title=note.title,
+        description=note.description,
+        budget_id=note.budget_id
+    )
+
+    db.add(note_obj)
+    db.commit()
+    db.refresh(note_obj)
+
+    return note_obj
+
+
+async def get_notes(
+    budget_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    return db.query(_models.Note).filter(
+        _models.Note.budget_id == budget_id).all()
+
+
+async def get_note(
+    note_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    note = db.query(_models.Note).filter(
+        _models.Note.id == note_id).first()
+
+    if (note == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID notatki, nieznaleziono notatki")
+
+    return note
+
+
+async def edit_note(
+    note_id: int,
+    note: _schemas.NoteEdit,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    note_obj = db.query(_models.Note).get(note_id)
+
+    if (note_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID notatki, nieznaleziono notatki")
+
+    if (note.title):
+        note_obj.title = note.title
+    if (note.description):
+        note_obj.description = note.description
+
+    db.commit()
+    db.refresh(note_obj)
+
+    return note_obj
+
+
+async def delete_note(
+    note_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    note_obj = db.query(_models.Note).get(note_id)
+
+    if (note_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID notatki, nieznaleziono notatki")
+
+    db.delete(note_obj)
+    db.commit()
+
+    return {"message": "Notatka usunięta"}
