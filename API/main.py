@@ -9,7 +9,15 @@ import services as _services
 import schemas as _schemas
 import models as _models
 
-app = _fastapi.FastAPI()
+app = _fastapi.FastAPI(
+    title="Zarzadzanie budzetem domowym API",
+    description="API stworzone na potrzeby pracy inżynierskiej",
+    version="1.0.0",
+    contact={
+            "name": "me by email",
+            "email": "155624@student.uwm.edu.pl"
+    }
+)
 
 
 # ####################### #
