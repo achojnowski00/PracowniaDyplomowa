@@ -198,32 +198,37 @@ async def delete_transaction(
 @app.post("/api/categories/create", response_model=_schemas.Category, tags=["category"])
 async def create_category(
         category: _schemas.CategoryCreate,
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.create_category(category, db)
 
 
 @app.get("/api/categories/get-all", tags=["category"])
 async def get_categories(
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.get_categories("all", db)
 
 
 @app.get("/api/categories/get-outcomes", tags=["category"])
 async def get_outcomes(
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.get_categories("outcomes", db)
 
 
 @app.get("/api/categories/get-incomes", tags=["category"])
 async def get_incomes(
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.get_categories("incomes", db)
 
 
 @app.get("/api/categories/get-single/{category_id}", response_model=_schemas.Category, tags=["category"])
 async def get_category(
         category_id: int,
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.get_category(category_id, db)
 
 
@@ -231,14 +236,16 @@ async def get_category(
 async def edit_category(
         category_id: int,
         category: _schemas.CategoryEdit,
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.edit_category(category_id, category, db)
 
 
 @app.delete("/api/categories/delete/{category_id}", tags=["category"])
 async def delete_category(
         category_id: int,
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.delete_category(category_id, db)
 
 
