@@ -20,4 +20,4 @@ instalowanie potrzebnych paczek
 `pip install -r API\requirements.txt`
 
 uruchamianie serwera backendu
-`ucivorn API.main:app --reload`
+`uvicorn API.main:app --reload`
