@@ -130,7 +130,8 @@ async def delete_user_from_budget(
 async def edit_budget(
         budget_id: int,
         budget: _schemas.BudgetCreate,
-        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+        db: _orm.Session = _fastapi.Depends(_services.get_db),
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
     return await _services.edit_budget(budget_id, budget, db)
 
 
