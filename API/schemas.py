@@ -46,12 +46,32 @@ class TransactionBase(_pydantic.BaseModel):
     title: str
     description: str
     amount: float
-    date: _dt.datetime
+
+
+class TransactionCreate(TransactionBase):
+    budget_id: int
+    category_id: int
+    # who_created_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class TransactionUpdate(_pydantic.BaseModel):
+    isOutcome: Optional[bool] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    amount: Optional[float] = None
+    category_id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
 
 
 class Transaction(TransactionBase):
     id: int
-    category_id: int
+    date: _dt.datetime
+    who_created: User
 
     class Config:
         orm_mode = True
@@ -84,11 +104,26 @@ class Category(CategoryBase):
         orm_mode = True
 
 
+class CategorySmall(CategoryEdit):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class TransactionDisplay(Transaction):
+    category: CategorySmall
+
+    class Config:
+        orm_mode = True
+
 # #################### #
 #
 #    BUDGET SCHEMA
 #
 # #################### #
+
+
 class BudgetBase(_pydantic.BaseModel):
     name: str
 
@@ -151,7 +186,7 @@ class NoteEdit(_pydantic.BaseModel):
 
 
 class BudgetOutput(Budget):
-    transactions: list[Transaction] = []
+    transactions: list[TransactionDisplay] = []
     users: list[User] = []
     notes: list[Note] = []
 

@@ -389,3 +389,106 @@ async def delete_note(
     db.commit()
 
     return {"message": "Notatka usunięta"}
+
+
+# ########################## #
+#
+#    Transaction functions
+#
+# ########################## #
+async def create_transaction(
+    transaction: _schemas.TransactionCreate,
+    db: _orm.Session = _fastapi.Depends(get_db),
+    user: _schemas.User = _fastapi.Depends(get_current_user)
+):
+    transaction_obj = _models.Transaction(
+        isOutcome=transaction.isOutcome,
+        title=transaction.title,
+        description=transaction.description,
+        amount=transaction.amount,
+        budget_id=transaction.budget_id,
+        category_id=transaction.category_id,
+        who_created_id=user.id
+    )
+
+    db.add(transaction_obj)
+    db.commit()
+    db.refresh(transaction_obj)
+
+    return transaction_obj
+
+
+async def edit_transaction(
+    transaction_id: int,
+    transaction: _schemas.TransactionUpdate,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    transaction_obj = db.query(_models.Transaction).get(transaction_id)
+
+    if (transaction_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID transakcji, nieznaleziono transakcji")
+
+    if (transaction.isOutcome):
+        transaction_obj.isOutcome = transaction.isOutcome
+    if (transaction.title):
+        transaction_obj.title = transaction.title
+    if (transaction.description):
+        transaction_obj.description = transaction.description
+    if (transaction.amount):
+        transaction_obj.amount = transaction.amount
+    if (transaction.category_id):
+        transaction_obj.category_id = transaction.category_id
+
+    db.commit()
+    db.refresh(transaction_obj)
+
+    return transaction_obj
+
+
+async def delete_transaction(
+    transaction_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    transaction_obj = db.query(_models.Transaction).get(transaction_id)
+
+    if (transaction_obj == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID transakcji, nieznaleziono transakcji")
+
+    db.delete(transaction_obj)
+    db.commit()
+
+    return {"message": "Transakcja usunięta"}
+
+
+async def get_transaction(
+    transaction_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    transaction = db.query(_models.Transaction).filter(
+        _models.Transaction.id == transaction_id).first()
+
+    if (transaction == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID transakcji, nieznaleziono transakcji")
+
+    return transaction
+
+
+async def get_transactions(
+    budget_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    return db.query(_models.Transaction).filter(
+        _models.Transaction.budget_id == budget_id).all()
+
+
+async def get_transactions_by_category(
+    budget_id: int,
+    category_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    return db.query(_models.Transaction).filter(
+        _models.Transaction.budget_id == budget_id,
+        _models.Transaction.category_id == category_id).all()

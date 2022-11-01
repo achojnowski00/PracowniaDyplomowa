@@ -24,6 +24,8 @@ class User(_db.Base):
 
     budgets = _orm.relationship(
         "Budget", secondary=user_has_budget, back_populates="users")
+    transactions = _orm.relationship(
+        "Transaction", back_populates="who_created")
 
     def verify_password(self, password):
         return _hash.bcrypt.verify(password, self.hashed_password)
@@ -61,9 +63,11 @@ class Transaction(_db.Base):
 
     budget_id = _sql.Column(_sql.Integer, _sql.ForeignKey("budgets.id"))
     category_id = _sql.Column(_sql.Integer, _sql.ForeignKey("categories.id"))
+    who_created_id = _sql.Column(_sql.Integer, _sql.ForeignKey("users.id"))
 
     budget = _orm.relationship("Budget", back_populates="transactions")
     category = _orm.relationship("Category", back_populates="transactions")
+    who_created = _orm.relationship("User", back_populates="transactions")
 
 
 class Note(_db.Base):
