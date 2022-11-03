@@ -1,5 +1,6 @@
 */env
 */__pycache__
 /env
+/venv
 /__pycache__
 requests.http
