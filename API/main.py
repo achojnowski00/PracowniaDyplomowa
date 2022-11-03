@@ -1,5 +1,6 @@
 import datetime as _datetime
 import fastapi as _fastapi
+from fastapi.middleware.cors import CORSMiddleware
 import fastapi.security as _security
 
 from typing import List
@@ -19,15 +20,27 @@ app = _fastapi.FastAPI(
     }
 )
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # ####################### #
 #
 #    Base route
 #
 # ####################### #
-@app.get("/", tags=["base"])
-def hello():
-    return {"messages": "All endpoints you can find in /docs"}
+@app.get("/api")
+async def root():
+    return {"message": "Api is working"}
 
 
 # ####################### #
@@ -36,14 +49,20 @@ def hello():
 #
 # ####################### #
 @app.post("/api/users/register", tags=["user"])
-async def create_user(user: _schemas.UserCreate, db: _orm.Session = _fastapi.Depends(_services.get_db)):
+async def create_user(
+    user: _schemas.UserCreate,
+    db: _orm.Session = _fastapi.Depends(_services.get_db)
+):
     db_user = await _services.get_user_by_login(user.login, db)
 
     if db_user:
         raise _fastapi.HTTPException(
             status_code=400, detail="Użytkownik o podanym emailu jest już zarejestrowany")
 
-    return await _services.create_user(user, db)
+    # return await _services.create_user(user, db)
+    user_data = await _services.create_user(user, db)
+
+    return await _services.create_token(user_data)
 
 
 @app.post("/api/users/token", tags=["user"])
