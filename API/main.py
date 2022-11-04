@@ -57,7 +57,7 @@ async def create_user(
 
     if db_user:
         raise _fastapi.HTTPException(
-            status_code=400, detail="Użytkownik o podanym emailu jest już zarejestrowany")
+            status_code=400, detail="Użytkownik o podanym loginie jest już zarejestrowany")
 
     # return await _services.create_user(user, db)
     user_data = await _services.create_user(user, db)
