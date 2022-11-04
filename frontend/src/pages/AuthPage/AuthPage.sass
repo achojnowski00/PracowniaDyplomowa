@@ -1,0 +1,78 @@
+.authPage
+    width: 100vw
+    height: 100vh
+    background: #F0F2F5
+    padding: 20px 10px
+    overflow: hidden;
+
+
+    &__wave
+        position: absolute
+        bottom: 0
+        left: 0
+        width: 100%
+        z-index: 20
+
+
+
+.authbox
+    border-radius: 6px;
+    background: #f1f1f1;
+    box-shadow:  20px 20px 60px #bebebe,-20px -20px 60px #ffffff;
+    padding: 20px;
+    max-width: 400px;
+    text-align: center
+    position: absolute
+    min-width: 350px
+    top: 50%
+    right: 50%
+    transform: translate(50%, -50%)
+    z-index: 30
+    @media(min-width: 1280px)
+        width: 450px
+        right: 200px
+        transform: translate(0, -70%)
+    @media(min-width: 1920px)
+        width: 550px
+        right: 300px
+        transform: translate(0, -70%)
+
+
+.joinUsImg
+    display: none
+    @media(min-width: 1280px)
+        display: block
+        position: absolute
+        bottom: 125px
+        left: 100px
+        width: 400px
+    @media(min-width: 1440px)
+        width: 500px
+        bottom: 140px
+        left: 150px
+    @media(min-width: 1660px)
+        bottom: 170px
+    @media(min-width: 1920px)
+        bottom: 190px
+        left: 350px
+
+
+
+.line
+    width: 100%
+    height: 2px
+    background: #dddddd
+    margin: 30px 0
+    box-sizing: border-box
+
+
+.buttonSwitch
+    all: unset
+    cursor: pointer
+    color: #fff
+    padding: 10px 15px
+    border-radius: 6px
+    font-size: 20px
+    background: #42b72a
+    text-align: center
+    user-select: none
