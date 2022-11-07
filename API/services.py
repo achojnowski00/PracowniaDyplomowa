@@ -481,7 +481,7 @@ async def get_transactions(
     db: _orm.Session = _fastapi.Depends(get_db)
 ):
     return db.query(_models.Transaction).filter(
-        _models.Transaction.budget_id == budget_id).all()
+        _models.Transaction.budget_id == budget_id).order_by(_models.Transaction.date.desc()).all()
 
 
 async def get_transactions_by_category(
@@ -491,4 +491,4 @@ async def get_transactions_by_category(
 ):
     return db.query(_models.Transaction).filter(
         _models.Transaction.budget_id == budget_id,
-        _models.Transaction.category_id == category_id).all()
+        _models.Transaction.category_id == category_id).order_by(_models.Transaction.date.desc()).all()
