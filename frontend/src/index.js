@@ -5,10 +5,13 @@ import App from "./App";
 import "./index.scss";
 
 import { UserProvider } from "./context/userContext";
+import { BudgetProvider } from "./context/budgetContext";
 
 ReactDOM.render(
   <UserProvider>
-    <App />
+    <BudgetProvider>
+      <App />
+    </BudgetProvider>
   </UserProvider>,
   document.getElementById("root")
 );

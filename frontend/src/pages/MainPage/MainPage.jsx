@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 
+import { LeftPanel } from "../../components/LeftPanel/LeftPanel";
+
 import { UserContext } from "../../context/userContext";
 
 export const MainPage = () => {
@@ -11,10 +13,8 @@ export const MainPage = () => {
 
   return (
     <div className="">
-      <p>Strona</p>
-      <button className="button is-danger" onClick={handlelogout}>
-        Wyloguj
-      </button>
+      <LeftPanel />
+      
     </div>
   );
 };

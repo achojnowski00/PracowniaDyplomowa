@@ -3,8 +3,10 @@ import axios from "axios";
 
 export const UserContext = createContext();
 
+
 export const UserProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
+  const [userdata, setUserdata] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,7 +19,10 @@ export const UserProvider = (props) => {
             Authorization: `Bearer ${token}`,
           },
         })
-        .catch((error) => {
+        .then((response) => {
+          setUserdata(response.data);
+        })
+        .catch(() => {
           setToken(null);
         });
       localStorage.setItem("access_token", token);
@@ -27,7 +32,7 @@ export const UserProvider = (props) => {
   }, [token]);
 
   return (
-    <UserContext.Provider value={[token, setToken]}>
+    <UserContext.Provider value={[token, setToken, userdata, setUserdata]}>
       {props.children}
     </UserContext.Provider>
   );
