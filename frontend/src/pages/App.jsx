@@ -13,11 +13,10 @@ import "./App.sass";
 
 const App = () => {
   const [token] = useContext(UserContext);
-  const [budgetData, setBudgetData, currentBudget, setCurrentBudget] = useContext(BudgetContext);
-
+  const [budgetData, setBudgetData, currentBudget, setCurrentBudget] =
+    useContext(BudgetContext);
 
   return (
-
     <BrowserRouter>
       <div className="page">
         {/* <Header title="Welcome to the app" /> */}

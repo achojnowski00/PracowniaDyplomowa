@@ -3,7 +3,6 @@ import axios from "axios";
 
 export const UserContext = createContext();
 
-
 export const UserProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("access_token"));
   const [userdata, setUserdata] = useState("");

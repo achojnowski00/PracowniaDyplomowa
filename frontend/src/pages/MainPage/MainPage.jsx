@@ -14,7 +14,6 @@ export const MainPage = () => {
   return (
     <div className="">
       <LeftPanel />
-      
     </div>
   );
 };
