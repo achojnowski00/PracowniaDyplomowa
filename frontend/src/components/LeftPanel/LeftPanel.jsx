@@ -7,6 +7,7 @@ import "./LeftPanel.sass";
 import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
+import DoneIcon from "@mui/icons-material/Done";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
@@ -24,7 +25,16 @@ export const LeftPanel = () => {
   const [budgetName, setBudgetName] = useState("");
 
   const handlelogout = () => {
-    setToken(null);
+    swal("Wylogowano", "", "success", {
+      button: "Zamknij",
+      timer: 500,
+    });
+    setTimeout(() => {
+      setToken(null);
+      setUserdata("");
+      setBudgetData("");
+      setCurrentBudget("");
+    }, 750);
   };
 
   const handleNameClick = () => {
@@ -135,16 +145,16 @@ export const LeftPanel = () => {
             <div className="leftPanel__buttons">
               <button
                 onClick={handleChangeName}
-                className="leftPanel__username-btn"
+                className="leftPanel__addBudget-btn"
               >
-                Zatwierdz
+                <DoneIcon />
               </button>
 
               <button
                 onClick={handleCancelChangeName}
-                className="leftPanel__username-btn leftPanel__username-btn--cancel"
+                className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
               >
-                Anuluj
+                <ClearIcon />
               </button>
             </div>
           </form>

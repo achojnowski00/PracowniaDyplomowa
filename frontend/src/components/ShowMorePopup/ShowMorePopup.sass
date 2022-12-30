@@ -1,0 +1,104 @@
+.showMorePopup
+  position: absolute
+  padding: 10px
+  z-index: 1
+  border-radius: 6px;
+  background: #e0e0e0;
+  box-shadow: inset 12px 12px 24px #d0d0d0,inset -12px -12px 24px #f0f0f0;
+
+  &__list
+    display: flex
+    gap: 10px
+    flex-direction: column
+    list-style: none
+    &-item
+      display: flex
+      align-items: center
+      gap: 10px
+      cursor: pointer
+      padding: 5px 10px
+      border-radius: 6px
+      transition: background .1s
+      &:hover
+        background: rgba(#000, .1)
+  
+  &__background
+    position: fixed
+    inset: 0
+    background: rgba(#000, .5)
+    z-index: 10
+    cursor: pointer
+    backdrop-filter: blur(2px)
+
+  &__form
+    position: fixed
+    z-index: 11
+    top: 40%
+    left: 50%
+    transform: translate(-50%, -50%)
+    max-width: 700px
+    padding: 50px
+    border-radius: 6px;
+    background: #e0e0e0;
+    box-shadow:  0px 0px 100px #d3d3d3,-0px -0px 100px #ededed;
+    
+    form 
+      text-align: center
+      display: flex
+      flex-direction: column
+      justify-content: center
+
+    &-title
+      font-size: 24px
+      font-weight: 500
+      margin-bottom: 10px
+    
+    &-instruction
+      font-size: 16px
+      font-weight: 500
+      width: 80%
+      margin-top: 10px
+      margin-right: auto
+      margin-left: auto
+      color: gray
+    
+    &-input
+      width: 200px
+      padding: 10px 20px
+      border: none
+      border-top-left-radius: 6px
+      border-top-right-radius: 6px
+      border-bottom: 1px solid rgba(0, 153, 204, 1)
+      background: rgba(0, 153, 204, 0.05)
+      margin-top: 30px
+      margin-right: auto
+      margin-left: auto
+      &::-webkit-inner-spin-button, &::-webkit-outer-spin-button
+        -webkit-appearance: none
+        margin: 0
+      &[type=number]
+        -moz-appearance: textfield
+      &:focus
+        outline: none
+        background: rgba(0, 153, 204, 0.2)
+    
+    &-btn
+      margin-top: 20px
+      width: 150px
+      padding: 10px 0
+      border: none
+      background: rgba(44, 204, 0, 0.1)
+      border-radius: 6px
+      cursor: pointer
+      transition: background .1s
+      margin-right: auto
+      margin-left: auto
+      border: 1px solid #239b02
+      font-size: 16px
+      &:hover
+        background: rgba(44, 204, 0, 0.2)
+
+
+
+    
+
