@@ -120,6 +120,7 @@ export const LeftPanel = () => {
         }
       )
       .then((response) => {
+        setCurrentBudget(response.data.id);
         reloadBudgets();
         setWantAddBudget(false);
         toast.success(`${budgetName} został utworzony`, {

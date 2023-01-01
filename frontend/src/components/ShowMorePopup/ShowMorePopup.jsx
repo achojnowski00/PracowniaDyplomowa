@@ -124,7 +124,6 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         }
       )
       .then((response) => {
-        setCurrentBudget("");
         toast.success(`${response.data.name} został usunięty z budżetu`, {
           autoClose: 1000,
           hideProgressBar: true,
@@ -155,6 +154,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
 
     if (budgetData.users.length !== 1) {
       handleDeleteUserFromBudget(userdata.id).then(() => {
+        setCurrentBudget("");
         reloadBudgets();
       });
     }
@@ -162,6 +162,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
 
   const handleDeleteBudget = async () => {
     handleDeleteUserFromBudget(userdata.id).then(() => {
+      setCurrentBudget("");
       reloadBudgets();
     });
   };
