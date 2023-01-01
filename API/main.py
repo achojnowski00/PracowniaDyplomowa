@@ -144,6 +144,19 @@ async def get_budget(
     return await _services.get_budget(budget_id, db)
 
 
+@app.get("/api/budgets/get-users/{budget_id}", response_model=List[_schemas.User], tags=["budget"])
+async def get_users_from_budget(
+        budget_id: int,
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_users_from_budget(budget_id, db)
+
+@app.get("/api/budgets/get-all", response_model=List[_schemas.Budget], tags=["budget"])
+async def get_all_budgets(
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_all_budgets(user, db)
+
 @app.delete("/api/budgets/remove-user/{budget_id}", tags=["budget"])
 async def delete_user_from_budget(
         budget_id: int,

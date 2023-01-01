@@ -170,6 +170,29 @@ async def get_budget(
     return budget
 
 
+async def get_users_from_budget(
+    budget_id: int,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    budget = db.query(_models.Budget).filter(
+        _models.Budget.id == budget_id).first()
+
+    if (budget == None):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie prawidłowe ID budżetu, nieznaleziono budżetu")
+
+    return budget.users
+
+
+async def get_all_budgets(
+    user: _schemas.User = _fastapi.Depends(get_current_user),
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    get_budgets = db.query(_models.Budget).filter(
+        _models.Budget.users.any(_models.User.id == user.id)).all()
+
+    return get_budgets
+
 async def delete_user_from_budget(
     budget_id: int,
     user_id: int,
