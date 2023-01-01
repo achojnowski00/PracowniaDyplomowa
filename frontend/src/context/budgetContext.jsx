@@ -11,6 +11,27 @@ export const BudgetProvider = (props) => {
 
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
+  const reloadBudgets = async () => {
+    axios
+      .get("http://127.0.0.1:8000/api/budgets/get-all", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUserdata((prev) => {
+          return {
+            ...prev,
+            budgets: res.data,
+          };
+        });
+      })
+      .catch((err) => {
+        console.log("budgetContext.jsx", err);
+      });
+  };
+
   useEffect(() => {
     if (currentBudget === "") {
       return;
@@ -34,7 +55,13 @@ export const BudgetProvider = (props) => {
 
   return (
     <BudgetContext.Provider
-      value={[budgetData, setBudgetData, currentBudget, setCurrentBudget]}
+      value={[
+        budgetData,
+        setBudgetData,
+        currentBudget,
+        setCurrentBudget,
+        reloadBudgets,
+      ]}
     >
       {props.children}
     </BudgetContext.Provider>

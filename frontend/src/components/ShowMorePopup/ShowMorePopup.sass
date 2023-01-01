@@ -11,6 +11,8 @@
     gap: 10px
     flex-direction: column
     list-style: none
+    &--margined
+      margin: 30px 0 20px 0
     &-item
       display: flex
       align-items: center
@@ -21,6 +23,22 @@
       transition: background .1s
       &:hover
         background: rgba(#000, .1)
+      &-name
+        font-size: 16px
+        &--bold
+          font-weight: 500
+      &-btn
+        display: flex
+        justify-content: center
+        align-items: center
+        padding: 3px
+        width: 30px
+        height: 30px
+        border-radius: 50%
+        transition: background .15s
+        color: #bb1313
+        &:hover
+          background: rgba(#000, .1)
   
   &__background
     position: fixed
@@ -30,7 +48,18 @@
     cursor: pointer
     backdrop-filter: blur(2px)
 
-  &__form
+  &__box-warning
+    margin-top: 50px
+    font-weight: 600
+    font-size: 20px
+    padding: 0 20px
+
+  &__box-controls
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+  &__form, &__box
     position: fixed
     z-index: 11
     top: 40%
@@ -97,6 +126,11 @@
       font-size: 16px
       &:hover
         background: rgba(44, 204, 0, 0.2)
+      &--red
+        background: rgba(204, 0, 0, 0.1)
+        border: 1px solid #b30000
+        &:hover
+          background: rgba(204, 0, 0, 0.2)
 
 
 

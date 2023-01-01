@@ -9,8 +9,13 @@ import { BudgetContext } from "../../context/budgetContext";
 
 export const CenterPanel = () => {
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
-  const [budgetData, setBudgetData, currentBudget, setCurrentBudget] =
-    useContext(BudgetContext);
+  const [
+    budgetData,
+    setBudgetData,
+    currentBudget,
+    setCurrentBudget,
+    reloadBudgets,
+  ] = useContext(BudgetContext);
 
   return (
     <div className="centerPanel-wrapper">
