@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import swal from "sweetalert";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./LeftPanel.sass";
 
@@ -8,6 +10,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
@@ -15,8 +18,13 @@ import { BudgetContext } from "../../context/budgetContext";
 export const LeftPanel = () => {
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
-  const [budgetData, setBudgetData, currentBudget, setCurrentBudget] =
-    useContext(BudgetContext);
+  const [
+    budgetData,
+    setBudgetData,
+    currentBudget,
+    setCurrentBudget,
+    reloadBudgets,
+  ] = useContext(BudgetContext);
 
   const [wantChangeName, setWantChangeName] = useState(false);
   const [newName, setNewName] = useState(userdata.name);
@@ -112,127 +120,156 @@ export const LeftPanel = () => {
         }
       )
       .then((response) => {
-        swal(response.data.message, "", "success", {
-          button: "Zamknij",
-          timer: 1000,
-        });
+        reloadBudgets();
         setWantAddBudget(false);
+        toast.success(`${budgetName} został utworzony`, {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       })
       .catch((error) => {
-        swal(error.response.data.message, "", "error");
+        swal("Coś poszło nie tak", "", "error");
       });
   };
 
   return (
-    <div className="leftPanel">
-      {!wantChangeName && (
-        <h1 onClick={handleNameClick} className="leftPanel__title">
-          Cześć {userdata.name}!
-        </h1>
-      )}
-
-      {wantChangeName && (
-        <h1 className="leftPanel__title">
-          Cześć
-          <form className="leftPanel__username-form">
-            <input
-              className="leftPanel__username-input"
-              placeholder={newName ? newName : "wprowadz nazwę"}
-              onChange={(e) => {
-                setNewName(e.target.value);
+    <>
+      <ToastContainer />
+      <div className="leftPanel">
+        {!wantChangeName && (
+          <>
+            <h1 onClick={handleNameClick} className="leftPanel__title">
+              Cześć {userdata.name}!
+            </h1>
+            <p
+              className="leftPanel__sub-title"
+              onClick={() => {
+                navigator.clipboard.writeText(userdata.id);
+                toast.success("Skopiowano ID do schowka", {
+                  autoClose: 1000,
+                  hideProgressBar: true,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                });
               }}
-            ></input>
-            <div className="leftPanel__buttons">
-              <button
-                onClick={handleChangeName}
-                className="leftPanel__addBudget-btn"
-              >
-                <DoneIcon />
-              </button>
-
-              <button
-                onClick={handleCancelChangeName}
-                className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
-              >
-                <ClearIcon />
-              </button>
-            </div>
-          </form>
-        </h1>
-      )}
-
-      {userdata.name === "Twoja nazwa użytkownika" && !wantChangeName && (
-        <h6 className="leftPanel__info">
-          Kliknij nazę użytkownika aby ją zmienić
-        </h6>
-      )}
-
-      {!userdata && (
-        <div className="leftPanel__loading">
-          <CircularProgress />
-        </div>
-      )}
-      {userdata.budgets && (
-        <ul className="leftPanel__list">
-          {userdata.budgets.map((budget) => {
-            return (
-              <li
-                key={budget.id}
-                className={
-                  currentBudget === budget.id
-                    ? "leftPanel__list-item leftPanel__list-item--active"
-                    : "leftPanel__list-item"
-                }
-                onClick={() => {
-                  setCurrentBudget(budget.id);
-                }}
-              >
-                {budget.name}
-              </li>
-            );
-          })}
-
-          {!wantAddBudget && (
-            <button
-              className="leftPanel__addBudget"
-              onClick={handleWantAddBudget}
             >
-              Dodaj nowy budżet
-            </button>
-          )}
+              Twoje ID:{" "}
+              <span className="leftPanel__sub-title--ID">{userdata.id}</span>
+            </p>
+          </>
+        )}
 
-          {wantAddBudget && (
-            <form>
+        {wantChangeName && (
+          <h1 className="leftPanel__title">
+            Cześć
+            <form className="leftPanel__username-form">
               <input
-                className="leftPanel__addBudget-input"
-                placeholder="Wprowadz nazwę budżetu"
+                className="leftPanel__username-input"
+                placeholder={newName ? newName : "wprowadz nazwę"}
                 onChange={(e) => {
-                  setBudgetName(e.target.value);
+                  setNewName(e.target.value);
                 }}
               ></input>
               <div className="leftPanel__buttons">
                 <button
+                  onClick={handleChangeName}
                   className="leftPanel__addBudget-btn"
-                  onClick={handleCreateBudget}
                 >
-                  <AddIcon />
+                  <DoneIcon />
                 </button>
 
                 <button
+                  onClick={handleCancelChangeName}
                   className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
-                  onClick={handleWantAddBudget}
                 >
                   <ClearIcon />
                 </button>
               </div>
             </form>
-          )}
-        </ul>
-      )}
+          </h1>
+        )}
 
-      <button className="leftPanel__logoutBtn" onClick={handlelogout}>
-        Wyloguj
-      </button>
-    </div>
+        {userdata.name === "Twoja nazwa użytkownika" && !wantChangeName && (
+          <h6 className="leftPanel__info">
+            Kliknij nazę użytkownika aby ją zmienić
+          </h6>
+        )}
+
+        {!userdata && (
+          <div className="leftPanel__loading">
+            <CircularProgress />
+          </div>
+        )}
+        {userdata.budgets && (
+          <ul className="leftPanel__list">
+            {userdata.budgets.map((budget) => {
+              return (
+                <li
+                  key={budget.id}
+                  className={
+                    currentBudget === budget.id
+                      ? "leftPanel__list-item leftPanel__list-item--active"
+                      : "leftPanel__list-item"
+                  }
+                  onClick={() => {
+                    setCurrentBudget(budget.id);
+                  }}
+                >
+                  {budget.name}
+                </li>
+              );
+            })}
+
+            {!wantAddBudget && (
+              <button
+                className="leftPanel__addBudget"
+                onClick={handleWantAddBudget}
+              >
+                Dodaj nowy budżet
+              </button>
+            )}
+
+            {wantAddBudget && (
+              <form>
+                <input
+                  className="leftPanel__addBudget-input"
+                  placeholder="Wprowadz nazwę budżetu"
+                  onChange={(e) => {
+                    setBudgetName(e.target.value);
+                  }}
+                ></input>
+                <div className="leftPanel__buttons">
+                  <button
+                    className="leftPanel__addBudget-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCreateBudget();
+                    }}
+                  >
+                    <AddIcon />
+                  </button>
+
+                  <button
+                    className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
+                    onClick={handleWantAddBudget}
+                  >
+                    <ClearIcon />
+                  </button>
+                </div>
+              </form>
+            )}
+          </ul>
+        )}
+
+        <button className="leftPanel__logoutBtn" onClick={handlelogout}>
+          <LogoutIcon />
+          Wyloguj
+        </button>
+      </div>
+    </>
   );
 };
