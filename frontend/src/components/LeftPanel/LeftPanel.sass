@@ -1,0 +1,200 @@
+.leftPanel
+    max-width: 300px
+    padding: 10px 20px
+    height: 100vh
+    position: fixed
+    top: 0
+    left: 0
+    padding-bottom: 100px
+    overflow-y: scroll
+    overflow-x: hidden
+    // background: red
+    &:hover
+        &::-webkit-scrollbar 
+            display: block
+            width: 0px
+            position: absolute
+            top: 0
+            right: 0
+        &::-webkit-scrollbar-thumb
+            background: rgb(206, 208, 212)
+            border-radius: 2px
+    &::-webkit-scrollbar 
+        display: none
+
+
+    &__info
+        color: gray
+        font-size: 12px
+        font-weight: 600
+
+    &__logoutBtn
+        all: unset
+        display: flex
+        gap: 5px
+        align-items: center
+        background: #F0F2F5
+        box-sizing: border-box
+        border-radius: 6px
+        bottom: 20px
+        font-weight: 600
+        padding: 10px
+        position: fixed
+        transition: color 0.15s, background 0.15s
+        width: 240px
+        z-index: 5
+        
+        &:hover
+            cursor: pointer
+            background: rgb(228,230,233)
+
+    &__title
+        border-radius: 6px
+        font-size: 32px
+        font-weight: 600
+        margin-top: 20px
+        padding: 10px
+        position: relative
+        &:hover
+            cursor: pointer
+            background: rgb(228,230,233)
+        &::after
+            content: ''
+            display: block
+            width: 30px
+            height: 38px
+            background: #0099CC
+            position: absolute
+            top: 14px
+            left: -40px
+            border-radius: 6px
+
+    &__sub-title
+        font-size: 16px
+        display: flex
+        align-items: center
+        gap: 5px
+        color: gray
+        font-weight: 600
+        margin-top: -15px
+        padding: 5px 10px
+        border-radius: 6px
+        position: relative
+        cursor: pointer
+        &:hover
+            background: rgb(228,230,233)
+        &--ID
+            color: black
+            font-weight: 700
+            font-size: 20px
+    
+
+    &__username-form
+        display: inline
+
+    &__username-input
+        all: unset
+        border-top-left-radius: 6px
+        border-top-right-radius: 6px
+        display: inline
+        padding-left: 5px
+        margin-left: 4px
+        width: 140px
+        cursor: pointer
+        border-bottom: 1px solid gray
+        &:focus
+            background: rgba(0, 153, 204, .1)
+        
+    &__username-btn
+        all: unset
+        padding: 5px 10px
+        font-size: 16px
+        border-radius: 6px
+        background: #0099CC
+        transition: background 0.15s
+        &:hover
+            background: #0077AA
+        &--cancel
+            background: #fa6666
+            &:hover
+                background: #e95555
+    
+    &__buttons
+        margin-top: 10px
+        display: flex
+        justify-content: space-around
+    
+    &__list
+        border-top: 1px solid rgb(206,208,212 )
+        border-bottom: 1px solid rgb(206,208,212 )
+        margin-top: 30px
+        list-style: none
+        padding: 10px 0
+
+        &-item
+            margin-top: 2px
+            padding: 5px 10px
+            border-radius: 6px
+            transition: background 0.15s
+            &:hover
+                cursor: pointer
+                background: rgb(228,230,233)
+            &--active
+                background: rgb(232,235,238)
+                font-weight: 600
+    
+    &__loading
+        display: flex
+        justify-content: center
+        align-items: center
+        svg
+            color: gray
+
+
+    &__addBudget-input
+        all: unset
+        margin-top: 10px
+        width: 100%
+        border-bottom: 1px solid #0099CC
+        border-top-left-radius: 6px
+        border-top-right-radius: 6px
+        box-sizing: border-box
+        padding: 5px 10px
+        &:focus
+            background: rgba(0, 153, 204, .1)
+
+    &__addBudget-btn
+        all: unset
+        border-radius: 50px
+        aspect-ratio: 1/1
+        width: 40px
+        display: flex
+        justify-content: center
+        align-items: center
+        background: rgba(206, 208, 212, .2)
+        border: 1px solid rgba(0, 153, 204, 0)
+        transition: background 0.15s, border 0.15s
+        &:hover
+            background: rgba(0, 153, 204, .3)
+            border: 1px solid rgba(0, 153, 204, .5)
+            
+        
+        &--cancel:hover
+            background: rgba(250, 102, 102, .3)
+            border: 1px solid rgba(250, 102, 102, .5)
+            
+    
+    &__addBudget
+        display: flex
+        justify-content: center
+        align-items: center
+        margin: 20px auto 0 auto
+        padding: 10px 20px
+        background: none
+        border: 1px solid #0099CC
+        border-radius: 6px
+        cursor: pointer
+        transition: background 0.15s
+        &:hover
+            background: rgba(0, 153, 204, .1)
+    

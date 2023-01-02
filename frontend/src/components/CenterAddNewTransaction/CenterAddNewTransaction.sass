@@ -1,0 +1,82 @@
+.newPost
+  margin-top: 30px
+  padding: 10px 15px
+  display: flex
+  align-items: center
+  gap: 10px
+  background: #fff
+  border-radius: 6px
+  box-shadow: 0px 3px 0px 0px #ced0d4, 0px 0px 0px 1px #ced0d4;
+  &__icon
+    width: 25px
+    height: 25px
+    display: flex
+    align-items: center
+    justify-content: center
+  
+  &__btn
+    background: #F0F2F5
+    width: 50%
+    text-align: left
+    cursor: pointer
+    border: none
+    border-radius: 10000px
+    padding: 10px 15px
+    font-size: 17px
+    &:hover
+      background: #e4e6e9
+  
+
+  &__popup
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    z-index: 11
+    border-radius: 6px
+    padding: 20px 50px 30px 50px
+    background: #fff
+    border: 2px solid #fff
+    box-shadow: 0 12px 28px 0 rgba(0,0,0,.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5)
+    transition: background 0.3s , border 0.3s
+    &--out 
+      background: #ECC1BD
+      border: 2px solid hsl( 5.00, 55.00, 60.00)
+    &--in
+      background: #B9ECCC
+      border: 2px solid hsl( 142.35, 57.3, 60.00)
+
+    &-form  
+      display: flex
+      flex-direction: column
+      gap: 20px
+      &-flex
+        display: flex
+        justify-content: center
+        align-items: center
+        margin-bottom: -20px
+      &-controls
+        display: flex
+        justify-content: space-evenly
+      &-btn
+        width: 40%
+        padding: 10px 0
+        cursor: pointer
+        border-radius: 6px
+        background: #0099CC
+        transition: background 0.3s
+        border: none
+        &:hover
+          background: #0088BB
+        &--cancel
+          background: #e4e6e9
+          &:hover
+            background: #d3d5d8
+
+    &-background
+      position: fixed
+      inset: 0
+      background: rgba(0,0,0,0.5)
+      backdrop-filter:  blur(2px)
+      z-index: 10
+    
