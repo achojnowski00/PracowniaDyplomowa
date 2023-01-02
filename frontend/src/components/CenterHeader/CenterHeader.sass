@@ -5,6 +5,65 @@
   justify-content: space-between
   padding: 0 20px
 
+  form
+    display: flex
+    align-items: center
+
+  &__title
+    font-size: 32px
+    font-weight: 500
+    margin-left: 9px
+    margin-bottom: 1px
+
+  &__input
+    all: unset
+    font-size: 32px
+    font-weight: 500
+    border: none
+    background: none
+    border-top-left-radius: 6px
+    border-top-right-radius: 6px
+    display: inline
+    padding-left: 5px
+    margin-left: 4px
+    width: 250px
+    cursor: pointer
+    border-bottom: 1px solid gray
+    color: #444
+    &:focus
+      background: rgba(0, 153, 204, .1)
+      outline: none
+
+  &__controls
+    margin-left: 10px
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 10px
+  
+  &__button
+    display: flex
+    align-items: center
+    justify-content: center
+    border: none
+    background: none
+    cursor: pointer
+    transition: background .15s
+    border-radius: 50%
+    padding: 4px
+    background: rgba(206, 208, 212, .4)
+    border: 1px solid rgba(0, 153, 204, 0)
+    transition: background 0.15s, border 0.15s
+    &:hover
+      background: rgba(0, 153, 204, .3)
+      border: 1px solid rgba(0, 153, 204, .5)
+          
+    &--clear:hover
+      background: rgba(250, 102, 102, .3)
+      border: 1px solid rgba(250, 102, 102, .5)
+
+
+
 .controls__icon
   display: flex
   justify-content: center

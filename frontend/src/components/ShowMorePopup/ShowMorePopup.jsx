@@ -212,6 +212,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                   type="number"
                   placeholder="Wpisz id użytkownika"
                   className="showMorePopup__form-input"
+                  autoFocus
                 />
                 <div className="showMorePopup__box-controls">
                   <button

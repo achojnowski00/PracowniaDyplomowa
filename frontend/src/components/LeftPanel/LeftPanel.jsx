@@ -174,6 +174,7 @@ export const LeftPanel = () => {
                 onChange={(e) => {
                   setNewName(e.target.value);
                 }}
+                autoFocus
               ></input>
               <div className="leftPanel__buttons">
                 <button
@@ -242,6 +243,7 @@ export const LeftPanel = () => {
                   onChange={(e) => {
                     setBudgetName(e.target.value);
                   }}
+                  autoFocus
                 ></input>
                 <div className="leftPanel__buttons">
                   <button
