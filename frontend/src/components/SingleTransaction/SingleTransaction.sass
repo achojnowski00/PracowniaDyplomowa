@@ -1,0 +1,123 @@
+.singleTransaction
+  padding: 5px 10px
+  display: flex
+  flex-direction: column
+  border-radius: 6px
+  box-shadow: 0px 3px 0px 0px #ced0d4, 0px 0px 0px 1px #ced0d4
+  &--income
+    background: #15dd4e40
+  &--outcome
+    background: #e12f1440
+  
+  
+  &__header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    &-left, &-right
+      display: flex
+      align-items: center
+    &-right
+      gap: 2px
+    &-left
+      gap: 10px
+    
+    &-graph-icon--down
+      color: hsl(0, 75, 30.0)
+    &-graph-icon--up
+      color: hsl(135, 75, 30.0)
+    &-title
+      font-size: 20px
+      font-weight: 600
+      
+    
+    
+    &-icon
+      cursor: pointer
+      display: flex
+      justify-content: center
+      align-items: center
+      padding: 3px
+      border-radius: 50%
+      transition: background 0.15s, color 0.15s
+      border: 1px solid rgba(0,0,0,0 )
+      &--edit
+        color: #525252
+        &:hover
+          background: #525252
+          color: #fff
+      &--delete
+        color: #353535
+        &:hover
+          background: #353535
+          color: #fff
+
+  &__info
+    margin-top: -2px
+    display: flex
+    margin-left: 35px
+    gap: 20px
+    font-size: 14px
+    font-weight: 600
+  
+  &__description
+    margin-left: 35px
+    margin-top: 20px
+    font-size: 16px
+  
+  &__amount
+    font-size: 20px
+    font-weight: 700
+    margin: 20px 0 10px 35px
+    &--income
+      color: hsl(135, 75, 30.0)
+    &--outcome
+      color: hsl(0, 75, 30.0)
+  
+
+.popup
+  background: #fff
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  z-index: 11
+  padding: 20px
+  border-radius: 6px
+  box-shadow: 0px 3px 0px 0px #ced0d4, 0px 0px 0px 1px #ced0d4
+  &__background
+    position: fixed
+    inset: 0
+    background: rgba(0,0,0,0.5)
+    z-index: 10
+    backdrop-filter: blur(2px)
+  &__title
+    font-size: 24px
+    font-weight: 600
+  &__subtitle
+    font-size: 16px
+    font-weight: 600
+    margin-bottom: 30px
+  &__buttons
+    display: flex
+    justify-content: space-around
+    gap: 10px
+    margin-top: 30px
+  &__btn
+    padding: 10px 20px
+    border-radius: 6px
+    font-size: 16px
+    cursor: pointer
+    transition: background 0.15s
+    background: #e12f1440
+    border: none
+    &:hover
+      background: #e12f1480
+    &--cancel
+      background: #ced0d480
+      &:hover
+        background: #ced0d4
+    &--confirm
+      background: #15dd4e40
+      &:hover
+        background: #15dd4e80

@@ -3,6 +3,9 @@ import React, { useContext } from "react";
 import "./CenterPanel.sass";
 
 import { CenterHeader } from "../CenterHeader/CenterHeader";
+import { CenterFilter } from "../CenterFilter/CenterFilter";
+import { CenterListOfTransactions } from "../CenterListOfTransactions/CenterListOfTransactions";
+import { CenterAddNewTransaction } from "../CenterAddNewTransaction/CenterAddNewTransaction";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
@@ -25,6 +28,9 @@ export const CenterPanel = () => {
       {currentBudget && (
         <div>
           <CenterHeader />
+          <CenterFilter />
+          <CenterAddNewTransaction />
+          <CenterListOfTransactions />
         </div>
       )}
     </div>

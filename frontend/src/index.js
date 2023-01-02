@@ -6,11 +6,14 @@ import "./index.scss";
 
 import { UserProvider } from "./context/userContext";
 import { BudgetProvider } from "./context/budgetContext";
+import { FilterProvider } from "./context/filterContext";
 
 ReactDOM.render(
   <UserProvider>
     <BudgetProvider>
-      <App />
+      <FilterProvider>
+        <App />
+      </FilterProvider>
     </BudgetProvider>
   </UserProvider>,
   document.getElementById("root")

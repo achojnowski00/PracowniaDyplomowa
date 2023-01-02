@@ -2,12 +2,15 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 import { UserContext } from "./userContext";
+import swal from "sweetalert";
 
 export const BudgetContext = createContext();
 
 export const BudgetProvider = (props) => {
   const [budgetData, setBudgetData] = useState("");
-  const [currentBudget, setCurrentBudget] = useState("");
+  const [currentBudget, setCurrentBudget] = useState(
+    localStorage.getItem("currentBudget") || ""
+  );
 
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
@@ -33,6 +36,8 @@ export const BudgetProvider = (props) => {
   };
 
   useEffect(() => {
+    localStorage.setItem("currentBudget", currentBudget);
+
     if (currentBudget === "") {
       return;
     }
@@ -50,6 +55,10 @@ export const BudgetProvider = (props) => {
       })
       .catch((err) => {
         console.log("budgetContext.jsx (31)", err);
+        swal("Coś poszło nie tak", "", "error", {
+          button: "Zamknij",
+          timer: 1000,
+        });
       });
   }, [currentBudget]);
 

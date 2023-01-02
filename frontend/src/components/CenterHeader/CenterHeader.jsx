@@ -13,6 +13,7 @@ import DoneIcon from "@mui/icons-material/Done";
 
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
+import { FilterContext } from "../../context/filterContext";
 
 export const CenterHeader = () => {
   const [
@@ -23,6 +24,7 @@ export const CenterHeader = () => {
     reloadBudgets,
   ] = useContext(BudgetContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
+  const [, , , , , , , , balans] = useContext(FilterContext);
 
   const [showMore, setShowMore] = useState(false);
   const [wantChangeBudgetName, setWantChangeBudgetName] = useState(false);
@@ -44,6 +46,10 @@ export const CenterHeader = () => {
     if (newBudgetName === budgetData.name) {
       setWantChangeBudgetName(false);
       return;
+    }
+
+    if (newBudgetName.length > 32) {
+      setNewBudgetName(newBudgetName.slice(0, 32));
     }
 
     await axios
@@ -102,6 +108,7 @@ export const CenterHeader = () => {
               value={newBudgetName}
               onChange={(e) => setNewBudgetName(e.target.value)}
               autoFocus
+              maxLength="32"
             />
             <div className="centerHeader__controls">
               <button
@@ -126,6 +133,8 @@ export const CenterHeader = () => {
             </div>
           </form>
         )}
+
+        <p className="centerHeader__balans">{balans} zł</p>
 
         <div className="centerHeader__controls">
           <div
