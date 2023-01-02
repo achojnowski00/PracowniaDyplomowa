@@ -141,7 +141,7 @@ async def get_budget(
         budget_id: int,
         user: _schemas.User = _fastapi.Depends(_services.get_current_user),
         db: _orm.Session = _fastapi.Depends(_services.get_db)):
-    return await _services.get_budget(budget_id, db)
+    return await _services.get_budget(budget_id, user, db)
 
 
 @app.get("/api/budgets/get-users/{budget_id}", response_model=List[_schemas.User], tags=["budget"])
@@ -212,6 +212,15 @@ async def get_transactions_with_specific_category(
         db: _orm.Session = _fastapi.Depends(_services.get_db)):
     return await _services.get_transactions_by_category(budget_id, category_id, db)
 
+@app.get("/api/transaction/get-all/{budget_id}/{from_date}/{to_date}", response_model=List[_schemas.TransactionDisplay], tags=["transaction"])
+async def get_transactions_with_specific_date(
+        budget_id: int,
+        from_date: _datetime.datetime,
+        to_date: _datetime.datetime,
+        user: _schemas.User = _fastapi.Depends(_services.get_current_user),
+        db: _orm.Session = _fastapi.Depends(_services.get_db)):
+    return await _services.get_transactions_by_date(budget_id, from_date, to_date, db)
+
 
 @app.put("/api/transaction/edit/{transaction_id}", tags=["transaction"])
 async def edit_transaction(
@@ -227,7 +236,7 @@ async def delete_transaction(
         transaction_id: int,
         db: _orm.Session = _fastapi.Depends(_services.get_db),
         user: _schemas.User = _fastapi.Depends(_services.get_current_user)):
-    return await _services.delete_transaction(transaction_id, db)
+    return await _services.delete_transaction(transaction_id, db, user)
 
 
 # ####################### #

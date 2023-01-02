@@ -158,6 +158,7 @@ async def add_user_to_budget(
 
 async def get_budget(
     budget_id: int,
+    user: _schemas.User = _fastapi.Depends(get_current_user),
     db: _orm.Session = _fastapi.Depends(get_db)
 ):
     budget = db.query(_models.Budget).filter(
@@ -166,6 +167,10 @@ async def get_budget(
     if (budget == None):
         raise _fastapi.HTTPException(
             status_code=404, detail="Nie prawidłowe ID budżetu, nieznaleziono budżetu")
+        
+    if(user.id not in [user.id for user in budget.users]):
+        raise _fastapi.HTTPException(
+            status_code=404, detail="Nie masz dostępu do tego budżetu")
 
     return budget
 
@@ -452,8 +457,8 @@ async def edit_transaction(
         raise _fastapi.HTTPException(
             status_code=404, detail="Nie prawidłowe ID transakcji, nieznaleziono transakcji")
 
-    if (transaction.isOutcome):
-        transaction_obj.isOutcome = transaction.isOutcome
+    # if (transaction.isOutcome):
+    transaction_obj.isOutcome = transaction.isOutcome
     if (transaction.title):
         transaction_obj.title = transaction.title
     if (transaction.description):
@@ -471,13 +476,18 @@ async def edit_transaction(
 
 async def delete_transaction(
     transaction_id: int,
-    db: _orm.Session = _fastapi.Depends(get_db)
+    db: _orm.Session = _fastapi.Depends(get_db),
+    user: _schemas.User = _fastapi.Depends(get_current_user)
 ):
     transaction_obj = db.query(_models.Transaction).get(transaction_id)
 
     if (transaction_obj == None):
         raise _fastapi.HTTPException(
             status_code=404, detail="Nie prawidłowe ID transakcji, nieznaleziono transakcji")
+    
+    if(transaction_obj.who_created_id != user.id):
+        raise _fastapi.HTTPException(
+            status_code=403, detail="Nie masz uprawnień do usunięcia tej transakcji")
 
     db.delete(transaction_obj)
     db.commit()
@@ -515,3 +525,15 @@ async def get_transactions_by_category(
     return db.query(_models.Transaction).filter(
         _models.Transaction.budget_id == budget_id,
         _models.Transaction.category_id == category_id).order_by(_models.Transaction.date.desc()).all()
+
+
+async def get_transactions_by_date(
+    budget_id: int,
+    date_from: str,
+    date_to: str,
+    db: _orm.Session = _fastapi.Depends(get_db)
+):
+    return db.query(_models.Transaction).filter(
+        _models.Transaction.budget_id == budget_id,
+        _models.Transaction.date >= date_from,
+        _models.Transaction.date <= date_to).order_by(_models.Transaction.date.desc()).all()

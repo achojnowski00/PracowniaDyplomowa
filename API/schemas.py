@@ -186,7 +186,7 @@ class NoteEdit(_pydantic.BaseModel):
 
 
 class BudgetOutput(Budget):
-    transactions: list[TransactionDisplay] = []
+    # transactions: list[TransactionDisplay] = []
     users: list[User] = []
     notes: list[Note] = []
 
