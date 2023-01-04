@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import "./Note.sass";
+import "./NotePopup.sass";
 import axios from "axios";
 import swal from "sweetalert";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,7 +13,7 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
 
-export const Note = ({
+export const NotePopup = ({
   turnOff,
   callback,
   title = "",

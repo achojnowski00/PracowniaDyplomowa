@@ -5,7 +5,7 @@ import "./Notes.sass";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 // Components
-import { Note } from "../Note/Note";
+import { NotePopup } from "../NotePopup/NotePopup";
 
 // Context
 import { BudgetContext } from "../../context/budgetContext";
@@ -64,7 +64,7 @@ export const Notes = () => {
       {/*      POPUPY      */}
       {/* ================ */}
       {wantAddNote && (
-        <Note
+        <NotePopup
           callback={fetchNotes}
           turnOff={handleSwitchWantAddNote}
           action="add"
