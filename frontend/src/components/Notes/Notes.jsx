@@ -6,6 +6,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 // Components
 import { NotePopup } from "../NotePopup/NotePopup";
+import { NoteDisplay } from "../NoteDisplay/NoteDisplay";
 
 // Context
 import { BudgetContext } from "../../context/budgetContext";
@@ -58,6 +59,9 @@ export const Notes = () => {
           <AddRoundedIcon />
           Dodaj notatkę
         </button>
+        {notesData && (
+          <NoteDisplay notesData={notesData} fetchNotes={fetchNotes} />
+        )}
       </div>
 
       {/* ================ */}
