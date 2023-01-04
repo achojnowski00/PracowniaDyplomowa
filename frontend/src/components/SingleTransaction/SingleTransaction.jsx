@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { format, formatDistance, formatRelative, subDays } from "date-fns";
 import { pl } from "date-fns/locale";
 import axios from "axios";
@@ -19,7 +19,6 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect } from "react";
 
 export const SingleTransaction = ({
   amount,
@@ -155,6 +154,7 @@ export const SingleTransaction = ({
           description: newDescription,
           amount: newAmount,
           category_id: newCategory,
+          date: newDate,
         },
         {
           headers: {
@@ -306,6 +306,16 @@ export const SingleTransaction = ({
                 label="Kwota"
                 variant="standard"
               />
+
+              <input
+                type="datetime-local"
+                value={newDate}
+                onChange={(e) => {
+                  resetErrorMessage();
+                  setNewDate(e.target.value);
+                }}
+              />
+
               <div className="popup__form-flex">
                 {newIsOutcome ? "Wydatek" : "Przychód"}
                 <Checkbox
