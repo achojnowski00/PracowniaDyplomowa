@@ -38,6 +38,7 @@ export const SingleTransaction = ({
   const [wantEdit, setWantEdit] = useState(false);
 
   const [categories, setCategories] = useState("");
+  const [newCategories, setNewCategories] = useState([]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -45,6 +46,15 @@ export const SingleTransaction = ({
   const [newIsOutcome, setNewIsOutcome] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newDate, setNewDate] = useState("");
+
+  const setFirstCategoryFromList = async () => {
+    if (categories === "") return;
+    let filteredCategoriesBasedOnNewIsOutcome = await categories.filter(
+      (cat) => cat.isOutcome === newIsOutcome
+    );
+
+    setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
+  };
 
   const setStartingEditValues = () => {
     setNewTitle(title);
@@ -54,6 +64,10 @@ export const SingleTransaction = ({
     setNewCategory(category.id);
     setNewDate(date);
   };
+
+  useEffect(() => {
+    setFirstCategoryFromList();
+  }, [newIsOutcome]);
 
   const handleWantDelete = () => {
     setWantDelete(!wantDelete);
