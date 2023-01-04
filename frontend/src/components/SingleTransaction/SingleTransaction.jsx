@@ -38,7 +38,6 @@ export const SingleTransaction = ({
   const [wantEdit, setWantEdit] = useState(false);
 
   const [categories, setCategories] = useState("");
-  const [newCategories, setNewCategories] = useState([]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -46,6 +45,7 @@ export const SingleTransaction = ({
   const [newIsOutcome, setNewIsOutcome] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newDate, setNewDate] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const setFirstCategoryFromList = async () => {
     if (categories === "") return;
@@ -53,7 +53,9 @@ export const SingleTransaction = ({
       (cat) => cat.isOutcome === newIsOutcome
     );
 
-    setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
+    if (filteredCategoriesBasedOnNewIsOutcome[0]) {
+      setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
+    }
   };
 
   const setStartingEditValues = () => {
@@ -63,6 +65,15 @@ export const SingleTransaction = ({
     setNewIsOutcome(isOutcome);
     setNewCategory(category.id);
     setNewDate(date);
+  };
+
+  const resetEditValues = () => {
+    setNewTitle("");
+    setNewDescription("");
+    setNewAmount("");
+    setNewIsOutcome("");
+    setNewCategory("");
+    setNewDate("");
   };
 
   useEffect(() => {
@@ -76,6 +87,10 @@ export const SingleTransaction = ({
   const handleWantEdit = () => {
     setWantEdit(!wantEdit);
     setStartingEditValues();
+  };
+
+  const resetErrorMessage = () => {
+    setErrorMessage("");
   };
 
   const fetchCategories = async () => {
@@ -112,6 +127,25 @@ export const SingleTransaction = ({
   };
 
   const handleSubmitEdit = async (transactionID) => {
+    if (newTitle === "") return setErrorMessage("Tytuł nie może być pusty");
+    if (newAmount === "") return setErrorMessage("Kwota nie może być pusta");
+    if (newCategory === "")
+      return setErrorMessage("Kategoria nie może być pusta");
+    if (newDate === "") return setErrorMessage("Data nie może być pusta");
+
+    if (
+      newTitle === title &&
+      newDescription === description &&
+      newAmount === amount &&
+      newIsOutcome === isOutcome &&
+      newCategory === category.id &&
+      newDate === date
+    ) {
+      setWantEdit(false);
+      resetEditValues();
+      return;
+    }
+
     await axios
       .put(
         `http://127.0.0.1:8000/api/transaction/edit/${transactionID}`,
@@ -132,6 +166,8 @@ export const SingleTransaction = ({
       .then((res) => {
         toast.success("Transakcja została zaktualizowana");
         getTransactions();
+        setWantEdit(false);
+        resetEditValues();
       })
       .catch((err) => {
         console.log("error - edycja posta", err);
@@ -241,7 +277,11 @@ export const SingleTransaction = ({
               <TextField
                 className="popup__form-input"
                 value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
+                required
+                onChange={(e) => {
+                  resetErrorMessage();
+                  setNewTitle(e.target.value);
+                }}
                 type="text"
                 label="Tytuł transakcji"
                 variant="standard"
@@ -257,7 +297,11 @@ export const SingleTransaction = ({
               <TextField
                 className="popup__form-input"
                 value={newAmount}
-                onChange={(e) => setNewAmount(e.target.value)}
+                required
+                onChange={(e) => {
+                  resetErrorMessage();
+                  setNewAmount(e.target.value);
+                }}
                 type="number"
                 label="Kwota"
                 variant="standard"
@@ -275,7 +319,9 @@ export const SingleTransaction = ({
 
               <select
                 value={Number(newCategory)}
+                required
                 onChange={(e) => {
+                  resetErrorMessage();
                   setNewCategory(Number(e.target.value));
                 }}
               >
@@ -292,6 +338,7 @@ export const SingleTransaction = ({
                   })}
               </select>
 
+              {errorMessage && <p className="popup__error">{errorMessage}</p>}
               <div className="popup__buttons">
                 <button
                   onClick={(e) => {
