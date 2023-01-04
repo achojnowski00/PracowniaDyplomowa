@@ -38,7 +38,6 @@ export const SingleTransaction = ({
   const [wantEdit, setWantEdit] = useState(false);
 
   const [categories, setCategories] = useState("");
-  const [newCategories, setNewCategories] = useState([]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -47,17 +46,6 @@ export const SingleTransaction = ({
   const [newCategory, setNewCategory] = useState("");
   const [newDate, setNewDate] = useState("");
 
-  const updateCategories = async () => {
-    if (categories === "") return;
-    let filteredCategoriesBasedOnNewIsOutcome = await categories.filter(
-      (cat) => cat.isOutcome === newIsOutcome
-    );
-    console.log("singleTransaction.jsx", filteredCategoriesBasedOnNewIsOutcome);
-
-    setNewCategories(filteredCategoriesBasedOnNewIsOutcome);
-    setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
-  };
-
   const setStartingEditValues = () => {
     setNewTitle(title);
     setNewDescription(description);
@@ -65,7 +53,6 @@ export const SingleTransaction = ({
     setNewIsOutcome(isOutcome);
     setNewCategory(category.id);
     setNewDate(date);
-    updateCategories();
   };
 
   const handleWantDelete = () => {
@@ -146,10 +133,6 @@ export const SingleTransaction = ({
     }
     fetchCategories();
   }, [wantEdit]);
-
-  useEffect(() => {
-    updateCategories();
-  }, [newIsOutcome]);
 
   return (
     <>
@@ -273,8 +256,8 @@ export const SingleTransaction = ({
                 <Checkbox
                   checked={newIsOutcome}
                   onChange={() => {
-                    setNewCategory("");
                     setNewIsOutcome(!newIsOutcome);
+                    setNewCategory("");
                   }}
                 />
               </div>
@@ -285,18 +268,17 @@ export const SingleTransaction = ({
                   setNewCategory(Number(e.target.value));
                 }}
               >
-                {/* <option value={0}>Wybierz kategorię</option> */}
-
-                {newCategories.map((category) => {
-                  if (category.isOutcome === newIsOutcome) {
-                    return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                        {category.id}
-                      </option>
-                    );
-                  }
-                })}
+                {categories &&
+                  categories.map((category) => {
+                    if (category.isOutcome === newIsOutcome) {
+                      return (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                          {category.id}
+                        </option>
+                      );
+                    }
+                  })}
               </select>
 
               <div className="popup__buttons">
@@ -320,7 +302,7 @@ export const SingleTransaction = ({
                 </button>
               </div>
 
-              {console.table({
+              {console.table("Nowe wartości edycji posta 🎅", {
                 newTitle,
                 newDescription,
                 newAmount,
