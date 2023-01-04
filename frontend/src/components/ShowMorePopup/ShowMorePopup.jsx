@@ -62,7 +62,38 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleLeaveBudget = () => {
-    setWantLeaveBudget(!wantLeaveBudget);
+    // setWantLeaveBudget(!wantLeaveBudget);
+    swal({
+      title: "Czy na pewno chcesz opuścić budżet?",
+      text: "Aby do niego wrócić musisz zostać zaproszony przez innych użytkowników",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete && budgetData.users.length === 1) {
+        swal({
+          title: "Czy na pewno chcesz usunąć budżet?",
+          text: "Nie będziesz mógł go odzyskać",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            deleteUserFromBudget(userdata.id).then(() => {
+              setCurrentBudget("");
+              reloadBudgets();
+            });
+          }
+        });
+      }
+
+      if (willDelete && budgetData.users.length > 1) {
+        deleteUserFromBudget(userdata.id).then(() => {
+          setCurrentBudget("");
+          reloadBudgets();
+        });
+      }
+    });
   };
 
   const handleSubmitAddUser = async (e) => {
@@ -112,7 +143,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
       });
   };
 
-  const handleDeleteUserFromBudget = async (user_id) => {
+  const deleteUserFromBudget = async (user_id) => {
     await axios
       .delete(
         `http://127.0.0.1:8000/api/budgets/remove-user/${currentBudget}?user_id=${user_id}`,
@@ -147,13 +178,27 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
       });
   };
 
+  const handleDeleteFromBudget = (userID) => {
+    swal({
+      title: "Czy na pewno chcesz usunąć użytkownika z budżetu?",
+      text: "Będziesz mógł zaprosić go ponownie",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        deleteUserFromBudget(userID);
+      }
+    });
+  }
+
   const handleSubmitLeaveBudget = () => {
     if (budgetData.users.length === 1) {
       setWantDeleteBudget(true);
     }
 
     if (budgetData.users.length !== 1) {
-      handleDeleteUserFromBudget(userdata.id).then(() => {
+      deleteUserFromBudget(userdata.id).then(() => {
         setCurrentBudget("");
         reloadBudgets();
       });
@@ -161,7 +206,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleDeleteBudget = async () => {
-    handleDeleteUserFromBudget(userdata.id).then(() => {
+    deleteUserFromBudget(userdata.id).then(() => {
       setCurrentBudget("");
       reloadBudgets();
     });
@@ -244,17 +289,16 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                         className="showMorePopup__list-item-btn"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleDeleteUserFromBudget(user.id);
+                          handleDeleteFromBudget(user.id);
                         }}
                       />
                     )}
                     <p
                       className={`showMorePopup__list-item-name 
-                    ${
-                      user.id === userdata.id
-                        ? "showMorePopup__list-item-name--bold"
-                        : ""
-                    }
+                    ${user.id === userdata.id
+                          ? "showMorePopup__list-item-name--bold"
+                          : ""
+                        }
                       `}
                     >
                       {user.name}
@@ -271,62 +315,6 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                   Zamknij
                 </button>
               </div>
-            </div>
-          </>
-        )}
-
-        {wantLeaveBudget && (
-          <>
-            <ToastContainer />
-            <div
-              onClick={handleLeaveBudget}
-              className="showMorePopup__background"
-            ></div>
-            <div className="showMorePopup__box">
-              <p className="showMorePopup__box-title">
-                Czy na pewno chcesz opuścić budżet {budgetData.name}
-              </p>
-              <p className="showMorePopup__form-instruction">
-                Aby wrócić do budżetu musisz zostać zaproszony ponownie.
-              </p>
-
-              <div className="showMorePopup__box-controls">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmitLeaveBudget();
-                    // console.log("ShowMorePopup.jsx", userdata);
-                  }}
-                  className="showMorePopup__form-btn showMorePopup__form-btn--red"
-                >
-                  Opuść
-                </button>
-                <button
-                  onClick={handleLeaveBudget}
-                  className="showMorePopup__form-btn"
-                >
-                  Zamknij
-                </button>
-              </div>
-              {wantDeleteBudget && (
-                <>
-                  <p className="showMorePopup__box-warning">
-                    Jesteś jedynym użytkownikiem w budżecie. Opuszczając budżet
-                    usuniesz go na stałe.
-                  </p>
-                  <div className="showMorePopup__box-controls">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDeleteBudget();
-                      }}
-                      className="showMorePopup__form-btn showMorePopup__form-btn--red"
-                    >
-                      Usuń budżet
-                    </button>
-                  </div>
-                </>
-              )}
             </div>
           </>
         )}

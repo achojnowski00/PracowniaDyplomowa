@@ -20,6 +20,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import Switch from "@mui/material/Switch";
+import swal from "sweetalert";
 
 export const SingleTransaction = ({
   amount,
@@ -175,6 +176,21 @@ export const SingleTransaction = ({
       });
   };
 
+  const submitDelete = (e, transactionID) => {
+    e.preventDefault();
+    swal({
+      title: "Czy na pewno chcesz usunąć transakcję?",
+      text: "Nie będziesz mógł tego cofnąć",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        handleSubmitDelete(transactionID);
+      }
+    });
+  }
+
   useEffect(() => {
     if (!wantEdit) {
       return;
@@ -211,7 +227,8 @@ export const SingleTransaction = ({
                 <EditRoundedIcon />
               </div>
               <div
-                onClick={handleWantDelete}
+                // onClick={handleWantDelete}
+                onClick={(e) => { submitDelete(e, id) }}
                 className="singleTransaction__header-icon singleTransaction__header-icon--delete"
               >
                 <DeleteRoundedIcon />
@@ -242,32 +259,6 @@ export const SingleTransaction = ({
       {/* ================ */}
       {/*      POPUPY      */}
       {/* ================ */}
-      {wantDelete && (
-        <>
-          <div onClick={handleWantDelete} className="popup__background"></div>
-          <div className="popup">
-            <h2 className="popup__title">
-              Czy na pewno chcesz usunąć transakcję?
-            </h2>
-            <h3 className="popup__subtitle">Tego nie da się cofnąć</h3>
-            <div className="popup__buttons">
-              <button
-                onClick={handleWantDelete}
-                className="popup__btn popup__btn--cancel"
-              >
-                Anuluj
-              </button>
-              <button
-                onClick={() => handleSubmitDelete(id)}
-                className="popup__btn popup__btn--delete"
-              >
-                Usuń
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
       {wantEdit && (
         <>
           <div onClick={handleWantEdit} className="popup__background"></div>
