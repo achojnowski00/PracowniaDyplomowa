@@ -312,7 +312,7 @@ async def edit_category(
 
     if (category.name):
         category_obj.name = category.name
-    if (category.isOutcome):
+    if (category.isOutcome or category.isOutcome == False):
         category_obj.isOutcome = category.isOutcome
 
     db.commit()
