@@ -275,7 +275,11 @@ export const SingleTransaction = ({
             <h2 className="popup__title">Edytuj transakcję</h2>
 
             <form className="popup__form">
-              <TextField
+              <label className="popup__form-label" htmlFor="title">
+                Tytuł transakcji
+              </label>
+              <input
+                id="title"
                 className="popup__form-input"
                 value={newTitle}
                 required
@@ -287,15 +291,21 @@ export const SingleTransaction = ({
                 label="Tytuł transakcji"
                 variant="standard"
               />
-              <TextField
+              <label className="popup__form-label" htmlFor="description">
+                Opis transakcji
+              </label>
+              <textarea
+                id="description"
                 className="popup__form-input"
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
-                type="text"
-                label="Opis transakcji"
-                variant="standard"
+                multiline
               />
-              <TextField
+              <label className="popup__form-label" htmlFor="amount">
+                Kwota (zł)
+              </label>
+              <input
+                id="amount"
                 className="popup__form-input"
                 value={newAmount}
                 required
@@ -308,8 +318,13 @@ export const SingleTransaction = ({
                 variant="standard"
               />
 
+              <label className="popup__form-label" htmlFor="date">
+                Data transakcji
+              </label>
               <input
+                id="date"
                 type="datetime-local"
+                className="popup__form-input popup__form-input--date"
                 value={newDate}
                 onChange={(e) => {
                   resetErrorMessage();
@@ -317,6 +332,9 @@ export const SingleTransaction = ({
                 }}
               />
 
+              <label className="popup__form-label" htmlFor="category">
+                Kategoria
+              </label>
               <div className="popup__form-flex">
                 <button
                   className={
@@ -348,26 +366,30 @@ export const SingleTransaction = ({
                 </button>
               </div>
 
-              <select
-                value={Number(newCategory)}
-                required
-                onChange={(e) => {
-                  resetErrorMessage();
-                  setNewCategory(Number(e.target.value));
-                }}
-              >
-                {categories &&
-                  categories.map((category) => {
-                    if (category.isOutcome === newIsOutcome) {
-                      return (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                          {category.id}
-                        </option>
-                      );
-                    }
-                  })}
-              </select>
+              <div className="popup__form-select-wrapper">
+                <select
+                  id="category"
+                  className="popup__form-input popup__form-input--select"
+                  value={Number(newCategory)}
+                  required
+                  onChange={(e) => {
+                    resetErrorMessage();
+                    setNewCategory(Number(e.target.value));
+                  }}
+                >
+                  {categories &&
+                    categories.map((category) => {
+                      if (category.isOutcome === newIsOutcome) {
+                        return (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                            {category.id}
+                          </option>
+                        );
+                      }
+                    })}
+                </select>
+              </div>
 
               {errorMessage && <p className="popup__error">{errorMessage}</p>}
               <div className="popup__buttons">
