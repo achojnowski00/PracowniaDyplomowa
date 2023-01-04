@@ -467,6 +467,8 @@ async def edit_transaction(
         transaction_obj.amount = transaction.amount
     if (transaction.category_id):
         transaction_obj.category_id = transaction.category_id
+    if (transaction.date):
+        transaction_obj.date = transaction.date
 
     db.commit()
     db.refresh(transaction_obj)

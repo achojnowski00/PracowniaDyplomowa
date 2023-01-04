@@ -63,6 +63,7 @@ class TransactionUpdate(_pydantic.BaseModel):
     description: Optional[str] = None
     amount: Optional[float] = None
     category_id: Optional[int] = None
+    date: Optional[_dt.datetime] = None
 
     class Config:
         orm_mode = True
