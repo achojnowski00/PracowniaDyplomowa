@@ -9,7 +9,7 @@ export const BudgetContext = createContext();
 export const BudgetProvider = (props) => {
   const [budgetData, setBudgetData] = useState("");
   const [currentBudget, setCurrentBudget] = useState(
-    localStorage.getItem("currentBudget") || ""
+    Number(localStorage.getItem("currentBudget")) || ""
   );
 
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
