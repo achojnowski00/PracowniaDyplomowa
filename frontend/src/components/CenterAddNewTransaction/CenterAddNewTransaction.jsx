@@ -214,11 +214,32 @@ export const CenterAddNewTransaction = () => {
                 variant="standard"
               />
               <div className="newPost__popup-form-flex">
-                {isOutcomeState ? "Wydatek" : "Przychód"}
-                <Checkbox
-                  checked={isOutcomeState}
-                  onChange={handleSwitchIsOutcome}
-                />
+                <button
+                  className={
+                    isOutcomeState
+                      ? "popup__form-switch popup__form-switch--active"
+                      : "popup__form-switch"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSwitchIsOutcome();
+                  }}
+                >
+                  Wydatek
+                </button>
+                <button
+                  className={
+                    !isOutcomeState
+                      ? "popup__form-switch popup__form-switch--active"
+                      : "popup__form-switch"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSwitchIsOutcome();
+                  }}
+                >
+                  Przychód
+                </button>
               </div>
               <Select
                 value={categoryState}

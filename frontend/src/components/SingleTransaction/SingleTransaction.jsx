@@ -19,6 +19,7 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
+import Switch from "@mui/material/Switch";
 
 export const SingleTransaction = ({
   amount,
@@ -317,14 +318,34 @@ export const SingleTransaction = ({
               />
 
               <div className="popup__form-flex">
-                {newIsOutcome ? "Wydatek" : "Przychód"}
-                <Checkbox
-                  checked={newIsOutcome}
-                  onChange={() => {
-                    setNewIsOutcome(!newIsOutcome);
+                <button
+                  className={
+                    newIsOutcome
+                      ? "popup__form-switch popup__form-switch--active"
+                      : "popup__form-switch"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setNewIsOutcome(true);
                     setNewCategory("");
                   }}
-                />
+                >
+                  Wydatek
+                </button>
+                <button
+                  className={
+                    !newIsOutcome
+                      ? "popup__form-switch popup__form-switch--active"
+                      : "popup__form-switch"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setNewIsOutcome(false);
+                    setNewCategory("");
+                  }}
+                >
+                  Przychód
+                </button>
               </div>
 
               <select
