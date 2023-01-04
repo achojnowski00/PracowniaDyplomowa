@@ -1,0 +1,91 @@
+.addNote
+  position: fixed
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  width: 400px
+  padding: 20px
+  border-radius: 6px
+  background: rgb(239, 228, 176)
+  box-shadow: 0 12px 28px 0 rgba(0,0,0,.2),0 2px 4px 0 rgba(0,0,0,0.1),inset 0 0 0 1px rgba(255,255,255,0.5), 0px 3px 0px 0px #ced0d4, 0px 0px 0px 1px #ced0d4;
+  z-index: 20
+  
+  &__background
+    position: fixed
+    inset: 0
+    background: rgba(0, 0, 0, 0.5)
+    backdrop-filter: blur(2px)
+    z-index: 10
+  
+  &__title
+    margin-bottom: 20px
+    font-size: 24px
+    font-weight: 500
+    text-align: center
+  
+  &__form
+    display: flex
+    flex-direction: column
+    &-input
+      all: unset
+      color: #000
+
+      &--title
+        font-weight: 700
+        margin-bottom: 10px
+      
+      &--content
+        height: 300px
+        line-height: 24px
+        background: url('./background.png') repeat
+        background-attachment: local
+        text-decoration: none
+        &::spelling-error
+          display: none
+
+        // Scrollbar styling 
+        &::-webkit-scrollbar
+          width: 5px
+        &::-webkit-scrollbar-thumb
+          background: rgba(206, 208, 212, 0.5)
+          border-radius: 2px
+        &:hover
+          &::-webkit-scrollbar-thumb
+            background: rgba(206, 208, 212, 1)
+      
+    &-btn
+      all: unset
+      margin-left: auto
+      margin-right: auto
+      margin-top: 20px
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 5px
+      padding: 5px 10px 5px 10px
+      border-radius: 6px
+      // border: 1px solid #b1a152
+      background: 	hsl(50, 66%, 85%)
+      color: #444444
+      transition: background 0.2s, color 0.2s
+      &:hover
+        color: #000
+        background: hsl(50, 66%, 90%)
+
+    
+    &-close-btn
+      all: unset
+      position: absolute
+      top: 10px
+      right: 10px
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 30px
+      height: 30px
+      border-radius: 50%
+      transition: background 0.15s
+      &:hover
+        background: #e4e6e9
