@@ -98,7 +98,7 @@ export const CenterAddNewTransaction = () => {
     if (titleState === "") {
       swal("Wpisz tytuł", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
@@ -106,7 +106,7 @@ export const CenterAddNewTransaction = () => {
     if (amountState === "") {
       swal("Wpisz kwotę", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
@@ -114,7 +114,7 @@ export const CenterAddNewTransaction = () => {
     if (categoryState === "") {
       swal("Wybierz kategorię", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
@@ -139,12 +139,12 @@ export const CenterAddNewTransaction = () => {
       )
       .then((res) => {
         toast.success("Dodano nową transakcję", {
-          autoClose: 1500,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
-          progress: undefined,
+          position: "bottom-right",
         });
         getTransactions();
         resetValues();
@@ -246,7 +246,7 @@ export const CenterAddNewTransaction = () => {
                 onChange={(e) => {
                   handleChangeInput(e, "category");
                 }}
-                // label="Kategoria"
+              // label="Kategoria"
               >
                 {categories &&
                   categories.map((category) => {

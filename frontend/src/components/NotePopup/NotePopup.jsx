@@ -91,10 +91,8 @@ export const NotePopup = ({
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
-          progress: undefined,
           position: "bottom-right",
         });
         callback();
@@ -110,6 +108,14 @@ export const NotePopup = ({
   const submitEditNote = async () => {
     if (titleState === title && contentState === content) {
       turnOff();
+      toast.info("Nie dokonano żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      })
       return;
     }
 
@@ -129,7 +135,14 @@ export const NotePopup = ({
       )
       .then((res) => {
         console.log(res);
-        toast.success("Notatka została zaktualizowana");
+        toast.success("Notatka została zaktualizowana", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        });
         callback();
         setTimeout(() => {
           turnOff();
@@ -155,6 +168,7 @@ export const NotePopup = ({
           closeOnClick: true,
           pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
         callback();
         setTimeout(() => {

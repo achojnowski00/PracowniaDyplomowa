@@ -123,8 +123,9 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
         setTimeout(() => {
           setWantAddUser(false);
@@ -159,8 +160,9 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
         setTimeout(() => {
           setWantShowUsers(false);

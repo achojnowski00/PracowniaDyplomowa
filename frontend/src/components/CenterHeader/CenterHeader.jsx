@@ -37,7 +37,7 @@ export const CenterHeader = () => {
   const handleSubmitChangeBudgetName = async () => {
     if (newBudgetName === "") {
       swal("wprowadzileś pustą nazwę", "", "error", {
-        button: "Zamknij",
+        buttons: false,
         timer: 1000,
       });
       return;
@@ -45,6 +45,14 @@ export const CenterHeader = () => {
 
     if (newBudgetName === budgetData.name) {
       setWantChangeBudgetName(false);
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -73,13 +81,14 @@ export const CenterHeader = () => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
       })
       .catch((err) => {
         swal("Wystąpił błąd", "", "error", {
-          button: "Zamknij",
+          buttons: false,
           timer: 1000,
         });
       });

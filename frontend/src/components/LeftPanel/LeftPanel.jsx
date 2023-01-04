@@ -42,7 +42,7 @@ export const LeftPanel = () => {
       setUserdata("");
       setBudgetData("");
       setCurrentBudget("");
-    }, 750);
+    }, 250);
   };
 
   const handleNameClick = () => {
@@ -54,12 +54,26 @@ export const LeftPanel = () => {
     setWantChangeName(false);
   };
 
-  const handleChangeName = async () => {
+  const handleChangeName = async (e) => {
+    e.preventDefault();
     if (newName === "") {
       swal("wprowadzileś pustą nazwę", "", "error", {
         button: "Zamknij",
         timer: 1000,
       });
+      return;
+    }
+
+    if (newName === userdata.name) {
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      })
+      setWantChangeName(false);
       return;
     }
 
@@ -81,13 +95,20 @@ export const LeftPanel = () => {
         }
       )
       .then((response) => {
-        swal(response.data.message, "", "success", {
-          button: "Zamknij",
-          timer: 1000,
-        });
+        toast.success("Pomyślnie zmieniono nazwę użytkownika", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        })
       })
       .catch((error) => {
-        swal(error.response.data.message, "", "error");
+        swal(error.response.data.message, "", "error", {
+          buttons: false,
+          timer: 1000,
+        });
       });
   };
 
@@ -99,7 +120,7 @@ export const LeftPanel = () => {
   const handleCreateBudget = async () => {
     if (budgetName === "") {
       swal("wprowadzileś pustą nazwę", "", "error", {
-        button: "Zamknij",
+        buttons: false,
         timer: 1000,
       });
       return;
@@ -127,12 +148,16 @@ export const LeftPanel = () => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
       })
       .catch((error) => {
-        swal("Coś poszło nie tak", "", "error");
+        swal("Coś poszło nie tak", "", "error", {
+          buttons: false,
+          timer: 1000,
+        });
       });
   };
 
@@ -153,8 +178,9 @@ export const LeftPanel = () => {
                   autoClose: 1000,
                   hideProgressBar: true,
                   closeOnClick: true,
-                  pauseOnHover: true,
+                  pauseOnHover: false,
                   draggable: true,
+                  position: "bottom-right",
                 });
               }}
             >
@@ -174,18 +200,21 @@ export const LeftPanel = () => {
                 onChange={(e) => {
                   setNewName(e.target.value);
                 }}
+                value={newName}
                 autoFocus
               ></input>
               <div className="leftPanel__buttons">
                 <button
-                  onClick={handleChangeName}
+                  onClick={(e) => {
+                    handleChangeName(e)
+                  }}
                   className="leftPanel__addBudget-btn"
                 >
                   <DoneIcon />
                 </button>
 
                 <button
-                  onClick={handleCancelChangeName}
+                  onClick={(e) => { handleCancelChangeName(e) }}
                   className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
                 >
                   <ClearIcon />

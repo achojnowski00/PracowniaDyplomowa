@@ -119,7 +119,14 @@ export const SingleTransaction = ({
         },
       })
       .then((res) => {
-        toast.success("Transakcja została usunięta");
+        toast.success("Transakcja została usunięta", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        });
         getTransactions();
       })
       .catch((err) => {
@@ -144,6 +151,14 @@ export const SingleTransaction = ({
     ) {
       setWantEdit(false);
       resetEditValues();
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -166,7 +181,14 @@ export const SingleTransaction = ({
         }
       )
       .then((res) => {
-        toast.success("Transakcja została zaktualizowana");
+        toast.success("Transakcja została zaktualizowana", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        });
         getTransactions();
         setWantEdit(false);
         resetEditValues();
