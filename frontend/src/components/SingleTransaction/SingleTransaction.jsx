@@ -374,7 +374,6 @@ export const SingleTransaction = ({
                         return (
                           <option key={category.id} value={category.id}>
                             {category.name}
-                            {category.id}
                           </option>
                         );
                       }
