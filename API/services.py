@@ -461,7 +461,7 @@ async def edit_transaction(
     transaction_obj.isOutcome = transaction.isOutcome
     if (transaction.title):
         transaction_obj.title = transaction.title
-    if (transaction.description):
+    if (transaction.description or transaction.description == ""):
         transaction_obj.description = transaction.description
     if (transaction.amount):
         transaction_obj.amount = transaction.amount
