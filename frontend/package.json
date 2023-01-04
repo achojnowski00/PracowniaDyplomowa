@@ -49,6 +49,7 @@
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.7",
     "moment": "^2.29.4",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "sweetalert2": "^11.6.16"
   }
 }

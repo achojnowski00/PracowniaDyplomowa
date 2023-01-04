@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 import axios from "axios";
 
 import { UserContext } from "./userContext";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 
 export const BudgetContext = createContext();
 
@@ -55,7 +55,7 @@ export const BudgetProvider = (props) => {
       })
       .catch((err) => {
         console.log("error - fetch budgetData", err);
-        swal("Coś poszło nie tak", "", "error", {
+        Swal.fire("Coś poszło nie tak", "", "error", {
           button: "Zamknij",
           timer: 1000,
         });

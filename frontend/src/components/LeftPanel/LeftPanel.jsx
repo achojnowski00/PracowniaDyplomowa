@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +33,7 @@ export const LeftPanel = () => {
   const [budgetName, setBudgetName] = useState("");
 
   const handlelogout = () => {
-    swal("Wylogowano", "", "success", {
+    Swal.fire("Wylogowano", "", "success", {
       button: "Zamknij",
       timer: 500,
     });
@@ -57,7 +57,7 @@ export const LeftPanel = () => {
   const handleChangeName = async (e) => {
     e.preventDefault();
     if (newName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
         button: "Zamknij",
         timer: 1000,
       });
@@ -105,7 +105,7 @@ export const LeftPanel = () => {
         })
       })
       .catch((error) => {
-        swal(error.response.data.message, "", "error", {
+        Swal.fire(error.response.data.message, "", "error", {
           buttons: false,
           timer: 1000,
         });
@@ -119,7 +119,7 @@ export const LeftPanel = () => {
 
   const handleCreateBudget = async () => {
     if (budgetName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -154,7 +154,7 @@ export const LeftPanel = () => {
         });
       })
       .catch((error) => {
-        swal("Coś poszło nie tak", "", "error", {
+        Swal.fire("Coś poszło nie tak", "", "error", {
           buttons: false,
           timer: 1000,
         });

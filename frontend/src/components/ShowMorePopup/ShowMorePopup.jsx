@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -63,34 +63,34 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
 
   const handleLeaveBudget = () => {
     // setWantLeaveBudget(!wantLeaveBudget);
-    swal({
+    Swal.fire({
       title: "Czy na pewno chcesz opuścić budżet?",
       text: "Aby do niego wrócić musisz zostać zaproszony przez innych użytkowników",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete && budgetData.users.length === 1) {
-        swal({
+      if (willDelete.isConfirmed && budgetData.users.length === 1) {
+        Swal.fire({
           title: "Czy na pewno chcesz usunąć budżet?",
           text: "Nie będziesz mógł go odzyskać",
           icon: "warning",
           buttons: true,
           dangerMode: true,
         }).then((willDelete) => {
-          if (willDelete) {
+          if (willDelete.isConfirmed) {
             deleteUserFromBudget(userdata.id).then(() => {
-              setCurrentBudget("");
               reloadBudgets();
+              setCurrentBudget("");
             });
           }
         });
       }
 
-      if (willDelete && budgetData.users.length > 1) {
+      if (willDelete.isConfirmed && budgetData.users.length > 1) {
         deleteUserFromBudget(userdata.id).then(() => {
-          setCurrentBudget("");
           reloadBudgets();
+          setCurrentBudget("");
         });
       }
     });
@@ -99,7 +99,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   const handleSubmitAddUser = async (e) => {
     if (userId === "") {
       e.preventDefault();
-      swal("Nie podano ID użytkownika", "", "error", {
+      Swal.fire("Nie podano ID użytkownika", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -137,7 +137,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         reloadUsersInBudget();
       })
       .catch((error) => {
-        swal(error.response.data.detail, "", "error", {
+        Swal.fire(error.response.data.detail, "", "error", {
           buttons: false,
           timer: 1000,
         });
@@ -173,7 +173,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         reloadUsersInBudget();
       })
       .catch((error) => {
-        swal("Coś poszło nie tak", "", "error", {
+        Swal.fire("Coś poszło nie tak", "", "error", {
           buttons: false,
           timer: 1000,
         });
@@ -181,14 +181,14 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleDeleteFromBudget = (userID) => {
-    swal({
+    Swal.fire({
       title: "Czy na pewno chcesz usunąć użytkownika z budżetu?",
       text: "Będziesz mógł zaprosić go ponownie",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      if (willDelete.isConfirmed) {
         deleteUserFromBudget(userID);
       }
     });

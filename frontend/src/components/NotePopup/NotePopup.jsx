@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import "./NotePopup.sass";
 import axios from "axios";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 
 // Mui stuff
@@ -56,14 +56,14 @@ export const NotePopup = ({
 
   const handleDeleteNote = (e) => {
     e.preventDefault();
-    swal({
+    Swal.fire({
       title: "Czy na pewno chcesz usunąć notatkę?",
       text: "Nie będziesz mógł tego cofnąć",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      if (willDelete.isConfirmed) {
         submitDeleteNote();
       }
     });

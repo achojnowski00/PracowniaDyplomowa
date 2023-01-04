@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./CenterAddNewTransaction.sass";
@@ -96,7 +96,7 @@ export const CenterAddNewTransaction = () => {
 
   const submitNewTransaction = async () => {
     if (titleState === "") {
-      swal("Wpisz tytuł", "", "error", {
+      Swal.fire("Wpisz tytuł", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -104,7 +104,7 @@ export const CenterAddNewTransaction = () => {
     }
 
     if (amountState === "") {
-      swal("Wpisz kwotę", "", "error", {
+      Swal.fire("Wpisz kwotę", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -112,7 +112,7 @@ export const CenterAddNewTransaction = () => {
     }
 
     if (categoryState === "") {
-      swal("Wybierz kategorię", "", "error", {
+      Swal.fire("Wybierz kategorię", "", "error", {
         buttons: false,
         timer: 1000,
       });

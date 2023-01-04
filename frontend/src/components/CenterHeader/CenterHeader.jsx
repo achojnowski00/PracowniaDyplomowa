@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "./CenterHeader.sass";
 import { ToastContainer, toast } from "react-toastify";
@@ -36,7 +36,7 @@ export const CenterHeader = () => {
 
   const handleSubmitChangeBudgetName = async () => {
     if (newBudgetName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -87,7 +87,7 @@ export const CenterHeader = () => {
         });
       })
       .catch((err) => {
-        swal("Wystąpił błąd", "", "error", {
+        Swal.fire("Wystąpił błąd", "", "error", {
           buttons: false,
           timer: 1000,
         });

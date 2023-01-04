@@ -20,7 +20,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import Switch from "@mui/material/Switch";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 
 export const SingleTransaction = ({
   amount,
@@ -200,14 +200,14 @@ export const SingleTransaction = ({
 
   const submitDelete = (e, transactionID) => {
     e.preventDefault();
-    swal({
+    Swal.fire({
       title: "Czy na pewno chcesz usunąć transakcję?",
       text: "Nie będziesz mógł tego cofnąć",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
-      if (willDelete) {
+      if (willDelete.isConfirmed) {
         handleSubmitDelete(transactionID);
       }
     });
