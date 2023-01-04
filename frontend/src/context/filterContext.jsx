@@ -59,11 +59,11 @@ export const FilterProvider = (props) => {
         }
       )
       .then((res) => {
-        console.log("filterContext.jsx", res.data);
+        console.log("lista transakcji", res.data);
         setTransactionsData(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error - fetch listy transakcji", err);
       });
   };
 

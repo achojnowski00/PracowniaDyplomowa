@@ -49,7 +49,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         });
       })
       .catch((err) => {
-        console.log("ShowMorePopup.jsx", err);
+        console.log("error przy reloadowaniu userów", err);
       });
   };
 

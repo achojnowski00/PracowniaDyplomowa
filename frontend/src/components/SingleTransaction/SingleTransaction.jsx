@@ -76,7 +76,7 @@ export const SingleTransaction = ({
         setCategories(res.data);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log("error - pobieranie kategorii", err);
       });
   };
 
@@ -93,13 +93,11 @@ export const SingleTransaction = ({
         getTransactions();
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error - usuwanie posta", err);
       });
   };
 
   const handleSubmitEdit = async (transactionID) => {
-    console.log("SingleTransaction.jsx", newIsOutcome);
-    console.log("SingleTransaction.jsx", newCategory);
     await axios
       .put(
         `http://127.0.0.1:8000/api/transaction/edit/${transactionID}`,
@@ -118,12 +116,11 @@ export const SingleTransaction = ({
         }
       )
       .then((res) => {
-        console.log(res);
         toast.success("Transakcja została zaktualizowana");
         getTransactions();
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error - edycja posta", err);
       });
   };
 

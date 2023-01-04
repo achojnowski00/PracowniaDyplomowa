@@ -51,7 +51,7 @@ export const CenterAddNewTransaction = () => {
         setCategories(res.data);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log("error pobierania kategorii (edycja posta)", err);
       });
   };
 
@@ -153,7 +153,7 @@ export const CenterAddNewTransaction = () => {
         }, 500);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error dodawania posta", err);
       });
   };
 

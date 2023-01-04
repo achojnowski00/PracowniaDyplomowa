@@ -31,7 +31,7 @@ export const BudgetProvider = (props) => {
         });
       })
       .catch((err) => {
-        console.log("budgetContext.jsx", err);
+        console.log("error reloadowania budżetu", err);
       });
   };
 
@@ -51,10 +51,10 @@ export const BudgetProvider = (props) => {
       })
       .then((res) => {
         setBudgetData(res.data);
-        console.log("budgetContext.jsx (28)", res.data);
+        console.log(`Dane budżetu`, res.data);
       })
       .catch((err) => {
-        console.log("budgetContext.jsx (31)", err);
+        console.log("error - fetch budgetData", err);
         swal("Coś poszło nie tak", "", "error", {
           button: "Zamknij",
           timer: 1000,
