@@ -59,7 +59,7 @@ class Transaction(_db.Base):
     title = _sql.Column(_sql.String(64), nullable=False)
     description = _sql.Column(_sql.String(256))
     amount = _sql.Column(_sql.Float, nullable=False)
-    date = _sql.Column(_sql.DateTime, default=_dt.datetime.utcnow)
+    date = _sql.Column(_sql.DateTime, default=_dt.datetime.now)
 
     budget_id = _sql.Column(_sql.Integer, _sql.ForeignKey("budgets.id"))
     category_id = _sql.Column(_sql.Integer, _sql.ForeignKey("categories.id"))
@@ -75,7 +75,7 @@ class Note(_db.Base):
     id = _sql.Column(_sql.Integer, primary_key=True, index=True)
     title = _sql.Column(_sql.String(64), nullable=True)
     description = _sql.Column(_sql.String(256))
-    date = _sql.Column(_sql.DateTime, default=_dt.datetime.utcnow)
+    date = _sql.Column(_sql.DateTime, default=_dt.datetime.now)
     budget_id = _sql.Column(_sql.Integer, _sql.ForeignKey("budgets.id"))
 
     budget = _orm.relationship("Budget", back_populates="notes")
