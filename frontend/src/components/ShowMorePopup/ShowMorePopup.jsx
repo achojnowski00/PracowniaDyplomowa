@@ -8,6 +8,7 @@ import "./ShowMorePopup.sass";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
+import { ApiContext } from "../../context/apiContext";
 
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -16,6 +17,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 export const ShowMorePopup = ({ turnOffShowMore }) => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
   const [
     budgetData,
@@ -34,7 +36,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
 
   const reloadUsersInBudget = async () => {
     await axios
-      .get(`http://127.0.0.1:8000/api/budgets/get-users/${currentBudget}`, {
+      .get(`${BACKEND_LINK}/api/budgets/get-users/${currentBudget}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -109,7 +111,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
     e.preventDefault();
     await axios
       .post(
-        `http://127.0.0.1:8000/api/budgets/add-to-budget?budget_id=${currentBudget}&user_id=${userId}`,
+        `${BACKEND_LINK}/api/budgets/add-to-budget?budget_id=${currentBudget}&user_id=${userId}`,
         {},
         {
           headers: {
@@ -147,7 +149,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   const deleteUserFromBudget = async (user_id) => {
     await axios
       .delete(
-        `http://127.0.0.1:8000/api/budgets/remove-user/${currentBudget}?user_id=${user_id}`,
+        `${BACKEND_LINK}/api/budgets/remove-user/${currentBudget}?user_id=${user_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -192,7 +194,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         deleteUserFromBudget(userID);
       }
     });
-  }
+  };
 
   const handleSubmitLeaveBudget = () => {
     if (budgetData.users.length === 1) {
@@ -297,10 +299,11 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                     )}
                     <p
                       className={`showMorePopup__list-item-name 
-                    ${user.id === userdata.id
-                          ? "showMorePopup__list-item-name--bold"
-                          : ""
-                        }
+                    ${
+                      user.id === userdata.id
+                        ? "showMorePopup__list-item-name--bold"
+                        : ""
+                    }
                       `}
                     >
                       {user.name}

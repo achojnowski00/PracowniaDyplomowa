@@ -1,12 +1,14 @@
 import React, { createContext, useEffect, useState, useContext } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 import { UserContext } from "./userContext";
-import Swal from "sweetalert2";
+import { ApiContext } from "./apiContext";
 
 export const BudgetContext = createContext();
 
 export const BudgetProvider = (props) => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [budgetData, setBudgetData] = useState("");
   const [currentBudget, setCurrentBudget] = useState(
     Number(localStorage.getItem("currentBudget")) || ""
@@ -16,7 +18,7 @@ export const BudgetProvider = (props) => {
 
   const reloadBudgets = async () => {
     axios
-      .get("http://127.0.0.1:8000/api/budgets/get-all", {
+      .get(`${BACKEND_LINK}/api/budgets/get-all`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -43,7 +45,7 @@ export const BudgetProvider = (props) => {
     }
 
     axios
-      .get(`http://127.0.0.1:8000/api/budgets/get-single/${currentBudget}`, {
+      .get(`${BACKEND_LINK}/api/budgets/get-single/${currentBudget}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

@@ -11,9 +11,11 @@ import { NoteDisplay } from "../NoteDisplay/NoteDisplay";
 // Context
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
+import { ApiContext } from "../../context/apiContext";
 import axios from "axios";
 
 export const Notes = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   // States
   const [wantAddNote, setWantAddNote] = useState(false);
   const [notesData, setNotesData] = useState();
@@ -30,15 +32,12 @@ export const Notes = () => {
   // Axios
   const fetchNotes = async () => {
     await axios
-      .get(
-        `http://127.0.0.1:8000/api/notes/get-all?budget_id=${currentBudget.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(`${BACKEND_LINK}/api/notes/get-all?budget_id=${currentBudget.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         setNotesData(res.data);
       })

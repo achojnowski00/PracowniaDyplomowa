@@ -14,8 +14,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
 
 export const CenterHeader = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [
     budgetData,
     setBudgetData,
@@ -62,7 +64,7 @@ export const CenterHeader = () => {
 
     await axios
       .put(
-        `http://127.0.0.1:8000/api/budgets/edit/${currentBudget}`,
+        `${BACKEND_LINK}/api/budgets/edit/${currentBudget}`,
         {
           name: newBudgetName,
         },

@@ -13,6 +13,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 // Context
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
+import { ApiContext } from "../../context/apiContext";
 
 export const NotePopup = ({
   turnOff,
@@ -22,6 +23,7 @@ export const NotePopup = ({
   action,
   id,
 }) => {
+  const BACKEND_LINK = useContext(ApiContext);
   // Context
   const [currentBudget] = useContext(BudgetContext);
   const [token] = useContext(UserContext);
@@ -73,7 +75,7 @@ export const NotePopup = ({
   const submitAddNote = async () => {
     await axios
       .post(
-        "http://127.0.0.1:8000/api/notes/create",
+        `${BACKEND_LINK}/api/notes/create`,
         {
           title: titleState,
           description: contentState,
@@ -121,7 +123,7 @@ export const NotePopup = ({
 
     await axios
       .put(
-        `http://127.0.0.1:8000/api/notes/edit/${id}`,
+        `${BACKEND_LINK}/api/notes/edit/${id}`,
         {
           title: titleState,
           description: contentState,
@@ -156,7 +158,7 @@ export const NotePopup = ({
 
   const submitDeleteNote = async () => {
     await axios
-      .delete(`http://127.0.0.1:8000/api/notes/delete/${id}`, {
+      .delete(`${BACKEND_LINK}/api/notes/delete/${id}`, {
         headers: {
           content_type: "application/json",
           Authorization: `Bearer ${token}`,

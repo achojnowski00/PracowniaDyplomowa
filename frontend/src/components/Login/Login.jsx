@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
 
 import { UserContext } from "../../context/userContext";
+import { ApiContext } from "../../context/apiContext";
 
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 
 export const Login = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,7 +22,7 @@ export const Login = () => {
     };
 
     const response = await fetch(
-      "http://localhost:8000/api/users/token",
+      `${BACKEND_LINK}/api/users/token`,
       requestOptions
     );
     const data = await response.json();

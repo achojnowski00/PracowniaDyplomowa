@@ -14,8 +14,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
+import { ApiContext } from "../../context/apiContext";
 
 export const LeftPanel = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
   const [
@@ -72,7 +74,7 @@ export const LeftPanel = () => {
         pauseOnHover: false,
         draggable: true,
         position: "bottom-right",
-      })
+      });
       setWantChangeName(false);
       return;
     }
@@ -81,7 +83,7 @@ export const LeftPanel = () => {
     setUserdata({ ...userdata, name: newName });
     await axios
       .put(
-        "http://localhost:8000/api/users/update",
+        `${BACKEND_LINK}/api/users/update`,
         {
           id: userdata.id,
           name: newName,
@@ -102,7 +104,7 @@ export const LeftPanel = () => {
           pauseOnHover: false,
           draggable: true,
           position: "bottom-right",
-        })
+        });
       })
       .catch((error) => {
         Swal.fire(error.response.data.message, "", "error", {
@@ -128,7 +130,7 @@ export const LeftPanel = () => {
 
     await axios
       .post(
-        "http://localhost:8000/api/budgets/create",
+        `${BACKEND_LINK}/api/budgets/create`,
         {
           name: budgetName,
         },
@@ -206,7 +208,7 @@ export const LeftPanel = () => {
               <div className="leftPanel__buttons">
                 <button
                   onClick={(e) => {
-                    handleChangeName(e)
+                    handleChangeName(e);
                   }}
                   className="leftPanel__addBudget-btn"
                 >
@@ -214,7 +216,9 @@ export const LeftPanel = () => {
                 </button>
 
                 <button
-                  onClick={(e) => { handleCancelChangeName(e) }}
+                  onClick={(e) => {
+                    handleCancelChangeName(e);
+                  }}
                   className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
                 >
                   <ClearIcon />

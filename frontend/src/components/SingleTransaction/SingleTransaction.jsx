@@ -9,6 +9,7 @@ import "./SingleTransaction.sass";
 
 import { UserContext } from "../../context/userContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
 
 import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
@@ -32,6 +33,7 @@ export const SingleTransaction = ({
   title,
   who_created,
 }) => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, , userdata] = useContext(UserContext);
   const [, , , , , , , , , getTransactions] = useContext(FilterContext);
 
@@ -96,7 +98,7 @@ export const SingleTransaction = ({
 
   const fetchCategories = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/categories/get-all", {
+      .get(`${BACKEND_LINK}/api/categories/get-all`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -112,7 +114,7 @@ export const SingleTransaction = ({
 
   const handleSubmitDelete = async (transactionID) => {
     await axios
-      .delete(`http://127.0.0.1:8000/api/transaction/delete/${transactionID}`, {
+      .delete(`${BACKEND_LINK}/api/transaction/delete/${transactionID}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -164,7 +166,7 @@ export const SingleTransaction = ({
 
     await axios
       .put(
-        `http://127.0.0.1:8000/api/transaction/edit/${transactionID}`,
+        `${BACKEND_LINK}/api/transaction/edit/${transactionID}`,
         {
           isOutcome: newIsOutcome,
           title: newTitle,
@@ -211,7 +213,7 @@ export const SingleTransaction = ({
         handleSubmitDelete(transactionID);
       }
     });
-  }
+  };
 
   useEffect(() => {
     if (!wantEdit) {
@@ -250,7 +252,9 @@ export const SingleTransaction = ({
               </div>
               <div
                 // onClick={handleWantDelete}
-                onClick={(e) => { submitDelete(e, id) }}
+                onClick={(e) => {
+                  submitDelete(e, id);
+                }}
                 className="singleTransaction__header-icon singleTransaction__header-icon--delete"
               >
                 <DeleteRoundedIcon />

@@ -6,7 +6,10 @@ import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 
 import "./Register.sass";
 
+import { ApiContext } from "../../context/apiContext";
+
 export const Register = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,7 +19,7 @@ export const Register = () => {
   const submitRegister = async (e) => {
     await axios
       .post(
-        "http://localhost:8000/api/users/register",
+        `${BACKEND_LINK}/api/users/register`,
         {
           login: login,
           hashed_password: password,

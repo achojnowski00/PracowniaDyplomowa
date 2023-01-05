@@ -15,8 +15,10 @@ import Checkbox from "@mui/material/Checkbox";
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
 
 export const CenterAddNewTransaction = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
   const [
     budgetData,
@@ -41,7 +43,7 @@ export const CenterAddNewTransaction = () => {
 
   const fetchCategories = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/categories/get-all", {
+      .get(`${BACKEND_LINK}/api/categories/get-all`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -121,7 +123,7 @@ export const CenterAddNewTransaction = () => {
 
     await axios
       .post(
-        "http://127.0.0.1:8000/api/transaction/create",
+        `${BACKEND_LINK}/api/transaction/create`,
         {
           isOutcome: isOutcomeState,
           title: titleState,
@@ -246,7 +248,7 @@ export const CenterAddNewTransaction = () => {
                 onChange={(e) => {
                   handleChangeInput(e, "category");
                 }}
-              // label="Kategoria"
+                // label="Kategoria"
               >
                 {categories &&
                   categories.map((category) => {

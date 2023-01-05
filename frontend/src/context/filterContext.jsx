@@ -3,10 +3,12 @@ import axios from "axios";
 
 import { UserContext } from "./userContext";
 import { BudgetContext } from "./budgetContext";
+import { ApiContext } from "./apiContext";
 
 export const FilterContext = createContext();
 
 export const FilterProvider = (props) => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [dateFrom, setDateFrom] = useState("");
@@ -50,7 +52,7 @@ export const FilterProvider = (props) => {
 
     await axios
       .get(
-        `http://127.0.0.1:8000/api/transaction/get-all/${currentBudget}/${dateFrom}/${dateTo}`,
+        `${BACKEND_LINK}/api/transaction/get-all/${currentBudget}/${dateFrom}/${dateTo}`,
         {
           headers: {
             "Aplication-Type": "application/json",
