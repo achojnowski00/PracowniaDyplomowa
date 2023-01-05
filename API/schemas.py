@@ -181,6 +181,7 @@ class Note(NoteBase):
 class NoteEdit(_pydantic.BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
+    date: Optional[_dt.datetime] = None
 
     class Config:
         orm_mode = True

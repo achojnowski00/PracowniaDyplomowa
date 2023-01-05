@@ -364,7 +364,7 @@ async def get_notes(
     db: _orm.Session = _fastapi.Depends(get_db)
 ):
     return db.query(_models.Note).filter(
-        _models.Note.budget_id == budget_id).all()
+        _models.Note.budget_id == budget_id).order_by(_models.Note.date.desc()).all()
 
 
 async def get_note(
@@ -396,6 +396,8 @@ async def edit_note(
         note_obj.title = note.title
     if (note.description):
         note_obj.description = note.description
+    if(note.date):
+        note_obj.date = note.date
 
     db.commit()
     db.refresh(note_obj)
