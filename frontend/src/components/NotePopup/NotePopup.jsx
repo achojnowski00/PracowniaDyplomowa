@@ -115,7 +115,7 @@ export const NotePopup = ({
         pauseOnHover: false,
         draggable: true,
         position: "bottom-right",
-      })
+      });
       return;
     }
 
@@ -125,6 +125,7 @@ export const NotePopup = ({
         {
           title: titleState,
           description: contentState,
+          date: new Date(),
         },
         {
           headers: {
@@ -219,6 +220,8 @@ export const NotePopup = ({
             placeholder="Treść notatki..."
             spellCheck="false"
             linebreak="br"
+            autoFocus
+            onFocus={(e) => (e.target.selectionStart = e.target.value.length)}
           />
           {action === "add" && (
             <>
