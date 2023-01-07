@@ -33,16 +33,22 @@
         inset: 0
         opacity: 0
         transition: background 0.15s
+        @media(max-width: 900px)
+          all: unset
 
       &:hover svg.noteDisplay__list-item-icon
         opacity: 1
         transform: translate(-50%, -50%) scale(1)
         background: var(--noteCoverColor)
+        @media(max-width: 900px)
+          display: none
       
       &:hover::after
         opacity: 1
         background: var(--noteCoverColor)
         backdrop-filter: blur(2px)
+        @media(max-width: 900px)
+          all: unset
       
       svg.noteDisplay__list-item-icon
         position: absolute
@@ -60,6 +66,8 @@
         transform-origin: center center
         z-index: 10
         transition: transform 0.15s, background 0.15s, opacity 0.15s
+        @media(max-width: 900px)
+          display: none
     
       &-title
         font-weight: bold
