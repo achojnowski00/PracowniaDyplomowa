@@ -31,6 +31,8 @@ export const Notes = () => {
 
   // Axios
   const fetchNotes = async () => {
+    if (!currentBudget) return;
+
     await axios
       .get(`${BACKEND_LINK}/api/notes/get-all?budget_id=${currentBudget.id}`, {
         headers: {
