@@ -100,9 +100,7 @@ export const NotePopup = ({
           position: "bottom-right",
         });
         callback();
-        setTimeout(() => {
-          turnOff();
-        }, 500);
+        turnOff();
       })
       .catch((err) => {
         console.log("error przy dodawaniu notatki", err);
@@ -149,9 +147,7 @@ export const NotePopup = ({
           position: "bottom-right",
         });
         callback();
-        setTimeout(() => {
-          turnOff();
-        }, 500);
+        turnOff();
       })
       .catch((err) => {
         console.log("error przy edycji notatki", err);
