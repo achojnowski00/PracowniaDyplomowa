@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,6 +12,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
@@ -19,6 +21,9 @@ import { ApiContext } from "../../context/apiContext";
 import { ThemeContext } from "../../context/themeContext";
 
 export const LeftPanel = () => {
+  const [hidden, setHidden] = useState(true);
+  const leftPanel = useRef();
+
   const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
@@ -165,10 +170,40 @@ export const LeftPanel = () => {
       });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!leftPanel.current.contains(e.target)) {
+        setHidden(true);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [hidden]);
+
   return (
     <>
       <ToastContainer />
-      <div className="leftPanel">
+      {hidden ? (
+        <MenuRoundedIcon
+          className="leftPanel__menu-icon"
+          onClick={() => {
+            setHidden(false);
+          }}
+        />
+      ) : (
+        <CloseRoundedIcon
+          className="leftPanel__menu-icon leftPanel__menu-icon--close"
+          onClick={() => setHidden(!hidden)}
+        />
+      )}
+
+      <div
+        ref={leftPanel}
+        className={"leftPanel" + (hidden ? " leftPanel--hidden" : "")}
+      >
         {!wantChangeName && (
           <>
             <h1 onClick={handleNameClick} className="leftPanel__title">

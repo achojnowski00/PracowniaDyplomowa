@@ -1,21 +1,24 @@
 .addNote
   position: fixed
-  top: 50%
+  top: 100px
   left: 50%
-  transform: translate(-50%, -50%)
-  width: 400px
+  transform: translateX(-50%)
+  max-width: 500px
+  width: 80vw
   padding: 20px
   border-radius: 6px
   background: var(--noteColor)
   box-shadow: var(--dropShadow)
-  z-index: 20
+  z-index: 500
+  @media(max-width: 900px)
+    top: 100px
   
   &__background
     position: fixed
     inset: 0
     background: var(--popupBg)
+    z-index: 400
     backdrop-filter: blur(2px)
-    z-index: 10
   
   &__title
     margin-bottom: 20px
@@ -36,7 +39,7 @@
         margin-bottom: 10px
       
       &--content
-        height: 300px
+        height: 30vh
         line-height: 24px
         background: url('./background.png') repeat
         background-attachment: local

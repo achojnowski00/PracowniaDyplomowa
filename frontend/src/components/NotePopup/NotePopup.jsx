@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import "./NotePopup.sass";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -23,6 +23,8 @@ export const NotePopup = ({
   action,
   id,
 }) => {
+  const popup = useRef();
+
   const BACKEND_LINK = useContext(ApiContext);
   // Context
   const [currentBudget] = useContext(BudgetContext);
@@ -183,83 +185,102 @@ export const NotePopup = ({
       });
   };
 
+  useEffect(() => {
+    if (!popup.current) return;
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        turnOff();
+      }
+    };
+
+    const handleClick = (e) => {
+      if (!popup.current.contains(e.target)) {
+        turnOff();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
+
   return (
     <>
       <ToastContainer />
-      <div
-        onClick={() => {
-          turnOff();
-          console.log("Kliknąłem w tło");
-        }}
-        className="addNote__background"
-      ></div>
-      <div className="addNote">
-        <form className="addNote__form">
-          {action === "edit" && (
-            <>
-              <div
-                className="addNote__form-btn addNote__form-btn--delete"
-                onClick={handleDeleteNote}
-              >
-                <DeleteRoundedIcon />
-                Usuń
-              </div>
-            </>
-          )}
-          <input
-            onChange={handleTitleChange}
-            value={titleState}
-            className="addNote__form-input addNote__form-input--title"
-            type="text"
-            placeholder="Tytuł notatki..."
-            maxLength="32"
-          />
-          <textarea
-            onChange={handleContentChange}
-            value={contentState}
-            className="addNote__form-input addNote__form-input--content"
-            type="text"
-            placeholder="Treść notatki..."
-            spellCheck="false"
-            linebreak="br"
-            autoFocus
-            onFocus={(e) => (e.target.selectionStart = e.target.value.length)}
-          />
-          {action === "add" && (
-            <>
-              <button
-                className="addNote__form-btn"
-                onClick={(e) => {
-                  handleAddNote(e);
-                }}
-              >
-                <LibraryAddOutlinedIcon />
-                Dodaj notatkę
-              </button>
-            </>
-          )}
-          {action === "edit" && (
-            <>
-              <button
-                className="addNote__form-btn"
-                onClick={(e) => {
-                  handleEditNote(e);
-                }}
-              >
-                <BookmarkAddedOutlinedIcon />
-                Zapisz
-              </button>
-            </>
-          )}
-          <button
-            className="addNote__form-close-btn"
-            onClick={(e) => {
-              handleTurnOff(e);
-            }}
-          >
-            <CloseRoundedIcon />
-          </button>
-        </form>
+      <div className="addNote__background">
+        <div ref={popup} className="addNote">
+          <form className="addNote__form">
+            {action === "edit" && (
+              <>
+                <div
+                  className="addNote__form-btn addNote__form-btn--delete"
+                  onClick={handleDeleteNote}
+                >
+                  <DeleteRoundedIcon />
+                  Usuń
+                </div>
+              </>
+            )}
+            <input
+              onChange={handleTitleChange}
+              value={titleState}
+              className="addNote__form-input addNote__form-input--title"
+              type="text"
+              placeholder="Tytuł notatki..."
+              maxLength="32"
+            />
+            <textarea
+              onChange={handleContentChange}
+              value={contentState}
+              className="addNote__form-input addNote__form-input--content"
+              type="text"
+              placeholder="Treść notatki..."
+              spellCheck="false"
+              linebreak="br"
+              autoFocus
+              onFocus={(e) => (e.target.selectionStart = e.target.value.length)}
+            />
+            {action === "add" && (
+              <>
+                <button
+                  className="addNote__form-btn"
+                  onClick={(e) => {
+                    handleAddNote(e);
+                  }}
+                >
+                  <LibraryAddOutlinedIcon />
+                  Dodaj notatkę
+                </button>
+              </>
+            )}
+            {action === "edit" && (
+              <>
+                <button
+                  className="addNote__form-btn"
+                  onClick={(e) => {
+                    handleEditNote(e);
+                  }}
+                >
+                  <BookmarkAddedOutlinedIcon />
+                  Zapisz
+                </button>
+              </>
+            )}
+            <button
+              className="addNote__form-close-btn"
+              onClick={(e) => {
+                handleTurnOff(e);
+              }}
+            >
+              <CloseRoundedIcon />
+            </button>
+          </form>
+        </div>
       </div>
     </>
   );

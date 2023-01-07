@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
@@ -19,6 +19,8 @@ import { FilterContext } from "../../context/filterContext";
 import { ApiContext } from "../../context/apiContext";
 
 export const CenterAddNewTransaction = () => {
+  const popupRef = useRef();
+
   const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
   const [
@@ -184,6 +186,30 @@ export const CenterAddNewTransaction = () => {
       });
   };
 
+  useEffect(() => {
+    if (!popupRef.current) return;
+
+    let handleClick = (e) => {
+      if (!popupRef.current.contains(e.target)) {
+        setWantAdd(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setWantAdd(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [wantAdd]);
+
   return (
     <>
       <ToastContainer />
@@ -196,11 +222,9 @@ export const CenterAddNewTransaction = () => {
 
       {wantAdd && (
         <>
+          <div className="newPost__popup-background"></div>
           <div
-            onClick={handleSwitchWantAdd}
-            className="newPost__popup-background"
-          ></div>
-          <div
+            ref={popupRef}
             className={
               isOutcomeState
                 ? "newPost__popup newPost__popup--out"
@@ -228,22 +252,17 @@ export const CenterAddNewTransaction = () => {
                   handleChangeInput(e, "title");
                 }}
                 type="text"
-                label="Tytuł transakcji"
-                variant="standard"
               />
               <label className="newPost__popup-form-input-label">
                 Opis transakcji
               </label>
-              <input
+              <textarea
                 className="newPost__popup-form-input newPost__popup-form-input--textarea "
                 value={descriptionState}
                 onChange={(e) => {
                   handleChangeInput(e, "description");
                 }}
                 type="text"
-                label="Opis transakcji"
-                variant="standard"
-                multiline
               />
               <label className="newPost__popup-form-input-label">Kwota</label>
               <input
@@ -295,8 +314,10 @@ export const CenterAddNewTransaction = () => {
                   handleChangeInput(e, "category");
                 }}
                 className="newPost__popup-form-input newPost__popup-form-input--select"
-                // label="Kategoria"
               >
+                <option value="" disabled>
+                  Wybierz kategorię
+                </option>
                 {categories &&
                   categories.map((category) => {
                     if (category.isOutcome === isOutcomeState) {

@@ -168,7 +168,7 @@ export const CenterHeader = () => {
 
         <p className="centerHeader__balans">{balans} zł</p>
 
-        <div className="centerHeader__controls">
+        <div ref={menuRef} className="centerHeader__controls">
           <div
             className="controls__icon controls__icon--more"
             onClick={handleSwitchShowMore}
@@ -176,7 +176,7 @@ export const CenterHeader = () => {
             <MoreVertIcon />
           </div>
           {showMore && (
-            <div ref={menuRef} className="controls__popup">
+            <div className="controls__popup">
               <ShowMorePopup turnOffShowMore={handleSwitchShowMore} />
             </div>
           )}

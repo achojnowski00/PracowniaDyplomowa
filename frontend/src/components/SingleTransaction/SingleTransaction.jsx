@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { format, formatDistance, formatRelative, subDays } from "date-fns";
 import { pl } from "date-fns/locale";
 import axios from "axios";
@@ -34,6 +34,8 @@ export const SingleTransaction = ({
   title,
   who_created,
 }) => {
+  const EditPopupRef = useRef();
+
   const BACKEND_LINK = useContext(ApiContext);
   const [token, , userdata] = useContext(UserContext);
   const [, , , , , , , , , getTransactions] = useContext(FilterContext);
@@ -223,6 +225,32 @@ export const SingleTransaction = ({
     fetchCategories();
   }, [wantEdit]);
 
+  useEffect(() => {
+    if (!wantEdit) {
+      return;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setWantEdit(false);
+      }
+    };
+
+    const handleClick = (event) => {
+      if (!EditPopupRef.current.contains(event.target)) {
+        setWantEdit(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [wantEdit]);
+
   return (
     <>
       <ToastContainer />
@@ -288,8 +316,8 @@ export const SingleTransaction = ({
       {/* ================ */}
       {wantEdit && (
         <>
-          <div onClick={handleWantEdit} className="popup__background"></div>
-          <div className="popup">
+          <div className="popup__background"></div>
+          <div ref={EditPopupRef} className="popup">
             <div
               onClick={(e) => {
                 e.preventDefault();
@@ -326,7 +354,6 @@ export const SingleTransaction = ({
                 className="popup__form-input"
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
-                multiline
               />
               <label className="popup__form-label" htmlFor="amount">
                 Kwota (zł)

@@ -1,16 +1,41 @@
 .leftPanel
     width: 300px
     padding: 10px 20px
-    position: fixed
+    position: absolute
     top: 0
     left: 0
-    bottom: 0
+    // bottom: 0
+    height: 100vh
     padding-bottom: 70px !important
     overflow-x: hidden
+    transition: left 0.3s ease
+    z-index: 0
     
     @media(max-width: 1280px)
         width: 200px
         padding: 10px 15px
+    @media(max-width: 900px)
+        background: var(--primaryBackgroundColor)
+        max-width: 70vw
+        width: 500px
+        z-index: 10
+        &--hidden
+            left: -500px
+
+    &__menu-icon
+        display: none !important
+        position: fixed
+        top: 110px
+        left: 20px
+        width: 30px !important
+        height: 30px !important
+        z-index: 50
+        @media(max-width: 900px)
+            display: block !important
+        &--close
+            top: 7px
+            left: 20px
+        
 
     
 
@@ -31,9 +56,9 @@
         bottom: 20px
         font-weight: 600
         padding: 10px
-        position: fixed
+        position: absolute
         transition: color 0.15s, background 0.15s
-        width: 240px
+        width: 85%
         z-index: 5
         
         &:hover
@@ -129,12 +154,17 @@
             padding: 5px 10px
             border-radius: 6px
             transition: background 0.15s
+            @media(max-width: 900px)
+                padding: 15px 10px
+                margin-top: 10px
             &:hover
                 cursor: pointer
                 background: var(--itemHoverBg)
             &--active
                 background: var(--itemActiveBg)
                 font-weight: 600
+            
+              
     
     &__loading
         display: flex
