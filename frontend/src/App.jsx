@@ -29,6 +29,10 @@ const App = () => {
             type="checkbox"
             className={"switchTheme__track switchTheme__track--" + theme}
             checked={theme === "dark"}
+            // This onChange is required to avoid console error
+            // changing theme is handled by onClick on div
+            onChange={() => {}}
+            // DONT DELETE ^^^
           />
           <span className={"switchTheme__thumb switchTheme__thumb--" + theme}>
             {theme === "dark" ? (

@@ -152,6 +152,7 @@ export const FilterProvider = (props) => {
         transactionsData,
         balans,
         getTransactions,
+        setYear,
       ]}
     >
       {props.children}

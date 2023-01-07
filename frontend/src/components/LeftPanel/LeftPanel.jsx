@@ -21,7 +21,6 @@ import { ApiContext } from "../../context/apiContext";
 import { ThemeContext } from "../../context/themeContext";
 
 export const LeftPanel = () => {
-  const [hidden, setHidden] = useState(true);
   const leftPanel = useRef();
 
   const BACKEND_LINK = useContext(ApiContext);
@@ -34,6 +33,8 @@ export const LeftPanel = () => {
     setCurrentBudget,
     reloadBudgets,
   ] = useContext(BudgetContext);
+
+  const [hidden, setHidden] = useState(currentBudget ? true : false);
 
   const [wantChangeName, setWantChangeName] = useState(false);
   const [newName, setNewName] = useState(userdata.name);
@@ -289,6 +290,7 @@ export const LeftPanel = () => {
                   }
                   onClick={() => {
                     setCurrentBudget(budget.id);
+                    if (!hidden) setHidden(true);
                   }}
                 >
                   {budget.name}

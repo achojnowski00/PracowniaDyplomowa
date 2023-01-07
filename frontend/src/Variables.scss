@@ -66,6 +66,10 @@
   --dropShadow: 0 12px 12px 0 var(--dropShadowCol1),
     0 2px 4px 0 var(--dropShadowCol1);
 
+  --panelShadowCol: #00000033;
+  --panelShadow: 0px 0 12px 0px var(--panelShadowCol),
+    0 0px 0px 0 var(--panelShadowCol);
+
   --noteColor: #efe4b0;
   --noteCoverColor: rgba(0, 0, 0, 0.25);
   --emptyNoteColor: #969696;
@@ -136,6 +140,8 @@
 
   // --dropShadowCol1: #ffffff80;
   // --dropShadowCol2: #00000033;
+
+  --panelShadowCol: #33333333;
 
   --noteColor: hsl(55, 52%, 65%);
   // --noteCoverColor: rgba(0, 0, 0, 0.25);
