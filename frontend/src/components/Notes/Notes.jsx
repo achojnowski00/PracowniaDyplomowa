@@ -12,46 +12,18 @@ import { NoteDisplay } from "../NoteDisplay/NoteDisplay";
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
 import { ApiContext } from "../../context/apiContext";
+import { NotesContext } from "../../context/notesContext";
 import axios from "axios";
 
 export const Notes = () => {
-  const BACKEND_LINK = useContext(ApiContext);
   // States
   const [wantAddNote, setWantAddNote] = useState(false);
-  const [notesData, setNotesData] = useState();
-
-  // Context
-  const [currentBudget] = useContext(BudgetContext);
-  const [token] = useContext(UserContext);
+  const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
 
   // Handlers
   const handleSwitchWantAddNote = () => {
     setWantAddNote(!wantAddNote);
   };
-
-  // Axios
-  const fetchNotes = async () => {
-    if (!currentBudget) return;
-
-    await axios
-      .get(`${BACKEND_LINK}/api/notes/get-all?budget_id=${currentBudget.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setNotesData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // useEffects
-  useEffect(() => {
-    fetchNotes();
-  }, [currentBudget]);
 
   return (
     <>

@@ -9,15 +9,18 @@ import { BudgetProvider } from "./context/budgetContext";
 import { FilterProvider } from "./context/filterContext";
 import { ApiProvider } from "./context/apiContext";
 import { ThemeProvider } from "./context/themeContext";
+import { NotesProvider } from "./context/notesContext";
 
 ReactDOM.render(
   <ThemeProvider>
     <ApiProvider>
       <UserProvider>
         <BudgetProvider>
-          <FilterProvider>
-            <App />
-          </FilterProvider>
+          <NotesProvider>
+            <FilterProvider>
+              <App />
+            </FilterProvider>
+          </NotesProvider>
         </BudgetProvider>
       </UserProvider>
     </ApiProvider>

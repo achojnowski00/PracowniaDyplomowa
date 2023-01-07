@@ -14,6 +14,7 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
 import { ApiContext } from "../../context/apiContext";
+import { NotesContext } from "../../context/notesContext";
 
 export const NotePopup = ({
   turnOff,
@@ -29,6 +30,7 @@ export const NotePopup = ({
   // Context
   const [currentBudget] = useContext(BudgetContext);
   const [token] = useContext(UserContext);
+  const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
 
   // States
   const [titleState, setTitleState] = useState(title);
@@ -99,7 +101,7 @@ export const NotePopup = ({
           draggable: true,
           position: "bottom-right",
         });
-        callback();
+        fetchNotes();
         turnOff();
       })
       .catch((err) => {
@@ -146,7 +148,7 @@ export const NotePopup = ({
           draggable: true,
           position: "bottom-right",
         });
-        callback();
+        fetchNotes();
         turnOff();
       })
       .catch((err) => {
@@ -171,10 +173,8 @@ export const NotePopup = ({
           draggable: true,
           position: "bottom-right",
         });
-        callback();
-        setTimeout(() => {
-          turnOff();
-        }, 500);
+        fetchNotes();
+        turnOff();
       })
       .catch((err) => {
         console.log("error przy usuwaniu notatki", err);

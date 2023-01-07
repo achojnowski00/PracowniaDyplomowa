@@ -9,6 +9,7 @@ import "./ShowMorePopup.sass";
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
 import { ApiContext } from "../../context/apiContext";
+import { NotesContext } from "../../context/notesContext";
 
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -27,6 +28,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
     setCurrentBudget,
     reloadBudgets,
   ] = useContext(BudgetContext);
+  const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
 
   const [wantAddUser, setWantAddUser] = useState(false);
   const [wantShowUsers, setWantShowUsers] = useState(false);
@@ -65,7 +67,6 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleLeaveBudget = () => {
-    // setWantLeaveBudget(!wantLeaveBudget);
     Swal.fire({
       title: "Czy na pewno chcesz opuścić budżet?",
       text: "Aby do niego wrócić musisz zostać zaproszony przez innych użytkowników",
@@ -83,8 +84,10 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         }).then((willDelete) => {
           if (willDelete.isConfirmed) {
             deleteUserFromBudget(userdata.id).then(() => {
-              reloadBudgets();
               setCurrentBudget("");
+              setBudgetData([]);
+              reloadBudgets();
+              setNotesData([]);
             });
           }
         });
