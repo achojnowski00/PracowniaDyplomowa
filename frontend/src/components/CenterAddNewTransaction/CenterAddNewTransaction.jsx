@@ -176,10 +176,8 @@ export const CenterAddNewTransaction = () => {
           position: "bottom-right",
         });
         getTransactions();
+        setWantAdd(false);
         resetValues();
-        setTimeout(() => {
-          setWantAdd(false);
-        }, 500);
       })
       .catch((err) => {
         console.log("error dodawania posta", err);
