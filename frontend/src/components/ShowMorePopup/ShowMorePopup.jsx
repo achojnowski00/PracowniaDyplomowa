@@ -15,6 +15,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 export const ShowMorePopup = ({ turnOffShowMore }) => {
   const BACKEND_LINK = useContext(ApiContext);
@@ -227,11 +228,22 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
             <PersonAddAlt1Icon />
             <span>Dodaj użytkownika</span>
           </li>
-          <li className="showMorePopup__list-item" onClick={handleShowUsers}>
+          <li
+            className="showMorePopup__list-item"
+            onClick={() => {
+              handleShowUsers();
+            }}
+          >
             <GroupsIcon />
             <span>Wyświetl użytkowników</span>
           </li>
-          <li className="showMorePopup__list-item" onClick={handleLeaveBudget}>
+          <li
+            className="showMorePopup__list-item"
+            onClick={() => {
+              handleLeaveBudget();
+              turnOffShowMore();
+            }}
+          >
             <ExitToAppIcon />
             <span>Opuść budżet</span>
           </li>
@@ -247,6 +259,16 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
               className="showMorePopup__background"
             ></div>
             <div className="showMorePopup__form">
+              <div
+                className="showMorePopup__form-close"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSwitchAddUserPopup();
+                  turnOffShowMore();
+                }}
+              >
+                <CloseRoundedIcon />
+              </div>
               <form>
                 <p className="showMorePopup__form-title">
                   Dodaj użytkownika do budżetu
@@ -284,6 +306,16 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
               className="showMorePopup__background"
             ></div>
             <div className="showMorePopup__box">
+              <div
+                className="showMorePopup__box-close"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleShowUsers();
+                  turnOffShowMore();
+                }}
+              >
+                <CloseRoundedIcon />
+              </div>
               <p className="showMorePopup__box-title">Użytkownicy w budżecie</p>
               <ul className="showMorePopup__list showMorePopup__list--margined">
                 {budgetData.users.map((user) => (
@@ -312,14 +344,6 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                   </li>
                 ))}
               </ul>
-              <div className="showMorePopup__box-controls">
-                <button
-                  onClick={handleShowUsers}
-                  className="showMorePopup__form-btn"
-                >
-                  Zamknij
-                </button>
-              </div>
             </div>
           </>
         )}

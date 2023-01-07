@@ -8,16 +8,19 @@ import { UserProvider } from "./context/userContext";
 import { BudgetProvider } from "./context/budgetContext";
 import { FilterProvider } from "./context/filterContext";
 import { ApiProvider } from "./context/apiContext";
+import { ThemeProvider } from "./context/themeContext";
 
 ReactDOM.render(
-  <ApiProvider>
-    <UserProvider>
-      <BudgetProvider>
-        <FilterProvider>
-          <App />
-        </FilterProvider>
-      </BudgetProvider>
-    </UserProvider>
-  </ApiProvider>,
+  <ThemeProvider>
+    <ApiProvider>
+      <UserProvider>
+        <BudgetProvider>
+          <FilterProvider>
+            <App />
+          </FilterProvider>
+        </BudgetProvider>
+      </UserProvider>
+    </ApiProvider>
+  </ThemeProvider>,
   document.getElementById("root")
 );

@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
@@ -62,6 +63,20 @@ export const CenterAddNewTransaction = () => {
       return;
     }
     fetchCategories();
+
+    let handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setWantAdd(false);
+      }
+    };
+
+    if (wantAdd) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [wantAdd]);
 
   const handleChangeInput = (e, what) => {
@@ -85,6 +100,16 @@ export const CenterAddNewTransaction = () => {
 
   const handleSwitchIsOutcome = () => {
     setIsOutcomeState(!isOutcomeState);
+    setCategoryState("");
+  };
+
+  const setCategoryToOutcome = () => {
+    setIsOutcomeState(true);
+    setCategoryState("");
+  };
+
+  const setCategoryToIncome = () => {
+    setIsOutcomeState(false);
     setCategoryState("");
   };
 
@@ -182,9 +207,21 @@ export const CenterAddNewTransaction = () => {
                 : "newPost__popup newPost__popup--in"
             }
           >
+            <div
+              className="newPost__popup-close"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSwitchWantAdd();
+              }}
+            >
+              <CloseRoundedIcon />
+            </div>
             <h1 className="newPost__popup-title">Dodaj nową transakcję</h1>
             <form className="newPost__popup-form">
-              <TextField
+              <label className="newPost__popup-form-input-label">
+                Tytuł transakcji
+              </label>
+              <input
                 className="newPost__popup-form-input"
                 value={titleState}
                 onChange={(e) => {
@@ -194,7 +231,10 @@ export const CenterAddNewTransaction = () => {
                 label="Tytuł transakcji"
                 variant="standard"
               />
-              <TextField
+              <label className="newPost__popup-form-input-label">
+                Opis transakcji
+              </label>
+              <input
                 className="newPost__popup-form-input newPost__popup-form-input--textarea "
                 value={descriptionState}
                 onChange={(e) => {
@@ -205,8 +245,9 @@ export const CenterAddNewTransaction = () => {
                 variant="standard"
                 multiline
               />
-              <TextField
-                className="newPost__popup-form-input"
+              <label className="newPost__popup-form-input-label">Kwota</label>
+              <input
+                className="newPost__popup-form-input newPost__popup-form-input--amount"
                 value={amountState}
                 onChange={(e) => {
                   handleChangeInput(e, "amount");
@@ -215,63 +256,59 @@ export const CenterAddNewTransaction = () => {
                 label="Kwota"
                 variant="standard"
               />
+              <label className="newPost__popup-form-input-label newPost__popup-form-input-label--cat">
+                Kategoria
+              </label>
               <div className="newPost__popup-form-flex">
-                <button
+                <div
                   className={
                     isOutcomeState
-                      ? "popup__form-switch popup__form-switch--active"
-                      : "popup__form-switch"
+                      ? "popup__form-switch popup__form-switch--out popup__form-switch--out-active"
+                      : "popup__form-switch popup__form-switch--out"
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    handleSwitchIsOutcome();
+                    // handleSwitchIsOutcome();
+                    setCategoryToOutcome();
                   }}
                 >
                   Wydatek
-                </button>
-                <button
+                </div>
+                <div
                   className={
                     !isOutcomeState
-                      ? "popup__form-switch popup__form-switch--active"
-                      : "popup__form-switch"
+                      ? "popup__form-switch popup__form-switch--in popup__form-switch--in-active"
+                      : "popup__form-switch popup__form-switch--in"
                   }
                   onClick={(e) => {
                     e.preventDefault();
-                    handleSwitchIsOutcome();
+                    // handleSwitchIsOutcome();
+                    setCategoryToIncome();
                   }}
                 >
                   Przychód
-                </button>
+                </div>
               </div>
-              <Select
+              <select
                 value={categoryState}
                 onChange={(e) => {
                   handleChangeInput(e, "category");
                 }}
+                className="newPost__popup-form-input newPost__popup-form-input--select"
                 // label="Kategoria"
               >
                 {categories &&
                   categories.map((category) => {
                     if (category.isOutcome === isOutcomeState) {
                       return (
-                        <MenuItem key={category.id} value={category.id}>
+                        <option key={category.id} value={category.id}>
                           {category.name}
-                          {/* {category.id} */}
-                        </MenuItem>
+                        </option>
                       );
                     }
                   })}
-              </Select>
+              </select>
               <div className="newPost__popup-form-controls">
-                <button
-                  className="newPost__popup-form-btn newPost__popup-form-btn--cancel"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSwitchWantAdd();
-                  }}
-                >
-                  Anuluj
-                </button>
                 <button
                   className="newPost__popup-form-btn"
                   onClick={(e) => {

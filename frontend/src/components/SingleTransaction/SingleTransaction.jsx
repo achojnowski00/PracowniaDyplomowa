@@ -15,6 +15,7 @@ import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import CloseRoundedIcon from "@mui/icons-material/ClearRounded";
 
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
@@ -289,6 +290,15 @@ export const SingleTransaction = ({
         <>
           <div onClick={handleWantEdit} className="popup__background"></div>
           <div className="popup">
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                handleWantEdit();
+              }}
+              className="popup-close"
+            >
+              <CloseRoundedIcon />
+            </div>
             <h2 className="popup__title">Edytuj transakcję</h2>
 
             <form className="popup__form">
@@ -323,7 +333,7 @@ export const SingleTransaction = ({
               </label>
               <input
                 id="amount"
-                className="popup__form-input"
+                className="popup__form-input popup__form-input--amount"
                 value={newAmount}
                 required
                 onChange={(e) => {
@@ -356,8 +366,8 @@ export const SingleTransaction = ({
                 <button
                   className={
                     newIsOutcome
-                      ? "popup__form-switch popup__form-switch--active"
-                      : "popup__form-switch"
+                      ? "popup__form-switch popup__form-switch--out popup__form-switch--out-active"
+                      : "popup__form-switch popup__form-switch--out"
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -370,8 +380,8 @@ export const SingleTransaction = ({
                 <button
                   className={
                     !newIsOutcome
-                      ? "popup__form-switch popup__form-switch--active"
-                      : "popup__form-switch"
+                      ? "popup__form-switch popup__form-switch--in popup__form-switch--in-active"
+                      : "popup__form-switch popup__form-switch--in"
                   }
                   onClick={(e) => {
                     e.preventDefault();
@@ -409,15 +419,6 @@ export const SingleTransaction = ({
 
               {errorMessage && <p className="popup__error">{errorMessage}</p>}
               <div className="popup__buttons">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleWantEdit();
-                  }}
-                  className="popup__btn popup__btn--cancel"
-                >
-                  Anuluj
-                </button>
                 <button
                   onClick={(e) => {
                     e.preventDefault();

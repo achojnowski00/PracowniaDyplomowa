@@ -3,6 +3,60 @@
     padding: 0
     box-sizing: border-box
 
+
+
+    
 .page
-    background: #F0F2F5
-    min-height: 100vh
+    background: var(--primaryBackgroundColor)
+    color: var(--textColor)
+
+
+.switchTheme
+    position: fixed
+    top: 10px
+    left: 10px
+    width: 45px
+    height: 20px
+    z-index: 9
+    cursor: pointer
+    box-sizing: border-box
+    opacity: .7
+    transition: opacity 0.15s, scale 0.5s
+    &:hover
+        opacity: 1
+        scale: 1.1
+    &__track
+        all: unset
+        position: absolute
+        width: 45px
+        height: 20px
+        border-radius: 1000px
+        background-color: #ccc
+        border: 1px solid #bbb
+        transition: background-color 0.15s, border 0.15s
+
+        &--dark
+            background-color: #666
+            border: 1px solid #222
+    
+    &__thumb
+        position: absolute
+        // top: -4px 
+        left: -5px
+        top: 50%
+        transform: translateY(-50%)
+        background: rgb(215, 181, 95)
+        color: rgb(248,220 ,110 )
+        display: flex
+        justify-content: center
+        align-items: center
+        padding: 3px
+        border-radius: 50%
+        transition: background 0.15s, left 0.5s ease
+        &--dark
+            background: rgb(125, 121, 211)
+            color: rgb(241, 243, 251)
+            left: calc(100% - 23px)
+        
+    
+

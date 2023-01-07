@@ -1,8 +1,8 @@
 .transactions
-  margin-top: 30px
+  margin-top: 20px
   display: flex
   gap: 15px
-  height: 70vh
+  height: calc( 100vh - 257px )
   padding: 5px
   flex-direction: column
   overflow-y: scroll
@@ -12,9 +12,9 @@
   &::-webkit-scrollbar
     width: 5px
   &::-webkit-scrollbar-thumb
-    background: rgba(206, 208, 212, 0.5)
+    background: var(--scrollThumb)
     border-radius: 2px
   &:hover
     &::-webkit-scrollbar-thumb
-      background: rgba(206, 208, 212, 1)
+      background: var(--scrollThumbHov)
 

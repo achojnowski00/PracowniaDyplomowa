@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./CenterHeader.sass";
@@ -35,6 +35,27 @@ export const CenterHeader = () => {
   const handleSwitchShowMore = () => {
     setShowMore(!showMore);
   };
+
+  let menuRef = useRef();
+
+  // Przez to, że menu zamyka się po kliknieciu na cokolwiek co
+  // nie jest nim to jak jest alert od sweetalerta to menu się
+  // zamyka to po zamknieciu go myszką zamyka się całe menu
+  useEffect(() => {
+    let handler = (event) => {
+      if (!menuRef.current.contains(event.target)) {
+        setShowMore(false);
+      }
+    };
+
+    if (showMore) {
+      document.addEventListener("mousedown", handler);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, [showMore]);
 
   const handleSubmitChangeBudgetName = async () => {
     if (newBudgetName === "") {
@@ -155,7 +176,7 @@ export const CenterHeader = () => {
             <MoreVertIcon />
           </div>
           {showMore && (
-            <div className="controls__popup">
+            <div ref={menuRef} className="controls__popup">
               <ShowMorePopup turnOffShowMore={handleSwitchShowMore} />
             </div>
           )}

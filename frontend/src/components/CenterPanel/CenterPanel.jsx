@@ -26,12 +26,12 @@ export const CenterPanel = () => {
       {!currentBudget && <h1>Wybierz budżet</h1>}
 
       {currentBudget && (
-        <div>
+        <>
           <CenterHeader />
           <CenterFilter />
           <CenterAddNewTransaction />
           <CenterListOfTransactions />
-        </div>
+        </>
       )}
     </div>
   );

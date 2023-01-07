@@ -1,30 +1,22 @@
 .leftPanel
-    max-width: 300px
+    width: 300px
     padding: 10px 20px
-    height: 100vh
     position: fixed
     top: 0
     left: 0
-    padding-bottom: 100px
-    overflow-y: scroll
+    bottom: 0
+    padding-bottom: 70px !important
     overflow-x: hidden
-    // background: red
-    &:hover
-        &::-webkit-scrollbar 
-            display: block
-            width: 0px
-            position: absolute
-            top: 0
-            right: 0
-        &::-webkit-scrollbar-thumb
-            background: rgb(206, 208, 212)
-            border-radius: 2px
-    &::-webkit-scrollbar 
-        display: none
+    
+    @media(max-width: 1280px)
+        width: 200px
+        padding: 10px 15px
+
+    
 
 
     &__info
-        color: gray
+        color: var(--primaryGray)
         font-size: 12px
         font-weight: 600
 
@@ -33,7 +25,7 @@
         display: flex
         gap: 5px
         align-items: center
-        background: #F0F2F5
+        background: var(--primaryBackgroundColor)
         box-sizing: border-box
         border-radius: 6px
         bottom: 20px
@@ -46,7 +38,7 @@
         
         &:hover
             cursor: pointer
-            background: rgb(228,230,233)
+            background: var(--itemHoverBg)
 
     &__title
         border-radius: 6px
@@ -57,13 +49,13 @@
         position: relative
         &:hover
             cursor: pointer
-            background: rgb(228,230,233)
+            background: var(--itemHoverBg)
         &::after
             content: ''
             display: block
             width: 30px
             height: 38px
-            background: #0099CC
+            background: var(--primaryAccent)
             position: absolute
             top: 14px
             left: -40px
@@ -74,7 +66,7 @@
         display: flex
         align-items: center
         gap: 5px
-        color: gray
+        color: var(--primaryGray)
         font-weight: 600
         margin-top: -15px
         padding: 5px 10px
@@ -82,9 +74,9 @@
         position: relative
         cursor: pointer
         &:hover
-            background: rgb(228,230,233)
+            background: var(--itemHoverBg)
         &--ID
-            color: black
+            color: var(--textColor)
             font-weight: 700
             font-size: 20px
     
@@ -101,23 +93,11 @@
         margin-left: 4px
         width: 140px
         cursor: pointer
-        border-bottom: 1px solid gray
+        border-bottom: 1px solid var(--primaryGray)
         &:focus
-            background: rgba(0, 153, 204, .1)
+            background: var(--primaryVeryLightBlue)
         
-    &__username-btn
-        all: unset
-        padding: 5px 10px
-        font-size: 16px
-        border-radius: 6px
-        background: #0099CC
-        transition: background 0.15s
-        &:hover
-            background: #0077AA
-        &--cancel
-            background: #fa6666
-            &:hover
-                background: #e95555
+    
     
     &__buttons
         margin-top: 10px
@@ -125,22 +105,35 @@
         justify-content: space-around
     
     &__list
-        border-top: 1px solid rgb(206,208,212 )
-        border-bottom: 1px solid rgb(206,208,212 )
+        border-top: var(--breakline)
+        border-bottom: var(--breakline)
         margin-top: 30px
         list-style: none
         padding: 10px 0
+        overflow-y: scroll
+        max-height: calc(100vh - 250px)
+
+        &::-webkit-scrollbar
+            width: 5px
+        &::-webkit-scrollbar-thumb
+            background: var(--scrollThumb)
+            border-radius: 2px
+        &:hover
+            &::-webkit-scrollbar-thumb
+                background: var(--scrollThumbHov)
 
         &-item
+            display: flex
+            align-items: center
             margin-top: 2px
             padding: 5px 10px
             border-radius: 6px
             transition: background 0.15s
             &:hover
                 cursor: pointer
-                background: rgb(228,230,233)
+                background: var(--itemHoverBg)
             &--active
-                background: rgb(232,235,238)
+                background: var(--itemActiveBg)
                 font-weight: 600
     
     &__loading
@@ -148,20 +141,21 @@
         justify-content: center
         align-items: center
         svg
-            color: gray
+            color: var(--primaryGray)
 
 
     &__addBudget-input
         all: unset
         margin-top: 10px
         width: 100%
-        border-bottom: 1px solid #0099CC
-        border-top-left-radius: 6px
-        border-top-right-radius: 6px
+        padding: 10px 20px
         box-sizing: border-box
-        padding: 5px 10px
+        border-radius: 6px
+        border: var(--inputBorder)
+        font-size: 16px
+        transition: border 0.15s
         &:focus
-            background: rgba(0, 153, 204, .1)
+            border: 2px solid var(--primaryAccent)
 
     &__addBudget-btn
         all: unset
@@ -171,30 +165,30 @@
         display: flex
         justify-content: center
         align-items: center
-        background: rgba(206, 208, 212, .2)
+        background: var(--itemHoverBg)
         border: 1px solid rgba(0, 153, 204, 0)
         transition: background 0.15s, border 0.15s
         &:hover
-            background: rgba(0, 153, 204, .3)
-            border: 1px solid rgba(0, 153, 204, .5)
+            background: var(--acceptBlueHoverBg)
+            border: 1px solid var(--acceptBlueHoverBorder)
             
         
         &--cancel:hover
-            background: rgba(250, 102, 102, .3)
-            border: 1px solid rgba(250, 102, 102, .5)
+            background: var(--cancelRedHoverBg)
+            border: 1px solid var(--cancelRedHoverBorder)
             
     
     &__addBudget
+        all: unset
         display: flex
         justify-content: center
         align-items: center
-        margin: 20px auto 0 auto
-        padding: 10px 20px
+        margin: 10px auto 0 auto
+        padding: 5px 15px 5px 10px
         background: none
-        border: 1px solid #0099CC
         border-radius: 6px
         cursor: pointer
         transition: background 0.15s
         &:hover
-            background: rgba(0, 153, 204, .1)
+            background: var(--itemHoverBg)
     

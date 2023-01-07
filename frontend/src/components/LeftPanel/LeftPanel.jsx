@@ -11,10 +11,12 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
 import { ApiContext } from "../../context/apiContext";
+import { ThemeContext } from "../../context/themeContext";
 
 export const LeftPanel = () => {
   const BACKEND_LINK = useContext(ApiContext);
@@ -264,6 +266,7 @@ export const LeftPanel = () => {
                 className="leftPanel__addBudget"
                 onClick={handleWantAddBudget}
               >
+                <AddRoundedIcon />
                 Dodaj nowy budżet
               </button>
             )}
