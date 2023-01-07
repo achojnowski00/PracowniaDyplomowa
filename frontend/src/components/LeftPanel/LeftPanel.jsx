@@ -184,6 +184,39 @@ export const LeftPanel = () => {
     };
   }, [hidden]);
 
+  const copyToClipboard = () => {
+    let succes = () => {
+      toast.success("Skopiowano ID do schowka", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(userdata.id);
+      succes();
+      return;
+    } else {
+      let textArea = document.createElement("textarea");
+      textArea.value = userdata.id;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+        succes();
+      });
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -210,20 +243,7 @@ export const LeftPanel = () => {
             <h1 onClick={handleNameClick} className="leftPanel__title">
               Cześć {userdata.name}!
             </h1>
-            <p
-              className="leftPanel__sub-title"
-              onClick={() => {
-                navigator.clipboard.writeText(userdata.id);
-                toast.success("Skopiowano ID do schowka", {
-                  autoClose: 1000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: true,
-                  position: "bottom-right",
-                });
-              }}
-            >
+            <p className="leftPanel__sub-title" onClick={copyToClipboard}>
               Twoje ID:{" "}
               <span className="leftPanel__sub-title--ID">{userdata.id}</span>
             </p>
