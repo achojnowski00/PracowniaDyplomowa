@@ -1,6 +1,7 @@
 import datetime as _dt
 import pydantic as _pydantic
 from typing import Optional
+from typing import List
 
 
 # ################# #
@@ -99,7 +100,7 @@ class CategoryEdit(_pydantic.BaseModel):
 
 class Category(CategoryBase):
     id: int
-    transactions: list[Transaction] = []
+    transactions: List[Transaction] = []
 
     class Config:
         orm_mode = True
@@ -142,7 +143,7 @@ class Budget(BudgetBase):
 
 
 class UsersOutput(User):
-    budgets: list[Budget] = []
+    budgets: List[Budget] = []
 
     class Config:
         orm_mode = True
@@ -189,8 +190,8 @@ class NoteEdit(_pydantic.BaseModel):
 
 class BudgetOutput(Budget):
     # transactions: list[TransactionDisplay] = []
-    users: list[User] = []
-    notes: list[Note] = []
+    users: List[User] = []
+    notes: List[Note] = []
 
     class Config:
         orm_mode = True
