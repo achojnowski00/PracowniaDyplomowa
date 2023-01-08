@@ -12,13 +12,46 @@ import { MainPage } from "./pages/MainPage/MainPage";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 
+import { NotesContext } from "./context/notesContext";
+import { BudgetContext } from "./context/budgetContext";
+import { FilterContext } from "./context/filterContext";
+
 import "./App.sass";
 import "./Variables.scss";
 
 const App = () => {
   const [token] = useContext(UserContext);
   const [theme, switchTheme] = useContext(ThemeContext);
-  useEffect(() => {}, []);
+
+  const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
+  const [
+    budgetData,
+    setBudgetData,
+    currentBudget,
+    setCurrentBudget,
+    reloadBudgets,
+  ] = useContext(BudgetContext);
+  const [
+    month,
+    setMonth,
+    plusMonth,
+    minusMonth,
+    year,
+    dateFrom,
+    dateTo,
+    transactionsData,
+    balans,
+    getTransactions,
+    setYear,
+  ] = useContext(FilterContext);
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      reloadBudgets();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <BrowserRouter>

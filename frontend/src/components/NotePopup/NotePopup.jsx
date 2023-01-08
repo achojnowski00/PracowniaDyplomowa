@@ -28,7 +28,13 @@ export const NotePopup = ({
 
   const BACKEND_LINK = useContext(ApiContext);
   // Context
-  const [currentBudget] = useContext(BudgetContext);
+  const [
+    budgetData,
+    setBudgetData,
+    currentBudget,
+    setCurrentBudget,
+    reloadBudgets,
+  ] = useContext(BudgetContext);
   const [token] = useContext(UserContext);
   const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
 
@@ -77,13 +83,14 @@ export const NotePopup = ({
 
   // Axios
   const submitAddNote = async () => {
+    console.log("😭", currentBudget);
     await axios
       .post(
         `${BACKEND_LINK}/api/notes/create`,
         {
           title: titleState,
           description: contentState,
-          budget_id: currentBudget.id,
+          budget_id: currentBudget,
         },
         {
           headers: {

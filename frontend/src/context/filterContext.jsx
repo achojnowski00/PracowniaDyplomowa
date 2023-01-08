@@ -45,6 +45,51 @@ export const FilterProvider = (props) => {
     setMonth(month - 1);
   };
 
+  const returnDateFrom = (month, year) => {
+    if (month < 10) {
+      return `${year}-0${month}-01T00:00:00`;
+    } else {
+      return `${year}-${month}-01T00:00:00`;
+    }
+  };
+
+  const returnDateTo = (mon, yea) => {
+    if (((yea % 4 === 0 && yea % 100 !== 0) || yea % 400 === 0) && mon === 2) {
+      return `${yea}-0${mon}-29T23:59:59`;
+    } else if (mon === 2) {
+      return `${yea}-0${mon}-28T23:59:59`;
+    }
+
+    if (
+      mon === 1 ||
+      mon === 3 ||
+      mon === 5 ||
+      mon === 7 ||
+      mon === 8 ||
+      mon === 10 ||
+      mon === 12
+    ) {
+      if (mon < 10) {
+        return `${yea}-0${mon}-31T23:59:59`;
+      } else {
+        return `${yea}-${mon}-31T23:59:59`;
+      }
+    }
+
+    if (mon === 4 || mon === 6 || mon === 9 || mon === 11) {
+      if (mon < 10) {
+        return `${yea}-0${mon}-30T23:59:59`;
+      } else {
+        return `${yea}-${mon}-30T23:59:59`;
+      }
+    }
+  };
+
+  const setDateFromAndDateTo = () => {
+    setDateFrom(returnDateFrom(month, year));
+    setDateTo(returnDateTo(month, year));
+  };
+
   const getTransactions = async () => {
     if (currentBudget === "") return;
     if (dateFrom === "") return;
@@ -75,44 +120,7 @@ export const FilterProvider = (props) => {
   //
   // =====================================================================
   useEffect(() => {
-    if (month < 10) {
-      setDateFrom(`${year}-0${month}-01T00:00:00`);
-    } else {
-      setDateFrom(`${year}-${month}-01T00:00:00`);
-    }
-
-    if (
-      ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) &&
-      month === 2
-    ) {
-      setDateTo(`${year}-0${month}-29T23:59:59`);
-    } else if (month === 2) {
-      setDateTo(`${year}-0${month}-28T23:59:59`);
-    }
-
-    if (
-      month === 1 ||
-      month === 3 ||
-      month === 5 ||
-      month === 7 ||
-      month === 8 ||
-      month === 10 ||
-      month === 12
-    ) {
-      if (month < 10) {
-        setDateTo(`${year}-0${month}-31T23:59:59`);
-      } else {
-        setDateTo(`${year}-${month}-31T23:59:59`);
-      }
-    }
-
-    if (month === 4 || month === 6 || month === 9 || month === 11) {
-      if (month < 10) {
-        setDateTo(`${year}-0${month}-30T23:59:59`);
-      } else {
-        setDateTo(`${year}-${month}-30T23:59:59`);
-      }
-    }
+    setDateFromAndDateTo();
   }, [month]);
 
   // ===============================================================
@@ -123,6 +131,10 @@ export const FilterProvider = (props) => {
   useEffect(() => {
     setTransactionsData("");
     getTransactions();
+    let interval = setInterval(() => {
+      getTransactions();
+    }, 10000);
+    return () => clearInterval(interval);
   }, [dateFrom, dateTo, currentBudget]);
 
   useEffect(() => {

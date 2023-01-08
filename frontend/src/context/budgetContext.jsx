@@ -17,7 +17,8 @@ export const BudgetProvider = (props) => {
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
   const reloadBudgets = async () => {
-    axios
+    // console.log("reload budżetów");
+    await axios
       .get(`${BACKEND_LINK}/api/budgets/get-all`, {
         headers: {
           "Content-Type": "application/json",
@@ -36,6 +37,16 @@ export const BudgetProvider = (props) => {
         console.log("error reloadowania budżetu", err);
       });
   };
+
+  useEffect(() => {
+    if (userdata.budgets === undefined || currentBudget === "") {
+      return;
+    }
+
+    if (!userdata.budgets.find((el) => el.id === currentBudget)) {
+      setCurrentBudget("");
+    }
+  }, [userdata]);
 
   useEffect(() => {
     localStorage.setItem("currentBudget", currentBudget);
