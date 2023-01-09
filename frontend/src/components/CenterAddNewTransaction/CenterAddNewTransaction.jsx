@@ -17,6 +17,7 @@ import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
 import { FilterContext } from "../../context/filterContext";
 import { ApiContext } from "../../context/apiContext";
+import { Raport } from "../Raport/Raport";
 
 export const CenterAddNewTransaction = () => {
   const popupRef = useRef();
@@ -40,8 +41,14 @@ export const CenterAddNewTransaction = () => {
   const [categoryState, setCategoryState] = useState("");
   const [isOutcomeState, setIsOutcomeState] = useState(true);
 
+  const [wantSeeRaport, setWantSeeRaport] = useState(false);
+
   const handleSwitchWantAdd = () => {
     setWantAdd(!wantAdd);
+  };
+
+  const handleSwitchWantSeeRaport = () => {
+    setWantSeeRaport(!wantSeeRaport);
   };
 
   const fetchCategories = async () => {
@@ -184,29 +191,29 @@ export const CenterAddNewTransaction = () => {
       });
   };
 
-  useEffect(() => {
-    if (!popupRef.current) return;
+  // useEffect(() => {
+  //   if (!popupRef.current) return;
 
-    let handleClick = (e) => {
-      if (!popupRef.current.contains(e.target)) {
-        setWantAdd(false);
-      }
-    };
+  //   let handleClick = (e) => {
+  //     if (!popupRef.current.contains(e.target)) {
+  //       setWantAdd(false);
+  //     }
+  //   };
 
-    const handleEscape = (e) => {
-      if (e.key === "Escape") {
-        setWantAdd(false);
-      }
-    };
+  //   const handleEscape = (e) => {
+  //     if (e.key === "Escape") {
+  //       setWantAdd(false);
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClick);
-    document.addEventListener("keydown", handleEscape);
+  //   document.addEventListener("mousedown", handleClick);
+  //   document.addEventListener("keydown", handleEscape);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [wantAdd]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClick);
+  //     document.removeEventListener("keydown", handleEscape);
+  //   };
+  // }, [wantAdd]);
 
   return (
     <>
@@ -216,13 +223,21 @@ export const CenterAddNewTransaction = () => {
         <button className="newPost__btn" onClick={handleSwitchWantAdd}>
           Dodaj nową transakcję
         </button>
+        <button className="newPost__btn" onClick={handleSwitchWantSeeRaport}>
+          Pokaż raport miesięczny
+        </button>
       </div>
+
+      {wantSeeRaport && <Raport turnOff={handleSwitchWantSeeRaport} />}
 
       {wantAdd && (
         <>
-          <div className="newPost__popup-background"></div>
           <div
-            ref={popupRef}
+            onClick={handleSwitchWantAdd}
+            className="newPost__popup-background"
+          ></div>
+          <div
+            // ref={popupRef}
             className={
               isOutcomeState
                 ? "newPost__popup newPost__popup--out"

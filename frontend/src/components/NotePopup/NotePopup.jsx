@@ -215,75 +215,74 @@ export const NotePopup = ({
   return (
     <>
       <ToastContainer />
-      <div className="addNote__background">
-        <div ref={popup} className="addNote">
-          <form className="addNote__form">
-            {action === "edit" && (
-              <>
-                <div
-                  className="addNote__form-btn addNote__form-btn--delete"
-                  onClick={handleDeleteNote}
-                >
-                  <DeleteRoundedIcon />
-                  Usuń
-                </div>
-              </>
-            )}
-            <input
-              onChange={handleTitleChange}
-              value={titleState}
-              className="addNote__form-input addNote__form-input--title"
-              type="text"
-              placeholder="Tytuł notatki..."
-              maxLength="32"
-            />
-            <textarea
-              onChange={handleContentChange}
-              value={contentState}
-              className="addNote__form-input addNote__form-input--content"
-              type="text"
-              placeholder="Treść notatki..."
-              spellCheck="false"
-              linebreak="br"
-              autoFocus
-              onFocus={(e) => (e.target.selectionStart = e.target.value.length)}
-            />
-            {action === "add" && (
-              <>
-                <button
-                  className="addNote__form-btn"
-                  onClick={(e) => {
-                    handleAddNote(e);
-                  }}
-                >
-                  <LibraryAddOutlinedIcon />
-                  Dodaj notatkę
-                </button>
-              </>
-            )}
-            {action === "edit" && (
-              <>
-                <button
-                  className="addNote__form-btn"
-                  onClick={(e) => {
-                    handleEditNote(e);
-                  }}
-                >
-                  <BookmarkAddedOutlinedIcon />
-                  Zapisz
-                </button>
-              </>
-            )}
-            <button
-              className="addNote__form-close-btn"
-              onClick={(e) => {
-                handleTurnOff(e);
-              }}
-            >
-              <CloseRoundedIcon />
-            </button>
-          </form>
-        </div>
+      <div className="addNote__background"></div>
+      <div ref={popup} className="addNote">
+        <form className="addNote__form">
+          {action === "edit" && (
+            <>
+              <div
+                className="addNote__form-btn addNote__form-btn--delete"
+                onClick={handleDeleteNote}
+              >
+                <DeleteRoundedIcon />
+                Usuń
+              </div>
+            </>
+          )}
+          <input
+            onChange={handleTitleChange}
+            value={titleState}
+            className="addNote__form-input addNote__form-input--title"
+            type="text"
+            placeholder="Tytuł notatki..."
+            maxLength="32"
+          />
+          <textarea
+            onChange={handleContentChange}
+            value={contentState}
+            className="addNote__form-input addNote__form-input--content"
+            type="text"
+            placeholder="Treść notatki..."
+            spellCheck="false"
+            linebreak="br"
+            autoFocus
+            onFocus={(e) => (e.target.selectionStart = e.target.value.length)}
+          />
+          {action === "add" && (
+            <>
+              <button
+                className="addNote__form-btn"
+                onClick={(e) => {
+                  handleAddNote(e);
+                }}
+              >
+                <LibraryAddOutlinedIcon />
+                Dodaj notatkę
+              </button>
+            </>
+          )}
+          {action === "edit" && (
+            <>
+              <button
+                className="addNote__form-btn"
+                onClick={(e) => {
+                  handleEditNote(e);
+                }}
+              >
+                <BookmarkAddedOutlinedIcon />
+                Zapisz
+              </button>
+            </>
+          )}
+          <button
+            className="addNote__form-close-btn"
+            onClick={(e) => {
+              handleTurnOff(e);
+            }}
+          >
+            <CloseRoundedIcon />
+          </button>
+        </form>
       </div>
     </>
   );

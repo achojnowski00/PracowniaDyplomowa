@@ -41,7 +41,7 @@ export const NotesProvider = (props) => {
     fetchNotes();
     let interval = setInterval(() => {
       fetchNotes();
-    }, 10000);
+    }, 30000);
     return () => clearInterval(interval);
   }, [currentBudget]);
 
