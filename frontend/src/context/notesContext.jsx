@@ -16,7 +16,7 @@ export const NotesProvider = (props) => {
 
   // Axios
   const fetchNotes = async () => {
-    console.log(`currentBudget`, currentBudget);
+    // console.log(`currentBudget`, currentBudget);
     if (!currentBudget) return;
     if (currentBudget === "") return;
 
@@ -31,7 +31,7 @@ export const NotesProvider = (props) => {
         setNotesData(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

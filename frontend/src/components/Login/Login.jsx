@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 
 import { UserContext } from "../../context/userContext";
 import { ApiContext } from "../../context/apiContext";
@@ -20,19 +21,35 @@ export const Login = () => {
         `grant_type=&username=${login}&password=${password}&scope=&client_id=&client_secret=`
       ),
     };
-
     const response = await fetch(
       `${BACKEND_LINK}/api/users/token`,
       requestOptions
     );
     const data = await response.json();
-
     if (!response.ok) {
       setErrorMessage(data.detail);
       return;
     }
-
     setToken(data.access_token);
+
+    // make an axios post rewquest with grant_type=&username=${login}&password=${password}&scope=&client_id=&client_secret=
+    // await axios
+    //   .post(`${BACKEND_LINK}/api/users/token`, {
+    //     grant_type: "",
+    //     username: login,
+    //     password: password,
+    //     scope: "",
+    //     client_id: "",
+    //     client_secret: "",
+    //   })
+    //   .then((response) => {
+    //     // setToken(response.data.access_token);
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     // setErrorMessage(error.response.data.detail);
+    //     console.log(error);
+    //   });
   };
 
   const handleSubmit = (e) => {

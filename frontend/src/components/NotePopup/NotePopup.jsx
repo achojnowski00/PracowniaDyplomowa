@@ -83,7 +83,7 @@ export const NotePopup = ({
 
   // Axios
   const submitAddNote = async () => {
-    console.log("😭", currentBudget);
+    // console.log("😭", currentBudget);
     await axios
       .post(
         `${BACKEND_LINK}/api/notes/create`,
@@ -112,7 +112,7 @@ export const NotePopup = ({
         turnOff();
       })
       .catch((err) => {
-        console.log("error przy dodawaniu notatki", err);
+        // console.log("error przy dodawaniu notatki", err);
       });
   };
 
@@ -146,7 +146,7 @@ export const NotePopup = ({
         }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         toast.success("Notatka została zaktualizowana", {
           autoClose: 1000,
           hideProgressBar: true,
@@ -159,7 +159,7 @@ export const NotePopup = ({
         turnOff();
       })
       .catch((err) => {
-        console.log("error przy edycji notatki", err);
+        // console.log("error przy edycji notatki", err);
       });
   };
 
@@ -184,7 +184,7 @@ export const NotePopup = ({
         turnOff();
       })
       .catch((err) => {
-        console.log("error przy usuwaniu notatki", err);
+        // console.log("error przy usuwaniu notatki", err);
       });
   };
 

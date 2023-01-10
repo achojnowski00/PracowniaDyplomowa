@@ -111,7 +111,7 @@ export const SingleTransaction = ({
         setCategories(res.data);
       })
       .catch((err) => {
-        console.log("error - pobieranie kategorii", err);
+        // console.log("error - pobieranie kategorii", err);
       });
   };
 
@@ -135,7 +135,7 @@ export const SingleTransaction = ({
         getTransactions();
       })
       .catch((err) => {
-        console.log("error - usuwanie posta", err);
+        // console.log("error - usuwanie posta", err);
       });
   };
 
@@ -199,7 +199,7 @@ export const SingleTransaction = ({
         resetEditValues();
       })
       .catch((err) => {
-        console.log("error - edycja posta", err);
+        // console.log("error - edycja posta", err);
       });
   };
 

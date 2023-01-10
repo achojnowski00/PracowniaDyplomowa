@@ -17,7 +17,7 @@ export const BudgetProvider = (props) => {
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
   const reloadBudgets = async () => {
-    // console.log("reload budżetów");
+    // // console.log("reload budżetów");
     await axios
       .get(`${BACKEND_LINK}/api/budgets/get-all`, {
         headers: {
@@ -34,9 +34,17 @@ export const BudgetProvider = (props) => {
         });
       })
       .catch((err) => {
-        console.log("error reloadowania budżetu", err);
+        // console.log("error reloadowania budżetu", err);
       });
   };
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      reloadBudgets();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [token]);
 
   useEffect(() => {
     if (userdata.budgets === undefined || currentBudget === "") {
@@ -64,10 +72,10 @@ export const BudgetProvider = (props) => {
       })
       .then((res) => {
         setBudgetData(res.data);
-        console.log(`Dane budżetu`, res.data);
+        // console.log(`Dane budżetu`, res.data);
       })
       .catch((err) => {
-        console.log("error - fetch budgetData", err);
+        // console.log("error - fetch budgetData", err);
         Swal.fire("Coś poszło nie tak", "", "error", {
           button: "Zamknij",
           timer: 1000,

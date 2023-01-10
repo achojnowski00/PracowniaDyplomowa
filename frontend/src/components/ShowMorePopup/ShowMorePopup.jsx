@@ -54,7 +54,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         });
       })
       .catch((err) => {
-        console.log("error przy reloadowaniu userów", err);
+        // console.log("error przy reloadowaniu userów", err);
       });
   };
 

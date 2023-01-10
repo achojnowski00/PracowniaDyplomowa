@@ -45,7 +45,7 @@ export const Raport = (props) => {
         resualt = res.data;
       })
       .catch((err) => {
-        console.log("error pobierania kategorii (raport miesieczny)", err);
+        // console.log("error pobierania kategorii (raport miesieczny)", err);
       });
 
     return resualt;
@@ -225,12 +225,12 @@ export const Raport = (props) => {
 
   // UseEffects
   useEffect(() => {
-    // console.log(`😎`, transactionsData);
-    // console.log(`😅`, budgetData);
+    // // console.log(`😎`, transactionsData);
+    // // console.log(`😅`, budgetData);
     let dupa = raport(transactionsData);
     setRaportData(raport(transactionsData));
 
-    console.log(`🤡`, dupa);
+    // console.log(`🤡`, dupa);
   }, []);
 
   return (

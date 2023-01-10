@@ -45,13 +45,14 @@ const App = () => {
     setYear,
   ] = useContext(FilterContext);
 
-  useEffect(() => {
-    let interval = setInterval(() => {
-      reloadBudgets();
-    }, 30000);
+  // Chyba przenieść do budgetContext.jsx
+  // useEffect(() => {
+  //   let interval = setInterval(() => {
+  //     reloadBudgets();
+  //   }, 30000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <BrowserRouter>

@@ -106,11 +106,11 @@ export const FilterProvider = (props) => {
         }
       )
       .then((res) => {
-        console.log("lista transakcji", res.data);
+        // console.log("lista transakcji", res.data);
         setTransactionsData(res.data);
       })
       .catch((err) => {
-        console.log("error - fetch listy transakcji", err);
+        // console.log("error - fetch listy transakcji", err);
       });
   };
 
