@@ -1,0 +1,156 @@
+.page {
+  --transparent: rgba(0, 0, 0, 0);
+
+  --primaryAccent: hsl(195, 100%, 40%);
+  --primaryAccentDarker: #0088bb;
+  --primaryBackgroundColor: #f0f2f5;
+  --textColor: #000000;
+  --primaryVeryLightBlue: rgb(229, 237, 239);
+  --primaryDarkGray: #353535;
+  --primaryGray: #525252;
+  --primaryLightGray: #969696;
+  --primaryLighterGray: #dadada;
+  --primaryVeryLightGray: #f0f0f0;
+  --primaryBlack: #000000;
+  --primaryWhite: #ffffff;
+  --primaryRed: #bb1313;
+
+  --newTransactionBtn: #e8ebee;
+  --newTransactionBtnHov: #e8ebee;
+
+  --tranEditIcon: #525252;
+  --tranDeleteIcon: #353535;
+
+  --scrollThumb: #ced0d480;
+  --scrollThumbHov: #ced0d4;
+
+  --popupBg: #f0f2f580;
+  --iconHovBg: rgba(0, 0, 0, 0.15);
+
+  --breaklineColor: #ced0d4;
+  --breakline: 1px solid var(--breaklineColor);
+  --inputBorderColor: #00000033;
+  --inputBorder: 2px solid var(--inputBorderColor);
+  --labelColor: hsl(0, 0%, 10%);
+
+  --itemHoverBg: #e4e6e9;
+  --itemActiveBg: #e8ebee;
+
+  --transparentBtnBg: #ffffff4d;
+  --transparentBtnBgHov: #ffffff80;
+  --transparentBtnRedBg: hsl(0, 65%, 80%);
+  --transparentBtnRedBgHov: hsl(0, 65%, 90%);
+  --transparentBtnGreenBg: hsl(130, 65%, 80%);
+  --transparentBtnGreenBgHov: hsl(130, 65%, 90%);
+
+  --acceptBlueHoverBg: #a8d7e9;
+  --acceptBlueHoverBorder: #54b8db;
+  --cancelRedHoverBg: #f3c8ca;
+  --cancelRedHoverBorder: #f69698;
+
+  --outcomeTransactionBg: #ecc1bd;
+  --outcomeTransactionColor: #861313;
+  --incomeTransactionBg: #b9eccc;
+  --incomeTransactionColor: #138630;
+  --transactionFontSize: 8px;
+
+  --editTransaction: hsl(210, 35%, 80%);
+  --deleteTransaction: #353535;
+
+  --shadowBorderCol: #ced0d4;
+  --shadowBorder: 0px 3px 0px 0px var(--shadowBorderCol),
+    0px 0px 0px 1px var(--shadowBorderCol);
+
+  --dropShadowCol1: #00000033;
+  --dropShadowCol2: #ffffff80;
+  --dropShadow: 0 12px 12px 0 var(--dropShadowCol1),
+    0 2px 4px 0 var(--dropShadowCol1);
+
+  --panelShadowCol: #00000033;
+  --panelShadow: 0px 0 12px 0px var(--panelShadowCol),
+    0 0px 0px 0 var(--panelShadowCol);
+
+  --noteColor: #efe4b0;
+  --noteCoverColor: rgba(0, 0, 0, 0.25);
+  --emptyNoteColor: #969696;
+  --noteBtnCol: #525252;
+
+  --loginBg: #f1f1f1;
+  --loginShadowCol1: #bebebe;
+  --loginShadowCol2: #ffffff;
+  --loginDropShadow: 20px 20px 60px var(--loginShadowCol1),
+    -20px -20px 60px var(--loginShadowCol2);
+}
+
+.page--dark {
+  --primaryAccent: #524db3;
+  --primaryAccentDarker: hsl(243, 40%, 40%);
+  --primaryBackgroundColor: #0f0d0a;
+  --textColor: #f0f2f5;
+  --primaryVeryLightBlue: hsl(243, 50%, 15%);
+  // --primaryDarkGray: #353535;
+  --primaryGray: hsl(0, 0%, 80%);
+  // --primaryLightGray: #969696;
+  --primaryLighterGray: hsl(0, 0%, 15%);
+  // --primaryVeryLightGray: #f0f0f0;
+  --primaryBlack: #111111;
+  --primaryWhite: #000000;
+  // --primaryRed: #bb1313;
+
+  --newTransactionBtn: hsl(0, 0%, 15%);
+  --newTransactionBtnHov: hsl(0, 0%, 20%);
+
+  --tranEditIcon: hsl(0, 0%, 25%);
+  --tranDeleteIcon: hsl(0, 0%, 20%);
+
+  --scrollThumb: hsl(220, 7%, 20%, 0.5);
+  --scrollThumbHov: hsl(220, 7%, 20%);
+
+  --popupBg: hsla(216, 20%, 10%, 0.5);
+  --iconHovBg: rgba(255, 255, 255, 0.15);
+
+  --breaklineColor: hsl(220, 0%, 15%);
+  --inputBorderColor: hsl(0, 0%, 8%);
+  --labelColor: hsl(0, 0%, 10%);
+
+  --itemHoverBg: hsl(216, 45%, 10%);
+  --itemActiveBg: hsl(210, 45%, 15%);
+
+  --transparentBtnBg: hsla(0, 0%, 40%, 0.3);
+  --transparentBtnBgHov: hsla(0, 0%, 40%, 0.5);
+  --transparentBtnRedBg: hsl(0, 65%, 40%);
+  --transparentBtnRedBgHov: hsl(0, 65%, 60%);
+  --transparentBtnGreenBg: hsl(130, 65%, 40%);
+  --transparentBtnGreenBgHov: hsl(130, 65%, 60%);
+
+  --acceptBlueHoverBg: hsl(197, 60%, 30%);
+  --acceptBlueHoverBorder: hsl(197, 65%, 50%);
+  --cancelRedHoverBg: hsl(357, 64%, 30%);
+  --cancelRedHoverBorder: hsl(357, 65%, 50%);
+
+  --outcomeTransactionBg: hsl(0, 55%, 50%);
+  --outcomeTransactionColor: hsl(0, 75%, 15%);
+  --incomeTransactionBg: hsl(150, 55%, 50%);
+  --incomeTransactionColor: hsl(135, 75%, 15%);
+  --transactionFontSize: 10px;
+
+  --editTransaction: hsl(210, 35%, 15%);
+
+  --shadowBorderCol: hsl(220, 7%, 18%);
+
+  // --dropShadowCol1: #ffffff80;
+  // --dropShadowCol2: #00000033;
+
+  --panelShadowCol: #33333333;
+
+  --noteColor: hsl(55, 52%, 65%);
+  // --noteCoverColor: rgba(0, 0, 0, 0.25);
+  --emptyNoteColor: #4a4a4a;
+  --noteBtnCol: #333;
+
+  --loginBg: rgb(14, 14, 14);
+  --loginShadowCol1: rgb(28, 28, 28);
+  --loginShadowCol2: #000000;
+
+  --test: #1a1a1a;
+}

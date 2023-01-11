@@ -1,0 +1,91 @@
+.noteDisplay
+  width: 100%
+  overflow: hidden
+  &__list
+    all: unset
+    display: flex
+    flex-wrap: wrap
+    gap: 10px 16px
+    margin-top: 10px
+    padding-top: 20px
+    border-top: var(--breakline)
+    &-item
+      all: unset
+      position: relative
+      flex-basis: calc(50% - 8px)
+      overflow: hidden
+      box-sizing: border-box
+      border-radius: 10px
+      background: var(--noteColor)
+      aspect-ratio: 4/3
+      padding: 10px
+      cursor: pointer
+      color: var(--primaryBlack)
+      @media(max-width: 1280px)
+        justify-content: center
+        flex-basis: 100%
+        aspect-ratio: 21/9
+
+      &::after
+        content: ''
+        display: block
+        position: absolute
+        inset: 0
+        opacity: 0
+        transition: background 0.15s
+        @media(max-width: 900px)
+          all: unset
+
+      &:hover svg.noteDisplay__list-item-icon
+        opacity: 1
+        transform: translate(-50%, -50%) scale(1)
+        background: var(--noteCoverColor)
+        @media(max-width: 900px)
+          display: none
+      
+      &:hover::after
+        opacity: 1
+        background: var(--noteCoverColor)
+        backdrop-filter: blur(2px)
+        @media(max-width: 900px)
+          all: unset
+      
+      svg.noteDisplay__list-item-icon
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%) scale(0.5)
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 50%
+        opacity: 0
+        padding: 10px
+        width: 60px !important
+        height: 60px !important
+        transform-origin: center center
+        z-index: 10
+        transition: transform 0.15s, background 0.15s, opacity 0.15s
+        @media(max-width: 900px)
+          display: none
+    
+      &-title
+        font-weight: bold
+        &--empty
+          color: var(--emptyNoteColor)
+          font-style: italic
+          font-weight: normal
+      
+      &--loading
+        margin-left: auto
+        margin-right: auto
+      
+      &--empty
+        all: unset
+        color: var(--emptyNoteColor)
+        font-style: italic
+        font-weight: normal
+        margin-left: auto
+        margin-right: auto
+        
+    

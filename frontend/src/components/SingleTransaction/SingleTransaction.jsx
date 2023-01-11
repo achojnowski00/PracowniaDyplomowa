@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { format, formatDistance, formatRelative, subDays } from "date-fns";
 import { pl } from "date-fns/locale";
 import axios from "axios";
@@ -9,17 +9,20 @@ import "./SingleTransaction.sass";
 
 import { UserContext } from "../../context/userContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
 
 import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import CloseRoundedIcon from "@mui/icons-material/ClearRounded";
 
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect } from "react";
+import Switch from "@mui/material/Switch";
+import Swal from "sweetalert2";
 
 export const SingleTransaction = ({
   amount,
@@ -31,6 +34,9 @@ export const SingleTransaction = ({
   title,
   who_created,
 }) => {
+  const EditPopupRef = useRef();
+
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, , userdata] = useContext(UserContext);
   const [, , , , , , , , , getTransactions] = useContext(FilterContext);
 
@@ -38,7 +44,6 @@ export const SingleTransaction = ({
   const [wantEdit, setWantEdit] = useState(false);
 
   const [categories, setCategories] = useState("");
-  const [newCategories, setNewCategories] = useState([]);
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -46,16 +51,17 @@ export const SingleTransaction = ({
   const [newIsOutcome, setNewIsOutcome] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [newDate, setNewDate] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const updateCategories = async () => {
+  const setFirstCategoryFromList = async () => {
     if (categories === "") return;
     let filteredCategoriesBasedOnNewIsOutcome = await categories.filter(
       (cat) => cat.isOutcome === newIsOutcome
     );
-    console.log("singleTransaction.jsx", filteredCategoriesBasedOnNewIsOutcome);
 
-    setNewCategories(filteredCategoriesBasedOnNewIsOutcome);
-    setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
+    if (filteredCategoriesBasedOnNewIsOutcome[0]) {
+      setNewCategory(filteredCategoriesBasedOnNewIsOutcome[0].id);
+    }
   };
 
   const setStartingEditValues = () => {
@@ -65,8 +71,20 @@ export const SingleTransaction = ({
     setNewIsOutcome(isOutcome);
     setNewCategory(category.id);
     setNewDate(date);
-    updateCategories();
   };
+
+  const resetEditValues = () => {
+    setNewTitle("");
+    setNewDescription("");
+    setNewAmount("");
+    setNewIsOutcome("");
+    setNewCategory("");
+    setNewDate("");
+  };
+
+  useEffect(() => {
+    setFirstCategoryFromList();
+  }, [newIsOutcome]);
 
   const handleWantDelete = () => {
     setWantDelete(!wantDelete);
@@ -77,9 +95,13 @@ export const SingleTransaction = ({
     setStartingEditValues();
   };
 
+  const resetErrorMessage = () => {
+    setErrorMessage("");
+  };
+
   const fetchCategories = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/categories/get-all", {
+      .get(`${BACKEND_LINK}/api/categories/get-all`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -89,39 +111,72 @@ export const SingleTransaction = ({
         setCategories(res.data);
       })
       .catch((err) => {
-        // console.log(err);
+        // console.log("error - pobieranie kategorii", err);
       });
   };
 
   const handleSubmitDelete = async (transactionID) => {
     await axios
-      .delete(`http://127.0.0.1:8000/api/transaction/delete/${transactionID}`, {
+      .delete(`${BACKEND_LINK}/api/transaction/delete/${transactionID}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        toast.success("Transakcja została usunięta");
+        toast.success("Transakcja została usunięta", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        });
         getTransactions();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log("error - usuwanie posta", err);
       });
   };
 
   const handleSubmitEdit = async (transactionID) => {
-    console.log("SingleTransaction.jsx", newIsOutcome);
-    console.log("SingleTransaction.jsx", newCategory);
+    if (newTitle === "") return setErrorMessage("Tytuł nie może być pusty");
+    if (newAmount === "") return setErrorMessage("Kwota nie może być pusta");
+    if (newCategory === "")
+      return setErrorMessage("Kategoria nie może być pusta");
+    if (newDate === "") return setErrorMessage("Data nie może być pusta");
+
+    if (
+      newTitle === title &&
+      newDescription === description &&
+      newAmount === amount &&
+      newIsOutcome === isOutcome &&
+      newCategory === category.id &&
+      newDate === date
+    ) {
+      setWantEdit(false);
+      resetEditValues();
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
+      return;
+    }
+
     await axios
       .put(
-        `http://127.0.0.1:8000/api/transaction/edit/${transactionID}`,
+        `${BACKEND_LINK}/api/transaction/edit/${transactionID}`,
         {
           isOutcome: newIsOutcome,
           title: newTitle,
           description: newDescription,
           amount: newAmount,
           category_id: newCategory,
+          date: newDate,
         },
         {
           headers: {
@@ -131,13 +186,36 @@ export const SingleTransaction = ({
         }
       )
       .then((res) => {
-        console.log(res);
-        toast.success("Transakcja została zaktualizowana");
+        toast.success("Transakcja została zaktualizowana", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
+        });
         getTransactions();
+        setWantEdit(false);
+        resetEditValues();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log("error - edycja posta", err);
       });
+  };
+
+  const submitDelete = (e, transactionID) => {
+    e.preventDefault();
+    Swal.fire({
+      title: "Czy na pewno chcesz usunąć transakcję?",
+      text: "Nie będziesz mógł tego cofnąć",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete.isConfirmed) {
+        handleSubmitDelete(transactionID);
+      }
+    });
   };
 
   useEffect(() => {
@@ -148,8 +226,30 @@ export const SingleTransaction = ({
   }, [wantEdit]);
 
   useEffect(() => {
-    updateCategories();
-  }, [newIsOutcome]);
+    if (!wantEdit) {
+      return;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setWantEdit(false);
+      }
+    };
+
+    const handleClick = (event) => {
+      if (!EditPopupRef.current.contains(event.target)) {
+        setWantEdit(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [wantEdit]);
 
   return (
     <>
@@ -180,7 +280,10 @@ export const SingleTransaction = ({
                 <EditRoundedIcon />
               </div>
               <div
-                onClick={handleWantDelete}
+                // onClick={handleWantDelete}
+                onClick={(e) => {
+                  submitDelete(e, id);
+                }}
                 className="singleTransaction__header-icon singleTransaction__header-icon--delete"
               >
                 <DeleteRoundedIcon />
@@ -211,104 +314,138 @@ export const SingleTransaction = ({
       {/* ================ */}
       {/*      POPUPY      */}
       {/* ================ */}
-      {wantDelete && (
-        <>
-          <div onClick={handleWantDelete} className="popup__background"></div>
-          <div className="popup">
-            <h2 className="popup__title">
-              Czy na pewno chcesz usunąć transakcję?
-            </h2>
-            <h3 className="popup__subtitle">Tego nie da się cofnąć</h3>
-            <div className="popup__buttons">
-              <button
-                onClick={handleWantDelete}
-                className="popup__btn popup__btn--cancel"
-              >
-                Anuluj
-              </button>
-              <button
-                onClick={() => handleSubmitDelete(id)}
-                className="popup__btn popup__btn--delete"
-              >
-                Usuń
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
       {wantEdit && (
         <>
-          <div onClick={handleWantEdit} className="popup__background"></div>
-          <div className="popup">
+          <div className="popup__background"></div>
+          <div ref={EditPopupRef} className="popup">
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                handleWantEdit();
+              }}
+              className="popup-close"
+            >
+              <CloseRoundedIcon />
+            </div>
             <h2 className="popup__title">Edytuj transakcję</h2>
 
             <form className="popup__form">
-              <TextField
+              <label className="popup__form-label" htmlFor="title">
+                Tytuł transakcji
+              </label>
+              <input
+                id="title"
                 className="popup__form-input"
                 value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
+                required
+                onChange={(e) => {
+                  resetErrorMessage();
+                  setNewTitle(e.target.value);
+                }}
                 type="text"
                 label="Tytuł transakcji"
                 variant="standard"
               />
-              <TextField
+              <label className="popup__form-label" htmlFor="description">
+                Opis transakcji
+              </label>
+              <textarea
+                id="description"
                 className="popup__form-input"
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
-                type="text"
-                label="Opis transakcji"
-                variant="standard"
               />
-              <TextField
-                className="popup__form-input"
+              <label className="popup__form-label" htmlFor="amount">
+                Kwota (zł)
+              </label>
+              <input
+                id="amount"
+                className="popup__form-input popup__form-input--amount"
                 value={newAmount}
-                onChange={(e) => setNewAmount(e.target.value)}
+                required
+                onChange={(e) => {
+                  resetErrorMessage();
+                  setNewAmount(e.target.value);
+                }}
                 type="number"
                 label="Kwota"
                 variant="standard"
               />
-              <div className="popup__form-flex">
-                {newIsOutcome ? "Wydatek" : "Przychód"}
-                <Checkbox
-                  checked={newIsOutcome}
-                  onChange={() => {
-                    setNewCategory("");
-                    setNewIsOutcome(!newIsOutcome);
-                  }}
-                />
-              </div>
 
-              <select
-                value={Number(newCategory)}
+              <label className="popup__form-label" htmlFor="date">
+                Data transakcji
+              </label>
+              <input
+                id="date"
+                type="datetime-local"
+                className="popup__form-input popup__form-input--date"
+                value={newDate}
                 onChange={(e) => {
-                  setNewCategory(Number(e.target.value));
+                  resetErrorMessage();
+                  setNewDate(e.target.value);
                 }}
-              >
-                {/* <option value={0}>Wybierz kategorię</option> */}
+              />
 
-                {newCategories.map((category) => {
-                  if (category.isOutcome === newIsOutcome) {
-                    return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                        {category.id}
-                      </option>
-                    );
-                  }
-                })}
-              </select>
-
-              <div className="popup__buttons">
+              <label className="popup__form-label" htmlFor="category">
+                Kategoria
+              </label>
+              <div className="popup__form-flex">
                 <button
+                  className={
+                    newIsOutcome
+                      ? "popup__form-switch popup__form-switch--out popup__form-switch--out-active"
+                      : "popup__form-switch popup__form-switch--out"
+                  }
                   onClick={(e) => {
                     e.preventDefault();
-                    handleWantEdit();
+                    setNewIsOutcome(true);
+                    setNewCategory("");
                   }}
-                  className="popup__btn popup__btn--cancel"
                 >
-                  Anuluj
+                  Wydatek
                 </button>
+                <button
+                  className={
+                    !newIsOutcome
+                      ? "popup__form-switch popup__form-switch--in popup__form-switch--in-active"
+                      : "popup__form-switch popup__form-switch--in"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setNewIsOutcome(false);
+                    setNewCategory("");
+                  }}
+                >
+                  Przychód
+                </button>
+              </div>
+
+              <div className="popup__form-select-wrapper">
+                <select
+                  id="category"
+                  className="popup__form-input popup__form-input--select"
+                  value={Number(newCategory)}
+                  required
+                  onChange={(e) => {
+                    resetErrorMessage();
+                    setNewCategory(Number(e.target.value));
+                  }}
+                >
+                  {categories &&
+                    categories.map((category) => {
+                      if (category.isOutcome === newIsOutcome) {
+                        return (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        );
+                      }
+                    })}
+                </select>
+              </div>
+
+              {errorMessage && <p className="popup__error">{errorMessage}</p>}
+              <div className="popup__buttons">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
@@ -320,7 +457,7 @@ export const SingleTransaction = ({
                 </button>
               </div>
 
-              {console.table({
+              {console.table("Nowe wartości edycji posta 🎅", {
                 newTitle,
                 newDescription,
                 newAmount,

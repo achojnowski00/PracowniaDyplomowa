@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import swal from "sweetalert";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,11 +11,19 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DoneIcon from "@mui/icons-material/Done";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
+import { ApiContext } from "../../context/apiContext";
+import { ThemeContext } from "../../context/themeContext";
 
 export const LeftPanel = () => {
+  const leftPanel = useRef();
+
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
 
   const [
@@ -26,6 +34,8 @@ export const LeftPanel = () => {
     reloadBudgets,
   ] = useContext(BudgetContext);
 
+  const [hidden, setHidden] = useState(currentBudget ? true : false);
+
   const [wantChangeName, setWantChangeName] = useState(false);
   const [newName, setNewName] = useState(userdata.name);
 
@@ -33,7 +43,7 @@ export const LeftPanel = () => {
   const [budgetName, setBudgetName] = useState("");
 
   const handlelogout = () => {
-    swal("Wylogowano", "", "success", {
+    Swal.fire("Wylogowano", "", "success", {
       button: "Zamknij",
       timer: 500,
     });
@@ -42,7 +52,7 @@ export const LeftPanel = () => {
       setUserdata("");
       setBudgetData("");
       setCurrentBudget("");
-    }, 750);
+    }, 250);
   };
 
   const handleNameClick = () => {
@@ -54,12 +64,26 @@ export const LeftPanel = () => {
     setWantChangeName(false);
   };
 
-  const handleChangeName = async () => {
+  const handleChangeName = async (e) => {
+    e.preventDefault();
     if (newName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
         button: "Zamknij",
         timer: 1000,
       });
+      return;
+    }
+
+    if (newName === userdata.name) {
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
+      setWantChangeName(false);
       return;
     }
 
@@ -67,7 +91,7 @@ export const LeftPanel = () => {
     setUserdata({ ...userdata, name: newName });
     await axios
       .put(
-        "http://localhost:8000/api/users/update",
+        `${BACKEND_LINK}/api/users/update`,
         {
           id: userdata.id,
           name: newName,
@@ -81,13 +105,20 @@ export const LeftPanel = () => {
         }
       )
       .then((response) => {
-        swal(response.data.message, "", "success", {
-          button: "Zamknij",
-          timer: 1000,
+        toast.success("Pomyślnie zmieniono nazwę użytkownika", {
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          position: "bottom-right",
         });
       })
       .catch((error) => {
-        swal(error.response.data.message, "", "error");
+        Swal.fire(error.response.data.message, "", "error", {
+          buttons: false,
+          timer: 1000,
+        });
       });
   };
 
@@ -98,8 +129,8 @@ export const LeftPanel = () => {
 
   const handleCreateBudget = async () => {
     if (budgetName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
-        button: "Zamknij",
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
+        buttons: false,
         timer: 1000,
       });
       return;
@@ -107,7 +138,7 @@ export const LeftPanel = () => {
 
     await axios
       .post(
-        "http://localhost:8000/api/budgets/create",
+        `${BACKEND_LINK}/api/budgets/create`,
         {
           name: budgetName,
         },
@@ -127,37 +158,92 @@ export const LeftPanel = () => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
       })
       .catch((error) => {
-        swal("Coś poszło nie tak", "", "error");
+        Swal.fire("Coś poszło nie tak", "", "error", {
+          buttons: false,
+          timer: 1000,
+        });
       });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!leftPanel.current.contains(e.target)) {
+        setHidden(true);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [hidden]);
+
+  const copyToClipboard = () => {
+    let succes = () => {
+      toast.success("Skopiowano ID do schowka", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(userdata.id);
+      succes();
+      return;
+    } else {
+      let textArea = document.createElement("textarea");
+      textArea.value = userdata.id;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+        succes();
+      });
+    }
   };
 
   return (
     <>
       <ToastContainer />
-      <div className="leftPanel">
+      {hidden ? (
+        <MenuRoundedIcon
+          className="leftPanel__menu-icon"
+          onClick={() => {
+            setHidden(false);
+          }}
+        />
+      ) : (
+        <CloseRoundedIcon
+          className="leftPanel__menu-icon leftPanel__menu-icon--close"
+          onClick={() => setHidden(!hidden)}
+        />
+      )}
+
+      <div
+        ref={leftPanel}
+        className={"leftPanel" + (hidden ? " leftPanel--hidden" : "")}
+      >
         {!wantChangeName && (
           <>
             <h1 onClick={handleNameClick} className="leftPanel__title">
               Cześć {userdata.name}!
             </h1>
-            <p
-              className="leftPanel__sub-title"
-              onClick={() => {
-                navigator.clipboard.writeText(userdata.id);
-                toast.success("Skopiowano ID do schowka", {
-                  autoClose: 1000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                });
-              }}
-            >
+            <p className="leftPanel__sub-title" onClick={copyToClipboard}>
               Twoje ID:{" "}
               <span className="leftPanel__sub-title--ID">{userdata.id}</span>
             </p>
@@ -174,18 +260,23 @@ export const LeftPanel = () => {
                 onChange={(e) => {
                   setNewName(e.target.value);
                 }}
+                value={newName}
                 autoFocus
               ></input>
               <div className="leftPanel__buttons">
                 <button
-                  onClick={handleChangeName}
+                  onClick={(e) => {
+                    handleChangeName(e);
+                  }}
                   className="leftPanel__addBudget-btn"
                 >
                   <DoneIcon />
                 </button>
 
                 <button
-                  onClick={handleCancelChangeName}
+                  onClick={(e) => {
+                    handleCancelChangeName(e);
+                  }}
                   className="leftPanel__addBudget-btn leftPanel__addBudget-btn--cancel"
                 >
                   <ClearIcon />
@@ -219,6 +310,7 @@ export const LeftPanel = () => {
                   }
                   onClick={() => {
                     setCurrentBudget(budget.id);
+                    if (!hidden) setHidden(true);
                   }}
                 >
                   {budget.name}
@@ -231,6 +323,7 @@ export const LeftPanel = () => {
                 className="leftPanel__addBudget"
                 onClick={handleWantAddBudget}
               >
+                <AddRoundedIcon />
                 Dodaj nowy budżet
               </button>
             )}

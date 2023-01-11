@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import axios from "axios";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 
 import "./CenterAddNewTransaction.sass";
@@ -11,12 +11,18 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
+import { Raport } from "../Raport/Raport";
 
 export const CenterAddNewTransaction = () => {
+  const popupRef = useRef();
+
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
   const [
     budgetData,
@@ -35,13 +41,19 @@ export const CenterAddNewTransaction = () => {
   const [categoryState, setCategoryState] = useState("");
   const [isOutcomeState, setIsOutcomeState] = useState(true);
 
+  const [wantSeeRaport, setWantSeeRaport] = useState(false);
+
   const handleSwitchWantAdd = () => {
     setWantAdd(!wantAdd);
   };
 
+  const handleSwitchWantSeeRaport = () => {
+    setWantSeeRaport(!wantSeeRaport);
+  };
+
   const fetchCategories = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/categories/get-all", {
+      .get(`${BACKEND_LINK}/api/categories/get-all`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -51,7 +63,7 @@ export const CenterAddNewTransaction = () => {
         setCategories(res.data);
       })
       .catch((err) => {
-        // console.log(err);
+        // console.log("error pobierania kategorii (edycja posta)", err);
       });
   };
 
@@ -60,6 +72,20 @@ export const CenterAddNewTransaction = () => {
       return;
     }
     fetchCategories();
+
+    let handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setWantAdd(false);
+      }
+    };
+
+    if (wantAdd) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [wantAdd]);
 
   const handleChangeInput = (e, what) => {
@@ -86,6 +112,16 @@ export const CenterAddNewTransaction = () => {
     setCategoryState("");
   };
 
+  const setCategoryToOutcome = () => {
+    setIsOutcomeState(true);
+    setCategoryState("");
+  };
+
+  const setCategoryToIncome = () => {
+    setIsOutcomeState(false);
+    setCategoryState("");
+  };
+
   const resetValues = () => {
     setTitleState("");
     setDescriptionState("");
@@ -96,32 +132,32 @@ export const CenterAddNewTransaction = () => {
 
   const submitNewTransaction = async () => {
     if (titleState === "") {
-      swal("Wpisz tytuł", "", "error", {
+      Swal.fire("Wpisz tytuł", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
 
     if (amountState === "") {
-      swal("Wpisz kwotę", "", "error", {
+      Swal.fire("Wpisz kwotę", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
 
     if (categoryState === "") {
-      swal("Wybierz kategorię", "", "error", {
+      Swal.fire("Wybierz kategorię", "", "error", {
         buttons: false,
-        timer: 1500,
+        timer: 1000,
       });
       return;
     }
 
     await axios
       .post(
-        "http://127.0.0.1:8000/api/transaction/create",
+        `${BACKEND_LINK}/api/transaction/create`,
         {
           isOutcome: isOutcomeState,
           title: titleState,
@@ -139,23 +175,45 @@ export const CenterAddNewTransaction = () => {
       )
       .then((res) => {
         toast.success("Dodano nową transakcję", {
-          autoClose: 1500,
+          autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
-          progress: undefined,
+          position: "bottom-right",
         });
         getTransactions();
+        setWantAdd(false);
         resetValues();
-        setTimeout(() => {
-          setWantAdd(false);
-        }, 500);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log("error dodawania posta", err);
       });
   };
+
+  // useEffect(() => {
+  //   if (!popupRef.current) return;
+
+  //   let handleClick = (e) => {
+  //     if (!popupRef.current.contains(e.target)) {
+  //       setWantAdd(false);
+  //     }
+  //   };
+
+  //   const handleEscape = (e) => {
+  //     if (e.key === "Escape") {
+  //       setWantAdd(false);
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleClick);
+  //   document.addEventListener("keydown", handleEscape);
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClick);
+  //     document.removeEventListener("keydown", handleEscape);
+  //   };
+  // }, [wantAdd]);
 
   return (
     <>
@@ -165,7 +223,12 @@ export const CenterAddNewTransaction = () => {
         <button className="newPost__btn" onClick={handleSwitchWantAdd}>
           Dodaj nową transakcję
         </button>
+        <button className="newPost__btn" onClick={handleSwitchWantSeeRaport}>
+          Pokaż raport miesięczny
+        </button>
       </div>
+
+      {wantSeeRaport && <Raport turnOff={handleSwitchWantSeeRaport} />}
 
       {wantAdd && (
         <>
@@ -174,37 +237,49 @@ export const CenterAddNewTransaction = () => {
             className="newPost__popup-background"
           ></div>
           <div
+            // ref={popupRef}
             className={
               isOutcomeState
                 ? "newPost__popup newPost__popup--out"
                 : "newPost__popup newPost__popup--in"
             }
           >
+            <div
+              className="newPost__popup-close"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSwitchWantAdd();
+              }}
+            >
+              <CloseRoundedIcon />
+            </div>
             <h1 className="newPost__popup-title">Dodaj nową transakcję</h1>
             <form className="newPost__popup-form">
-              <TextField
+              <label className="newPost__popup-form-input-label">
+                Tytuł transakcji
+              </label>
+              <input
                 className="newPost__popup-form-input"
                 value={titleState}
                 onChange={(e) => {
                   handleChangeInput(e, "title");
                 }}
                 type="text"
-                label="Tytuł transakcji"
-                variant="standard"
               />
-              <TextField
+              <label className="newPost__popup-form-input-label">
+                Opis transakcji
+              </label>
+              <textarea
                 className="newPost__popup-form-input newPost__popup-form-input--textarea "
                 value={descriptionState}
                 onChange={(e) => {
                   handleChangeInput(e, "description");
                 }}
                 type="text"
-                label="Opis transakcji"
-                variant="standard"
-                multiline
               />
-              <TextField
-                className="newPost__popup-form-input"
+              <label className="newPost__popup-form-input-label">Kwota</label>
+              <input
+                className="newPost__popup-form-input newPost__popup-form-input--amount"
                 value={amountState}
                 onChange={(e) => {
                   handleChangeInput(e, "amount");
@@ -213,42 +288,61 @@ export const CenterAddNewTransaction = () => {
                 label="Kwota"
                 variant="standard"
               />
+              <label className="newPost__popup-form-input-label newPost__popup-form-input-label--cat">
+                Kategoria
+              </label>
               <div className="newPost__popup-form-flex">
-                {isOutcomeState ? "Wydatek" : "Przychód"}
-                <Checkbox
-                  checked={isOutcomeState}
-                  onChange={handleSwitchIsOutcome}
-                />
+                <div
+                  className={
+                    isOutcomeState
+                      ? "popup__form-switch popup__form-switch--out popup__form-switch--out-active"
+                      : "popup__form-switch popup__form-switch--out"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // handleSwitchIsOutcome();
+                    setCategoryToOutcome();
+                  }}
+                >
+                  Wydatek
+                </div>
+                <div
+                  className={
+                    !isOutcomeState
+                      ? "popup__form-switch popup__form-switch--in popup__form-switch--in-active"
+                      : "popup__form-switch popup__form-switch--in"
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // handleSwitchIsOutcome();
+                    setCategoryToIncome();
+                  }}
+                >
+                  Przychód
+                </div>
               </div>
-              <Select
+              <select
                 value={categoryState}
                 onChange={(e) => {
                   handleChangeInput(e, "category");
                 }}
-                // label="Kategoria"
+                className="newPost__popup-form-input newPost__popup-form-input--select"
               >
+                <option value="" disabled>
+                  Wybierz kategorię
+                </option>
                 {categories &&
                   categories.map((category) => {
                     if (category.isOutcome === isOutcomeState) {
                       return (
-                        <MenuItem key={category.id} value={category.id}>
+                        <option key={category.id} value={category.id}>
                           {category.name}
-                          {/* {category.id} */}
-                        </MenuItem>
+                        </option>
                       );
                     }
                   })}
-              </Select>
+              </select>
               <div className="newPost__popup-form-controls">
-                <button
-                  className="newPost__popup-form-btn newPost__popup-form-btn--cancel"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSwitchWantAdd();
-                  }}
-                >
-                  Anuluj
-                </button>
                 <button
                   className="newPost__popup-form-btn"
                   onClick={(e) => {

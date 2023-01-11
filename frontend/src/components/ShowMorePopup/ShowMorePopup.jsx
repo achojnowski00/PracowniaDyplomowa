@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,14 +8,18 @@ import "./ShowMorePopup.sass";
 
 import { UserContext } from "../../context/userContext";
 import { BudgetContext } from "../../context/budgetContext";
+import { ApiContext } from "../../context/apiContext";
+import { NotesContext } from "../../context/notesContext";
 
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import GroupsIcon from "@mui/icons-material/Groups";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 export const ShowMorePopup = ({ turnOffShowMore }) => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [token, setToken, userdata, setUserdata] = useContext(UserContext);
   const [
     budgetData,
@@ -24,6 +28,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
     setCurrentBudget,
     reloadBudgets,
   ] = useContext(BudgetContext);
+  const [notesData, setNotesData, fetchNotes] = useContext(NotesContext);
 
   const [wantAddUser, setWantAddUser] = useState(false);
   const [wantShowUsers, setWantShowUsers] = useState(false);
@@ -34,7 +39,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
 
   const reloadUsersInBudget = async () => {
     await axios
-      .get(`http://127.0.0.1:8000/api/budgets/get-users/${currentBudget}`, {
+      .get(`${BACKEND_LINK}/api/budgets/get-users/${currentBudget}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -49,7 +54,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         });
       })
       .catch((err) => {
-        console.log("ShowMorePopup.jsx", err);
+        // console.log("error przy reloadowaniu userów", err);
       });
   };
 
@@ -62,13 +67,45 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleLeaveBudget = () => {
-    setWantLeaveBudget(!wantLeaveBudget);
+    Swal.fire({
+      title: "Czy na pewno chcesz opuścić budżet?",
+      text: "Aby do niego wrócić musisz zostać zaproszony przez innych użytkowników",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete.isConfirmed && budgetData.users.length === 1) {
+        Swal.fire({
+          title: "Czy na pewno chcesz usunąć budżet?",
+          text: "Nie będziesz mógł go odzyskać",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete.isConfirmed) {
+            deleteUserFromBudget(userdata.id).then(() => {
+              setCurrentBudget("");
+              setBudgetData([]);
+              reloadBudgets();
+              setNotesData([]);
+            });
+          }
+        });
+      }
+
+      if (willDelete.isConfirmed && budgetData.users.length > 1) {
+        deleteUserFromBudget(userdata.id).then(() => {
+          reloadBudgets();
+          setCurrentBudget("");
+        });
+      }
+    });
   };
 
   const handleSubmitAddUser = async (e) => {
     if (userId === "") {
       e.preventDefault();
-      swal("Nie podano ID użytkownika", "", "error", {
+      Swal.fire("Nie podano ID użytkownika", "", "error", {
         buttons: false,
         timer: 1000,
       });
@@ -78,7 +115,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
     e.preventDefault();
     await axios
       .post(
-        `http://127.0.0.1:8000/api/budgets/add-to-budget?budget_id=${currentBudget}&user_id=${userId}`,
+        `${BACKEND_LINK}/api/budgets/add-to-budget?budget_id=${currentBudget}&user_id=${userId}`,
         {},
         {
           headers: {
@@ -92,8 +129,9 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
         setTimeout(() => {
           setWantAddUser(false);
@@ -105,17 +143,17 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         reloadUsersInBudget();
       })
       .catch((error) => {
-        swal(error.response.data.detail, "", "error", {
+        Swal.fire(error.response.data.detail, "", "error", {
           buttons: false,
           timer: 1000,
         });
       });
   };
 
-  const handleDeleteUserFromBudget = async (user_id) => {
+  const deleteUserFromBudget = async (user_id) => {
     await axios
       .delete(
-        `http://127.0.0.1:8000/api/budgets/remove-user/${currentBudget}?user_id=${user_id}`,
+        `${BACKEND_LINK}/api/budgets/remove-user/${currentBudget}?user_id=${user_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -128,8 +166,9 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
         setTimeout(() => {
           setWantShowUsers(false);
@@ -140,11 +179,25 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
         reloadUsersInBudget();
       })
       .catch((error) => {
-        swal("Coś poszło nie tak", "", "error", {
+        Swal.fire("Coś poszło nie tak", "", "error", {
           buttons: false,
           timer: 1000,
         });
       });
+  };
+
+  const handleDeleteFromBudget = (userID) => {
+    Swal.fire({
+      title: "Czy na pewno chcesz usunąć użytkownika z budżetu?",
+      text: "Będziesz mógł zaprosić go ponownie",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete.isConfirmed) {
+        deleteUserFromBudget(userID);
+      }
+    });
   };
 
   const handleSubmitLeaveBudget = () => {
@@ -153,7 +206,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
     }
 
     if (budgetData.users.length !== 1) {
-      handleDeleteUserFromBudget(userdata.id).then(() => {
+      deleteUserFromBudget(userdata.id).then(() => {
         setCurrentBudget("");
         reloadBudgets();
       });
@@ -161,7 +214,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
   };
 
   const handleDeleteBudget = async () => {
-    handleDeleteUserFromBudget(userdata.id).then(() => {
+    deleteUserFromBudget(userdata.id).then(() => {
       setCurrentBudget("");
       reloadBudgets();
     });
@@ -178,11 +231,22 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
             <PersonAddAlt1Icon />
             <span>Dodaj użytkownika</span>
           </li>
-          <li className="showMorePopup__list-item" onClick={handleShowUsers}>
+          <li
+            className="showMorePopup__list-item"
+            onClick={() => {
+              handleShowUsers();
+            }}
+          >
             <GroupsIcon />
             <span>Wyświetl użytkowników</span>
           </li>
-          <li className="showMorePopup__list-item" onClick={handleLeaveBudget}>
+          <li
+            className="showMorePopup__list-item"
+            onClick={() => {
+              handleLeaveBudget();
+              turnOffShowMore();
+            }}
+          >
             <ExitToAppIcon />
             <span>Opuść budżet</span>
           </li>
@@ -198,6 +262,16 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
               className="showMorePopup__background"
             ></div>
             <div className="showMorePopup__form">
+              <div
+                className="showMorePopup__form-close"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSwitchAddUserPopup();
+                  turnOffShowMore();
+                }}
+              >
+                <CloseRoundedIcon />
+              </div>
               <form>
                 <p className="showMorePopup__form-title">
                   Dodaj użytkownika do budżetu
@@ -235,6 +309,16 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
               className="showMorePopup__background"
             ></div>
             <div className="showMorePopup__box">
+              <div
+                className="showMorePopup__box-close"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleShowUsers();
+                  turnOffShowMore();
+                }}
+              >
+                <CloseRoundedIcon />
+              </div>
               <p className="showMorePopup__box-title">Użytkownicy w budżecie</p>
               <ul className="showMorePopup__list showMorePopup__list--margined">
                 {budgetData.users.map((user) => (
@@ -244,7 +328,7 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                         className="showMorePopup__list-item-btn"
                         onClick={(e) => {
                           e.preventDefault();
-                          handleDeleteUserFromBudget(user.id);
+                          handleDeleteFromBudget(user.id);
                         }}
                       />
                     )}
@@ -263,70 +347,6 @@ export const ShowMorePopup = ({ turnOffShowMore }) => {
                   </li>
                 ))}
               </ul>
-              <div className="showMorePopup__box-controls">
-                <button
-                  onClick={handleShowUsers}
-                  className="showMorePopup__form-btn"
-                >
-                  Zamknij
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-
-        {wantLeaveBudget && (
-          <>
-            <ToastContainer />
-            <div
-              onClick={handleLeaveBudget}
-              className="showMorePopup__background"
-            ></div>
-            <div className="showMorePopup__box">
-              <p className="showMorePopup__box-title">
-                Czy na pewno chcesz opuścić budżet {budgetData.name}
-              </p>
-              <p className="showMorePopup__form-instruction">
-                Aby wrócić do budżetu musisz zostać zaproszony ponownie.
-              </p>
-
-              <div className="showMorePopup__box-controls">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmitLeaveBudget();
-                    // console.log("ShowMorePopup.jsx", userdata);
-                  }}
-                  className="showMorePopup__form-btn showMorePopup__form-btn--red"
-                >
-                  Opuść
-                </button>
-                <button
-                  onClick={handleLeaveBudget}
-                  className="showMorePopup__form-btn"
-                >
-                  Zamknij
-                </button>
-              </div>
-              {wantDeleteBudget && (
-                <>
-                  <p className="showMorePopup__box-warning">
-                    Jesteś jedynym użytkownikiem w budżecie. Opuszczając budżet
-                    usuniesz go na stałe.
-                  </p>
-                  <div className="showMorePopup__box-controls">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDeleteBudget();
-                      }}
-                      className="showMorePopup__form-btn showMorePopup__form-btn--red"
-                    >
-                      Usuń budżet
-                    </button>
-                  </div>
-                </>
-              )}
             </div>
           </>
         )}

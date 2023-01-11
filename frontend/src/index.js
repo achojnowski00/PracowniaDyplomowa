@@ -7,14 +7,23 @@ import "./index.scss";
 import { UserProvider } from "./context/userContext";
 import { BudgetProvider } from "./context/budgetContext";
 import { FilterProvider } from "./context/filterContext";
+import { ApiProvider } from "./context/apiContext";
+import { ThemeProvider } from "./context/themeContext";
+import { NotesProvider } from "./context/notesContext";
 
 ReactDOM.render(
-  <UserProvider>
-    <BudgetProvider>
-      <FilterProvider>
-        <App />
-      </FilterProvider>
-    </BudgetProvider>
-  </UserProvider>,
+  <ThemeProvider>
+    <ApiProvider>
+      <UserProvider>
+        <BudgetProvider>
+          <NotesProvider>
+            <FilterProvider>
+              <App />
+            </FilterProvider>
+          </NotesProvider>
+        </BudgetProvider>
+      </UserProvider>
+    </ApiProvider>
+  </ThemeProvider>,
   document.getElementById("root")
 );

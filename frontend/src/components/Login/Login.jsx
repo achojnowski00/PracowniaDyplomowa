@@ -1,10 +1,13 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 
 import { UserContext } from "../../context/userContext";
+import { ApiContext } from "../../context/apiContext";
 
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 
 export const Login = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,19 +21,35 @@ export const Login = () => {
         `grant_type=&username=${login}&password=${password}&scope=&client_id=&client_secret=`
       ),
     };
-
     const response = await fetch(
-      "http://localhost:8000/api/users/token",
+      `${BACKEND_LINK}/api/users/token`,
       requestOptions
     );
     const data = await response.json();
-
     if (!response.ok) {
       setErrorMessage(data.detail);
       return;
     }
-
     setToken(data.access_token);
+
+    // make an axios post rewquest with grant_type=&username=${login}&password=${password}&scope=&client_id=&client_secret=
+    // await axios
+    //   .post(`${BACKEND_LINK}/api/users/token`, {
+    //     grant_type: "",
+    //     username: login,
+    //     password: password,
+    //     scope: "",
+    //     client_id: "",
+    //     client_secret: "",
+    //   })
+    //   .then((response) => {
+    //     // setToken(response.data.access_token);
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     // setErrorMessage(error.response.data.detail);
+    //     console.log(error);
+    //   });
   };
 
   const handleSubmit = (e) => {

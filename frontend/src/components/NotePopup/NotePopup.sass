@@ -1,0 +1,102 @@
+.addNote
+  position: fixed
+  top: 100px
+  left: 50%
+  transform: translateX(-50%)
+  max-width: 500px
+  width: 80vw
+  padding: 20px
+  border-radius: 6px
+  background: var(--noteColor)
+  box-shadow: var(--dropShadow)
+  z-index: 500
+  @media(max-width: 900px)
+    top: 100px
+  
+  &__background
+    position: fixed
+    inset: 0
+    background: var(--popupBg)
+    z-index: 400
+    backdrop-filter: blur(2px)
+  
+  &__title
+    margin-bottom: 20px
+    font-size: 24px
+    font-weight: 500
+    text-align: center
+  
+  &__form
+    display: flex
+    flex-direction: column
+    color: var(--primaryBlack)
+    &-input
+      all: unset
+      padding: 0 5px
+
+      &--title
+        font-weight: 700
+        margin-bottom: 10px
+      
+      &--content
+        height: 30vh
+        line-height: 24px
+        background: url('./background.png') repeat
+        background-attachment: local
+        text-decoration: none
+        &::spelling-error
+          display: none
+
+        // Scrollbar styling 
+        &::-webkit-scrollbar
+          width: 5px
+        &::-webkit-scrollbar-thumb
+          background: var(--scrollThumb)
+          border-radius: 2px
+        &:hover
+          &::-webkit-scrollbar-thumb
+            background: var(--scrollThumbHov)
+
+    &-btn
+      all: unset
+      margin-left: auto
+      margin-right: auto
+      margin-top: 20px
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 5px
+      padding: 5px 10px 5px 10px
+      border-radius: 6px
+      background: 	var(--transparentBtnBg)
+      color: var(--noteBtnCol)
+      transition: background 0.2s, color 0.2s
+      &:hover
+        color: var(--noteBlack)
+        background: var(--transparentBtnBgHov)
+      &--delete
+        margin-top: -5px
+        margin-bottom: 30px
+        &:hover
+          color: var(--primaryBlack)
+          background: var(--transparentBtnRedBgHov)
+
+    
+    &-close-btn
+      all: unset
+      position: absolute
+      top: 10px
+      right: 10px
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 30px
+      height: 30px
+      border-radius: 50%
+      transition: background 0.15s
+      &:hover
+        background: var(--iconHovBg)
+    
+    

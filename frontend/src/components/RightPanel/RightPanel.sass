@@ -1,0 +1,44 @@
+.RightPanel
+  position: fixed
+  top: 0
+  right: 0
+  height: 100vh
+  width: 300px
+  padding: 40px 10px 10px 10px
+  overflow-y: scroll
+  transition: right 0.3s ease
+  box-shadow: var(--panelShadow)
+
+  @media(max-width: 1280px)
+    width: 200px
+  @media(max-width: 996px)
+    width: 180px
+  @media(max-width: 900px)
+    background: var(--primaryBackgroundColor)
+    max-width: 70vw
+    width: 500px
+    &--hidden
+      right: -500px
+  
+  &__icon
+    display: none !important
+    position: fixed
+    top: 110px
+    right: 20px
+    width: 30px !important
+    height: 30px !important
+    z-index: 50
+    @media(max-width: 900px)
+      display: block !important
+    &--close
+      top: 7px
+
+  // Scrollbar styling 
+  &::-webkit-scrollbar
+    width: 5px
+  &::-webkit-scrollbar-thumb
+    background: var(--scrollThumb)
+    border-radius: 2px
+  &:hover
+    &::-webkit-scrollbar-thumb
+      background: var(--scrollThumbHov)

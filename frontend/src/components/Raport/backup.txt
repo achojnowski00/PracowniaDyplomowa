@@ -1,0 +1,54 @@
+// Raport main function
+  const raport = (data) => {
+    if (!data) return;
+
+    let resualt = {
+      bilans: {
+        In: 0,
+        Out: 0,
+      },
+      categories: {
+        outcomes: [],
+        incomes: [],
+      },
+      users: [],
+    };
+
+    let categories;
+
+    data.find((transaction) => {
+      transaction.isOutcome === true
+        ? (resualt.bilans.Out += Number(transaction.amount))
+        : (resualt.bilans.In += Number(transaction.amount));
+    });
+
+    fetchCategories()
+      .then((res) => (categories = res))
+      .then(() => {
+        categories.forEach((category) => {
+          let ammount = 0;
+
+          if (category.isOutcome) {
+            resualt.categories.outcomes.push({
+              name: category.name,
+              amount: sumUpAmountOfCategory(category.id, transactionsData),
+            });
+          } else {
+            resualt.categories.incomes.push({
+              name: category.name,
+              amount: sumUpAmountOfCategory(category.id, transactionsData),
+            });
+          }
+        });
+      });
+
+    budgetData.users.forEach((user) => {
+      // console.log(`🙄`, user.id);
+      resualt.users.push({
+        name: user.name,
+        amount: sumUpAmountOfUser(user.id, transactionsData),
+      });
+    });
+
+    return resualt;
+  };

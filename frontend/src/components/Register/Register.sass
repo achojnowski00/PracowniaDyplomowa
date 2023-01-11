@@ -10,7 +10,7 @@
     &__input
         all: unset
         padding: 5px 10px 10px 10px
-        border-bottom: 2px solid #E6E8E9
+        border-bottom: 2px solid var(--primaryVeryLightBlue)
         box-sizing: border-box
         width: 100%
         border-radius: 6px 6px 0 0
@@ -18,8 +18,8 @@
         text-align: left
 
         &:focus
-            border-bottom: 2px solid #0099CC
-            background: rgba(0, 153, 204, .05)
+            border-color: var(--primaryAccent)
+            background: var(--primaryVeryLightBlue)
     
     &__button
         all: unset
@@ -27,8 +27,8 @@
         width: 100%
         padding: 10px 0px
         border-radius: 6px
-        background: #0099CC
-        color: #fff
+        background: var(--primaryAccent)
+        color: var(--primaryWhite)
         font-size: 15px
         cursor: pointer
         text-align: center
@@ -37,5 +37,5 @@
         user-select: none
 
         &:hover
-            background: #0088BB
+            background: var(--primaryAccentDarker)
 

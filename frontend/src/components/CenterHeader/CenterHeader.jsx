@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import swal from "sweetalert";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "./CenterHeader.sass";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,8 +14,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import { BudgetContext } from "../../context/budgetContext";
 import { UserContext } from "../../context/userContext";
 import { FilterContext } from "../../context/filterContext";
+import { ApiContext } from "../../context/apiContext";
 
 export const CenterHeader = () => {
+  const BACKEND_LINK = useContext(ApiContext);
   const [
     budgetData,
     setBudgetData,
@@ -34,10 +36,31 @@ export const CenterHeader = () => {
     setShowMore(!showMore);
   };
 
+  let menuRef = useRef();
+
+  // Przez to, że menu zamyka się po kliknieciu na cokolwiek co
+  // nie jest nim to jak jest alert od sweetalerta to menu się
+  // zamyka to po zamknieciu go myszką zamyka się całe menu
+  useEffect(() => {
+    let handler = (event) => {
+      if (!menuRef.current.contains(event.target)) {
+        setShowMore(false);
+      }
+    };
+
+    if (showMore) {
+      document.addEventListener("mousedown", handler);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, [showMore]);
+
   const handleSubmitChangeBudgetName = async () => {
     if (newBudgetName === "") {
-      swal("wprowadzileś pustą nazwę", "", "error", {
-        button: "Zamknij",
+      Swal.fire("wprowadzileś pustą nazwę", "", "error", {
+        buttons: false,
         timer: 1000,
       });
       return;
@@ -45,6 +68,14 @@ export const CenterHeader = () => {
 
     if (newBudgetName === budgetData.name) {
       setWantChangeBudgetName(false);
+      toast.info("Nie wprowadzono żadnych zmian", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -54,7 +85,7 @@ export const CenterHeader = () => {
 
     await axios
       .put(
-        `http://127.0.0.1:8000/api/budgets/edit/${currentBudget}`,
+        `${BACKEND_LINK}/api/budgets/edit/${currentBudget}`,
         {
           name: newBudgetName,
         },
@@ -73,13 +104,14 @@ export const CenterHeader = () => {
           autoClose: 1000,
           hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
+          position: "bottom-right",
         });
       })
       .catch((err) => {
-        swal("Wystąpił błąd", "", "error", {
-          button: "Zamknij",
+        Swal.fire("Wystąpił błąd", "", "error", {
+          buttons: false,
           timer: 1000,
         });
       });
@@ -136,7 +168,7 @@ export const CenterHeader = () => {
 
         <p className="centerHeader__balans">{balans} zł</p>
 
-        <div className="centerHeader__controls">
+        <div ref={menuRef} className="centerHeader__controls">
           <div
             className="controls__icon controls__icon--more"
             onClick={handleSwitchShowMore}

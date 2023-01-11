@@ -23,11 +23,37 @@
     border-radius: 50%
     transition: background-color 0.15s
     &:hover
-      background: rgba(0, 0, 0, 0.1)
+      background: var(--iconHovBg)
     &--left
-      left: 180px
+      left: 130px
     &--right
-      right: 180px
+      right: 130px
+    @media(max-width: 500px)
+      &--left
+        left: 20%
+      &--right
+        right: 20%
+    @media(max-width: 400px)
+      &--left
+        left: 15%
+      &--right
+        right: 15%
     
-  &__date--month
-    font-weight: 600
+  &__date
+    display: flex
+    position: relative
+    gap: 7px
+    padding: 0 10px
+    cursor: pointer
+    user-select: none
+    &--month
+      font-weight: 600
+    &-info
+      position: absolute
+      font-size: 10px
+      bottom: -15px
+      left: 50%
+      transform: translateX(-50%)
+      color: var(--primaryGray)
+      text-align: center
+      width: 250px
