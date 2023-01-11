@@ -6,6 +6,7 @@ colorama==0.4.6
 ecdsa==0.18.0
 fastapi==0.89.1
 greenlet==2.0.1
+gunicorn==20.1.0
 h11==0.14.0
 idna==3.4
 mysqlclient==2.1.1
@@ -26,4 +27,3 @@ SQLAlchemy==1.4.46
 starlette==0.22.0
 typing_extensions==4.4.0
 uvicorn==0.20.0
-gunicorn
