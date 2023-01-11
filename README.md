@@ -31,7 +31,7 @@ Upewnij się, że jesteś w folderze \API, następnie uruchom serwer backendu
 
 Swagger UI dostępny jest pod linkiem `http://localhost:8000/docs`
 
-# Uruchamianie projektu backendu w React.JS
+# Uruchamianie projektu frontendu w React.JS
 
 Będąc w głownym folderze repozytorium (...\PracowniaDyplomowa) przejdz do folderu \frontend, a następnie zainstaluj potrzebne paczki JavaScriptu (Wymagany Node 14.17.3, na innych wersjach Node projekt może się nie odpalić): `npm install`
 
