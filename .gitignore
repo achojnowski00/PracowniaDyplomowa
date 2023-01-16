@@ -5,3 +5,6 @@
 /__pycache__
 requests.http
 /node_modules
+apilink.txt
+
+requirements-backup.txt
