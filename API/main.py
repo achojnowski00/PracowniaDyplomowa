@@ -9,6 +9,7 @@ import sqlalchemy.orm as _orm
 import services as _services
 import schemas as _schemas
 import models as _models
+import asyncio
 
 app = _fastapi.FastAPI(
     title="Zarzadzanie budzetem domowym API",
@@ -31,6 +32,39 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+
+
+#  ############################ #
+#     background runnig task    #
+#       Async infinite loop     #
+#  ############################ #
+class BackgroundRunner:
+    def __init__(self):
+        self.value = 0
+
+    async def run_main(self):
+        while True:
+            await asyncio.sleep(1)
+            self.value += 1
+
+runner = BackgroundRunner()
+
+@app.on_event('startup')
+async def app_startup():
+    asyncio.create_task(runner.run_main())
+
+
+@app.get("/time", tags=["root"])
+def root():
+    return {"HowManySecondsSystemWorks": runner.value }
+# #################################### #
+#     End of background tusk runner    #
+# #################################### #
+
+
+
 
 
 # ####################### #
